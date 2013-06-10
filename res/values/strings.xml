@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Zoromatic Widgets</string>
+    <string name="app_name">Zoromatic Widgets</string>
+    <string name="buttontxt">Click Me!</string>
+    <string name="buttonsave">Save</string>
+    <string name="buttoncolor">Color</string>
+    <string name="fiveblanks">     </string>	
+    <string name="clockwidgetname4x2">Zoromatic Clock Widget 4x2</string>    
+    <string name="batterywidgetname">Zoromatic Battery Widget</string>
+    <string name="wifiwidgetname">Zoromatic WiFi Widget</string>
+    <string name="bluetoothwidgetname">Zoromatic Bluetooth Widget</string>
+    <string name="gpswidgetname">Zoromatic GPS Widget</string>
+    <string name="mobilewidgetname">Zoromatic Mobile Data Widget</string>
+    <string name="ringerwidgetname">Zoromatic Ringer Widget</string>
+    <string name="timetxt">--:--</string>
+    <string name="datebatterytxt">--.--.---- [--%]</string>
+    <string name="tempempty">--</string>
+    <string name="locationempty">--</string>
+    <string name="weatherdesc">Weather</string>
+    <string name="dateformat">Date Format</string>
+    <string name="defaultdateformat">dd.MM.yyyy</string>
+    <string name="showdate">Show Date</string>
+    <string name="show24hrs">24 hrs</string>    
+    <string name="showbattery">Show Battery Status</string>    
+    <string name="text_format">hh:mm:ss</string>
+    <string name="batterystatus">--%</string>
+    <string name="batterydesc">Battery Status</string>
+    <string name="wifidesc">WiFi Status</string>
+    <string name="bluetoothdesc">Bluetooth Status</string>
+    <string name="gpsdesc">GPS Status</string>
+    <string name="mobiledesc">Mobile Data Status</string>
+    <string name="ringerdesc">Ringer Status</string>
+    <string name="batterynotification">Battery Notification</string>
+    <string name="showbatterynotification">Show Battery Notification</string>
+    <string name="configurewidgets">Configure Widgets</string>
+    <string name="clockwidgetprefs">Digital Clock Widget Preferences</string>
+    <string name="basedon12or24">Presentation based on 12 or 24 hours</string>
+    <string name="clockcolor">Clock Color</string>
+    <string name="selectclockcolor">Select clock color</string>
+    <string name="widgettransparency">Widget Opacity</string>
+    <string name="widgetbackground">Opacity of widget background</string>
+	<string name="additionalinformation">Additional Information</string>
+	<string name="showdatewidget">Show date on the widget</string>
+	<string name="showbatterywidget">Show battery status on the widget</string>
+	<string name="weathersettings">Weather Settings</string>
+	<string name="refreshinterval">Refresh Interval</string>
+	<string name="intervalrefreshing">Interval for refreshing weather information</string>
+	<string name="refreshnow">Refresh Now</string>
+	<string name="locationsettings">Location Settings</string>
+	<string name="selectlocation">Select Location</string>
+	<string name="tempscale">Temperature Scale</string>
+	<string name="selecttempscale">Select temperature scale</string>
+	<string name="weatherprovider">Weather Information Provider</string>
+	<string name="openweathermaplink">www.openweathermap.org</string>
+	<string name="lastrefresh">Last refresh: </string>
+	<string name="lastrefreshnever">Last refresh: Never</string>
+	<string name="refreshwifionly">Refresh Over WiFi Only</string>
+	<string name="refreshwifionlyconnection">Scheduled refresh only when WiFi connection is active</string>
+	<string name="refreshanyconnection">Scheduled refresh when any connection is active</string>
+	<string name="opacitydescription">0 - fully transparent; 100 - fully opaque</string>
+	<string name="selectclockskin">Select clock skin</string>
+	<string name="clockskin">Clock Skin</string>
+	<string name="selectsoundtoggle">Select sound toggle options</string>
+	<string name="soundtoggle">Sound Toggle Options</string>
+	<string name="weatherforecast">Weather Forecast</string>
+	<string name="versioncode">3</string>
+	<string name="versionname">1.2</string>	
+	
+	<string name="bluetooth">Bluetooth</string>
+	<string name="gps">GPS</string>
+	<string name="mobile">Data</string>
+	<string name="ringer">Ringer</string>
+	<string name="wifi">WiFi</string>
+	
+	<string name="locationdescription">Use current location (requires GPS turned on) or enter custom location</string>
+    <string name="locationcurrent">Current location</string>
+    <string name="locationmanual">Custom location</string>
+    <string name="locationmap">Find on Map</string>
+    <string name="locationsave">Save Location</string>
+    
+    <string name="weather_thunderstorm_rain_light">Thunderstorm with light rain</string>
+    <string name="weather_thunderstorm_rain">Thunderstorm with rain</string>
+    <string name="weather_thunderstorm_rain_heavy">Thunderstorm with heavy rain</string>
+    <string name="weather_thunderstorm_light">Light thunderstorm</string>
+    <string name="weather_thunderstorm">Thunderstorm</string>
+    <string name="weather_thunderstorm_heavy">Heavy thunderstorm</string>
+    <string name="weather_thunderstorm_ragged">Ragged thunderstorm</string>
+    <string name="weather_thunderstorm_drizzle_light">Thunderstorm with light drizzle</string>
+    <string name="weather_thunderstorm_drizzle">Thunderstorm with drizzle</string>
+    <string name="weather_thunderstorm_drizzle_heavy">Thunderstorm with heavy drizzle</string>
+
+    <string name="weather_drizzle_light">Light drizzle</string>
+    <string name="weather_drizzle">Drizzle</string>
+    <string name="weather_drizzle_heavy">Heavy drizzle</string>
+    <string name="weather_drizzle_rain_light">Light drizzle rain</string>
+    <string name="weather_drizzle_rain">Drizzle rain</string>
+    <string name="weather_drizzle_rain_heavy">Heavy drizzle rain</string>
+    <string name="weather_drizzle_shower">Shower drizzle</string>
+
+    <string name="weather_rain_light">Light rain</string>
+    <string name="weather_rain">Rain</string>
+    <string name="weather_rain_heavy">Heavy rain</string>
+    <string name="weather_rain_very_heavy">Very heavy rain</string>
+    <string name="weather_rain_extreme">Extreme rain</string>
+    <string name="weather_rain_freezing">Freezing rain</string>
+    <string name="weather_rain_shower_light">Light shower rain</string>
+    <string name="weather_rain_shower">Shower rain</string>
+    <string name="weather_rain_shower_heavy">Heavy shower rain</string>
+
+    <string name="weather_snow_light">Light snow</string>
+    <string name="weather_snow">Snow</string>
+    <string name="weather_snow_heavy">Heavy snow</string>
+    <string name="weather_sleet">Sleet</string>
+    <string name="weather_snow_shower">Shower snow</string>
+
+    <string name="weather_mist">Mist</string>
+    <string name="weather_smoke">Smoke</string>
+    <string name="weather_haze">Haze</string>
+    <string name="weather_sand_whirls">Sand/Dust whirls</string>
+    <string name="weather_fog">Fog</string>
+
+    <string name="weather_clouds_clear">Sky is clear</string>
+    <string name="weather_clouds_few">Few clouds</string>
+    <string name="weather_clouds_scattered">Scattered clouds</string>
+    <string name="weather_clouds_broken">Broken clouds</string>
+    <string name="weather_clouds_overcast">Overcast clouds</string>
+
+    <string name="weather_tornado">Tornado</string>
+    <string name="weather_tropical_storm">Tropical storm</string>
+    <string name="weather_hurricane">Hurricane</string>
+    <string name="weather_cold">Cold</string>
+    <string name="weather_hot">Hot</string>
+    <string name="weather_windy">Windy</string>
+    <string name="weather_hail">Hail</string>
+</resources>

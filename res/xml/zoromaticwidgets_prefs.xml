@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:key="com.zoromatic.widgets.Preferences" >
+    <PreferenceCategory android:title="Main Settings" >
+        
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="showbatterynotif_"
+            android:summary="Show battery notification in status bar"
+            android:title="@string/showbatterynotification" />
+        
+		<ListPreference
+            android:defaultValue="0"
+            android:key="soundoptions_"
+            android:entries="@array/soundArray"
+            android:entryValues="@array/soundValues"
+            android:summary="@string/selectsoundtoggle"
+            android:title="@string/soundtoggle" />
+        
+        <PreferenceScreen
+			android:key="zoromaticabout_" 
+			android:summary="About Zoromatic Widgets application"
+			android:title="@string/app_name">		        
+		</PreferenceScreen>
+                                
+    </PreferenceCategory>    
+
+</PreferenceScreen>

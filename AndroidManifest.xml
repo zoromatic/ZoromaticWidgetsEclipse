@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zoromatic.widgets"
+    android:versionCode="@string/versioncode"
+    android:versionName="@string/versionname" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="8" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.BATTERY_STATS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.DEVICE_POWER" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" >
+    </uses-permission>    
+     
+    <application
+        android:icon="@drawable/icon"
+        android:label="@string/app_name" >
+<!--         <activity -->
+<!--             android:name=".ZoromaticWidgetsActivity" -->
+<!--             android:label="@string/app_name" > -->
+<!--             <intent-filter> -->
+<!--                 <action android:name="android.intent.action.MAIN" /> -->
+<!--                 <category android:name="android.intent.category.LAUNCHER" /> -->
+<!--             </intent-filter> -->
+<!--         </activity> -->
+
+<!--         <service -->
+<!--             android:name=".BatteryIntentService" -->
+<!--             android:enabled="true" /> -->
+
+<!--         <receiver android:name=".BatteryServiceStartup" > -->
+<!--             <intent-filter> -->
+<!--                 <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
+<!--             </intent-filter> -->
+<!--         </receiver> -->
+        
+        <service android:name=".WidgetUpdateService" />
+        
+        <receiver 
+            android:name=".WidgetInfoReceiver" 
+            android:label="WidgetInfoReceiver">          	
+      	</receiver>
+        
+        <receiver
+            android:name=".DigitalClockAppWidgetProvider"
+            android:icon="@drawable/icon"
+            android:label="@string/clockwidgetname4x2" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/digitalclockwidget_info" />
+        </receiver>
+        
+        <receiver
+            android:name=".BatteryAppWidgetProvider"
+            android:icon="@drawable/battery"
+            android:label="@string/batterywidgetname" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />                
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/batterywidget_info" />
+        </receiver>              
+        
+        <receiver
+            android:name=".WifiAppWidgetProvider"
+            android:icon="@drawable/wifi"
+            android:label="@string/wifiwidgetname" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/wifiwidget_info" />
+        </receiver>
+        
+        <receiver
+            android:name=".BluetoothAppWidgetProvider"
+            android:icon="@drawable/bluetooth"
+            android:label="@string/bluetoothwidgetname" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/bluetoothwidget_info" />
+        </receiver>
+        
+        <receiver
+            android:name=".MobileAppWidgetProvider"
+            android:icon="@drawable/mobile"
+            android:label="@string/mobilewidgetname" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/mobilewidget_info" />
+        </receiver>
+        
+        <receiver
+            android:name=".GpsAppWidgetProvider"
+            android:icon="@drawable/gps"
+            android:label="@string/gpswidgetname" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />                   
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/gpswidget_info" />
+        </receiver>
+        
+        <receiver
+            android:name=".RingerAppWidgetProvider"
+            android:icon="@drawable/ringer"
+            android:label="@string/ringerwidgetname" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/ringerwidget_info" />
+        </receiver>
+
+        <activity
+            android:name=".DigitalClockAppWidgetConfigure"
+            android:label="@string/clockwidgetprefs" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DigitalClockAppWidgetPreferences"
+            android:label="@string/clockwidgetprefs" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".ZoromaticWidgetsPreferences"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".ConfigureLocationActivity"
+            android:label="@string/locationsettings" >
+            <intent-filter>
+	            <action android:name="android.intent.category.SEARCH" />
+	            <category android:name="android.intent.category.DEFAULT" />
+	        </intent-filter>	                   
+        </activity>
+        <activity
+            android:name=".WeatherForecastActivity"
+            android:label="@string/weatherforecast" >            	                  
+        </activity>
+    </application>
+
+</manifest>

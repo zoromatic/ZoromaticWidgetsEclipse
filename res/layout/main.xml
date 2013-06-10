@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="0dp" -->
+    <!-- android:layout_weight="1.10" -->
+    <!-- android:orientation="vertical" > -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textShowBatteryNotif"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:text="@string/showbatterynotification"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <CheckBox
+            android:id="@+id/checkBoxShowBatteryNotif"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <TextView
+		android:id="@+id/textConfigureWidgets"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"		
+		android:gravity="center|left"
+		android:text="@string/configurewidgets"
+		android:drawableRight="@android:drawable/ic_menu_manage"
+		android:textAppearance="?android:attr/textAppearanceMedium" />    
+
+</LinearLayout>

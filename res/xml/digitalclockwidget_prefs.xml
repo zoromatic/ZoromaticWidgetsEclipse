@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"  
+	android:key="com.zoromatic.widgets.Preferences" >
+
+    <PreferenceCategory android:title="Clock Layout" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="show24hrs_"
+            android:summary="@string/basedon12or24"
+            android:title="@string/show24hrs" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/colorArray"
+            android:entryValues="@array/colorValues"
+            android:key="color_"
+            android:summary="@string/selectclockcolor"
+            android:title="@string/clockcolor" />
+        
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/skinArray"
+            android:entryValues="@array/skinValues"
+            android:key="clockskin_"
+            android:summary="@string/selectclockskin"
+            android:title="@string/clockskin" />
+        
+        <com.zoromatic.widgets.SeekBarPreference 
+	        android:key="transparency_"
+	        android:title="@string/widgettransparency"
+	        android:summary="@string/widgetbackground"
+	        android:dialogMessage="@string/opacitydescription"
+	        android:defaultValue="100"
+	        android:text=" %"
+	        android:max="100"
+	        />
+                
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/additionalinformation" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="showdate_"
+            android:summary="@string/showdatewidget"
+            android:title="@string/showdate" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/dateFormatArray"
+            android:entryValues="@array/dateFormatValues"
+            android:key="dateformat_"
+            android:summary="Select date format"
+            android:title="@string/dateformat" />
+            
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="showbattery_"
+            android:summary="@string/showbatterywidget"
+            android:title="@string/showbattery" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/weathersettings" >
+        <PreferenceScreen android:title="@string/weathersettings">
+		    <PreferenceCategory android:title="@string/weathersettings" >
+		        <ListPreference
+		            android:defaultValue="0"
+		            android:entries="@array/tempScaleArray"
+		            android:entryValues="@array/tempScaleValues"
+		            android:key="tempscale_"
+		            android:summary="@string/selecttempscale"
+		            android:title="@string/tempscale" />
+		        <PreferenceScreen android:title="@string/locationsettings"
+		            android:key="locationsettings_">
+					<intent android:action="android.intent.action.VIEW"
+					         android:targetPackage="com.zoromatic.widgets"
+					         android:targetClass="com.zoromatic.widgets.ConfigureLocationActivity">					    
+					</intent>
+				</PreferenceScreen>
+		        <ListPreference
+		            android:defaultValue="3"
+		            android:entries="@array/refreshIntervalArray"
+		            android:entryValues="@array/refreshIntervalValues"
+		            android:key="refreshinterval_"
+		            android:summary="@string/intervalrefreshing"
+		            android:title="@string/refreshinterval" />
+		        <CheckBoxPreference
+		            android:defaultValue="true"
+		            android:key="refreshwifionly_"
+		            android:summary="@string/refreshwifionlyconnection"
+		            android:title="@string/refreshwifionly" />
+		        <PreferenceScreen android:title="@string/refreshnow"
+		            android:key="refreshnow_"
+		            android:summary="@string/lastrefreshnever">				    
+				</PreferenceScreen>		        				
+			</PreferenceCategory>
+		</PreferenceScreen>
+		<PreferenceScreen android:title="@string/weatherprovider"
+            android:summary="@string/openweathermaplink"
+            android:key="openweatherlink_">
+		</PreferenceScreen>			
+    </PreferenceCategory>
+
+</PreferenceScreen>
