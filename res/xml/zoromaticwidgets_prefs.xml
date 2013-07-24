@@ -18,6 +18,12 @@
             android:title="@string/soundtoggle" />
         
         <PreferenceScreen
+			android:key="restartservice_" 
+			android:summary="@string/restartservicedesc"
+			android:title="@string/restartservice">		        
+		</PreferenceScreen>
+		
+        <PreferenceScreen
 			android:key="zoromaticabout_" 
 			android:summary="About Zoromatic Widgets application"
 			android:title="@string/app_name">		        

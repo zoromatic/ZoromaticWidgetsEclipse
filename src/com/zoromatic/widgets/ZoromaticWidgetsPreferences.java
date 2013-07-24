@@ -9,6 +9,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 public class ZoromaticWidgetsPreferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	
@@ -27,6 +28,25 @@ public class ZoromaticWidgetsPreferences extends PreferenceActivity implements O
         {
         	soundToggle.setValueIndex(Preferences.getSoundOptions(this));
         	soundToggle.setSummary(soundToggle.getEntries()[Preferences.getSoundOptions(this)]);
+        }
+        
+        Preference restart = findPreference(Preferences.PREF_RESTART_SERVICE);
+        
+        if (restart != null) {
+        	restart.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                @Override
+				public boolean onPreferenceClick(Preference p) {
+                	Intent startIntent = new Intent(ZoromaticWidgetsPreferences.this, WidgetUpdateService.class);
+    	            startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, Intent.ACTION_CONFIGURATION_CHANGED);        
+
+    	            ZoromaticWidgetsPreferences.this.startService(startIntent);
+    	            
+    	            Toast.makeText(getApplicationContext(), "Restarting widgets service.", Toast.LENGTH_LONG).show();
+    	            
+                    return true;
+                }
+            });        	        	
         }
         
         Preference about = findPreference(Preferences.PREF_ABOUT_KEY);
@@ -71,8 +91,8 @@ public class ZoromaticWidgetsPreferences extends PreferenceActivity implements O
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 	   
-		if (key.equals(Preferences.PREF_BATTERY_NOTIF_KEY)) {
-			CheckBoxPreference showBatteryNotif = (CheckBoxPreference)findPreference(Preferences.PREF_BATTERY_NOTIF_KEY);
+		if (key.equals(Preferences.PREF_BATTERY_NOTIF)) {
+			CheckBoxPreference showBatteryNotif = (CheckBoxPreference)findPreference(Preferences.PREF_BATTERY_NOTIF);
 	        
 	        if (showBatteryNotif != null)
 	        {

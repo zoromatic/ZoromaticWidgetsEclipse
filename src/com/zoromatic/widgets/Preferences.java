@@ -12,7 +12,8 @@ public class Preferences {
 	public static final String PREF_DATEFORMAT_KEY = "dateformat_";
 	public static final String PREF_BATTERY_KEY = "showbattery_";
 	public static final String PREF_TRANSPARENCY_KEY = "transparency_";
-	public static final String PREF_BATTERY_NOTIF_KEY = "showbatterynotif_";
+	public static final String PREF_BATTERY_NOTIF = "showbatterynotif_";
+	public static final String PREF_BATTERY_NOTIF_KEY = "showbatterynotifkey_";
 	public static final String PREF_REFRESH_INTERVAL_KEY = "refreshinterval_";
 	public static final String PREF_REFRESH_NOW_KEY = "refreshnow_";
 	public static final String PREF_LOCATION_SETTINGS_KEY = "locationsettings_";
@@ -32,6 +33,7 @@ public class Preferences {
 	public static final String PREF_CLOCK_SKIN = "clockskin_";
 	public static final String PREF_SOUND_OPTIONS = "soundoptions_";
 	public static final String PREF_SOUND_OPTIONS_KEY = "soundoptionskey_";
+	public static final String PREF_RESTART_SERVICE = "restartservice_";
 
 	private static SharedPreferences getPreferences(Context context) {
 		return context.getSharedPreferences(PREFS_NAME, 0);

@@ -6,8 +6,7 @@
     android:gravity="center|center_vertical"
     android:weightSum="1.0"
     android:baselineAligned="false"
-    android:orientation="vertical" >
-
+    android:orientation="vertical" >
     <RelativeLayout
         android:id="@+id/weatherLayoutToday"
         android:layout_width="match_parent"
@@ -91,7 +90,7 @@
                 android:autoLink="web"                
                 android:gravity="center|center_vertical"
                 android:text="@string/openweathermaplink"
-                android:textSize="8dp" />
+                android:textSize="12sp" />
 	   </LinearLayout>
 <!--         <TextView -->
 <!--             android:id="@+id/textViewOpenWeatherMapLink" -->
@@ -110,19 +109,19 @@
 	        android:id="@+id/textViewTempToday"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
 	        android:layout_centerVertical="true"
-	        android:layout_marginLeft="16dp"
 	        android:layout_toRightOf="@+id/imageViewWeatherToday"
 	        android:gravity="center|center_vertical"
 	        android:text="@string/tempempty"
-	        android:textSize="48dp" />
+	        android:textSize="48sp" />
 
 	    <LinearLayout
 	        android:id="@+id/locationLayoutToday"
 	        android:layout_width="wrap_content"
 	        android:layout_height="match_parent"
+	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentTop="true"
-	        android:layout_marginRight="16dp"
 	        android:layout_toLeftOf="@+id/imageViewWeatherToday"
 	        android:gravity="center|center_vertical"
 	        android:orientation="vertical" >
@@ -132,14 +131,14 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/locationempty"
-	            android:textSize="24dp" />
+	            android:textSize="24sp" />
 
 	        <TextView
 	            android:id="@+id/textViewDescToday"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/locationempty"
-	            android:textSize="18dp" />
+	            android:textSize="18sp" />
 	    </LinearLayout>
 
     </RelativeLayout>    
@@ -177,7 +176,7 @@
 			       	android:layout_weight="1"
 			       	android:gravity="center|bottom"
 	                android:text="@string/locationempty"
-	                android:textSize="12dp" />
+	                android:textSize="12sp" />
 		        
 		        <ImageView
 			    	android:id="@+id/imageViewWeather1"
@@ -196,7 +195,7 @@
 			       	android:layout_weight="1"
 			       	android:gravity="center|top"
 	                android:text="@string/locationempty"
-	                android:textSize="12dp" />
+	                android:textSize="12sp" />
 		    </LinearLayout>
 	
 	        <LinearLayout
@@ -214,7 +213,7 @@
                     android:layout_weight="1"
                     android:gravity="center|bottom"
                     android:text="@string/tempempty"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/textViewTempLow1"
@@ -223,7 +222,7 @@
                     android:layout_weight="1"
                     android:gravity="center|top"
                     android:text="@string/tempempty"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </LinearLayout>	        
 	    </LinearLayout>
 	    
@@ -251,7 +250,7 @@
 			       	android:layout_weight="1"
 			       	android:gravity="center|bottom"
 	                android:text="@string/locationempty"
-	                android:textSize="12dp" />
+	                android:textSize="12sp" />
                 
 		        <ImageView
 			    	android:id="@+id/imageViewWeather2"
@@ -270,7 +269,7 @@
 			       	android:layout_weight="1"
 			       	android:gravity="center|top"
 	                android:text="@string/locationempty"
-	                android:textSize="12dp" />
+	                android:textSize="12sp" />
 		    </LinearLayout>
 	
 	        <LinearLayout
@@ -288,7 +287,7 @@
                     android:layout_weight="1"
                     android:gravity="center|bottom"
                     android:text="@string/tempempty"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/textViewTempLow2"
@@ -297,7 +296,7 @@
                     android:layout_weight="1"
                     android:gravity="center|top"
                     android:text="@string/tempempty"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </LinearLayout>	        
 	    </LinearLayout>
 	    
@@ -325,7 +324,7 @@
 			       	android:layout_weight="1"
 			       	android:gravity="center|bottom"
 	                android:text="@string/locationempty"
-	                android:textSize="12dp" />
+	                android:textSize="12sp" />
                 
 		        <ImageView
 			    	android:id="@+id/imageViewWeather3"
@@ -344,7 +343,7 @@
 			       	android:layout_weight="1"
 			       	android:gravity="center|top"
 	                android:text="@string/locationempty"
-	                android:textSize="12dp" />
+	                android:textSize="12sp" />
 		    </LinearLayout>
 	
 	        <LinearLayout
@@ -362,7 +361,7 @@
                     android:layout_weight="1"
                     android:gravity="center|bottom"
                     android:text="@string/tempempty"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/textViewTempLow3"
@@ -371,7 +370,7 @@
                     android:layout_weight="1"
                     android:gravity="center|top"
                     android:text="@string/tempempty"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </LinearLayout>	        
 	    </LinearLayout>
 	    
@@ -399,7 +398,7 @@
 			       	android:layout_weight="1"
 			       	android:gravity="center|bottom"
 	                android:text="@string/locationempty"
-	                android:textSize="12dp" />
+	                android:textSize="12sp" />
                 
 		        <ImageView
 			    	android:id="@+id/imageViewWeather4"
@@ -418,7 +417,7 @@
 			       	android:layout_weight="1"
 			       	android:gravity="center|top"
 	                android:text="@string/locationempty"
-	                android:textSize="12dp" />
+	                android:textSize="12sp" />
 		    </LinearLayout>
 	
 	        <LinearLayout
@@ -436,7 +435,7 @@
                     android:layout_weight="1"
                     android:gravity="center|bottom"
                     android:text="@string/tempempty"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/textViewTempLow4"
@@ -445,7 +444,7 @@
                     android:layout_weight="1"
                     android:gravity="center|top"
                     android:text="@string/tempempty"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </LinearLayout>	        
 	    </LinearLayout>
 	    
@@ -473,7 +472,7 @@
 			       	android:layout_weight="1"
 			       	android:gravity="center|bottom"
 	                android:text="@string/locationempty"
-	                android:textSize="12dp" />
+	                android:textSize="12sp" />
                 
 		        <ImageView
 			    	android:id="@+id/imageViewWeather5"
@@ -492,7 +491,7 @@
 			       	android:layout_weight="1"
 			       	android:gravity="center|top"
 	                android:text="@string/locationempty"
-	                android:textSize="12dp" />
+	                android:textSize="12sp" />
 		    </LinearLayout>
 	
 	        <LinearLayout
@@ -510,7 +509,7 @@
                     android:layout_weight="1"
                     android:gravity="center|bottom"
                     android:text="@string/tempempty"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/textViewTempLow5"
@@ -519,7 +518,7 @@
                     android:layout_weight="1"
                     android:gravity="center|top"
                     android:text="@string/tempempty"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </LinearLayout>	        
 	    </LinearLayout>
 	    
@@ -546,7 +545,7 @@
 <!-- 			       	android:layout_weight="1" -->
 <!-- 			       	android:gravity="center|bottom" -->
 <!-- 	                android:text="@string/locationempty" -->
-<!-- 	                android:textSize="12dp" /> -->
+<!-- 	                android:textSize="12sp" /> -->
                 
 <!-- 		        <ImageView -->
 <!-- 			    	android:id="@+id/imageViewWeather5" -->
@@ -565,7 +564,7 @@
 <!-- 			       	android:layout_weight="1" -->
 <!-- 			       	android:gravity="center|top" -->
 <!-- 	                android:text="@string/locationempty" -->
-<!-- 	                android:textSize="12dp" /> -->
+<!-- 	                android:textSize="12sp" /> -->
 <!-- 		    </LinearLayout> -->
 	
 <!-- 	        <LinearLayout -->
@@ -583,7 +582,7 @@
 <!--                     android:layout_weight="1" -->
 <!--                     android:gravity="center|bottom" -->
 <!--                     android:text="@string/tempempty" -->
-<!--                     android:textSize="12dp" /> -->
+<!--                     android:textSize="12sp" /> -->
 
 <!--                 <TextView -->
 <!--                     android:id="@+id/textViewTempLow5" -->
@@ -592,7 +591,7 @@
 <!--                     android:layout_weight="1" -->
 <!--                     android:gravity="center|top" -->
 <!--                     android:text="@string/tempempty" -->
-<!--                     android:textSize="12dp" /> -->
+<!--                     android:textSize="12sp" /> -->
 <!--             </LinearLayout>	         -->
 <!-- 	    </LinearLayout> -->
         

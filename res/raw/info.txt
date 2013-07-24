@@ -1,5 +1,5 @@
 <h3>Zoromatic Widgets</h3>
 
-Version 1.0<br>
+Version 1<br>
 Copyright 2013<br>
 <b>zoromaticsoftware.blogspot.com</b><br><br>

@@ -37,7 +37,7 @@
 		        android:layout_height="wrap_content"
 		        android:gravity="center|center_vertical"
 		        android:text="@string/datebatterytxt"
-		        android:textSize="14dp"
+		        android:textSize="14sp"
 		        android:visibility="invisible" />
             
             <LinearLayout
@@ -56,7 +56,7 @@
 				        android:gravity="center|fill_vertical"
 				        android:text="@string/tempempty"
 				        android:background="@drawable/bck_left"
-				        android:textSize="72dp" />
+				        android:textSize="72sp" />
 				    
 				    <TextView
 				        android:id="@+id/textViewClockSpace"
@@ -65,7 +65,7 @@
 				        android:layout_weight=".1"
 				        android:gravity="center|fill_vertical"
 				        android:text=""
-				        android:textSize="72dp" />
+				        android:textSize="72sp" />
 				    
 				    <TextView
 				        android:id="@+id/textViewClockMinute"
@@ -75,7 +75,7 @@
 				        android:gravity="center|fill_vertical"
 				        android:text="@string/tempempty"
 				        android:background="@drawable/bck_right"
-				        android:textSize="72dp" />
+				        android:textSize="72sp" />
 			</LinearLayout>
 				    		    
 		</LinearLayout>
@@ -101,14 +101,14 @@
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:text="@string/locationempty"
-			        android:textSize="12dp" />
+			        android:textSize="12sp" />
 	
 			    <TextView
 			        android:id="@+id/textViewDesc"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:text="@string/locationempty"
-			        android:textSize="12dp" />
+			        android:textSize="12sp" />
 			</LinearLayout>
 			
 		    <TextView
@@ -118,7 +118,7 @@
 		        android:layout_weight=".4"
 		        android:gravity="center|fill_vertical"
 		        android:text=""
-		        android:textSize="72dp" />		    
+		        android:textSize="72sp" />		    
 		    
 		    <TextView
 		        android:id="@+id/textViewTemp"
@@ -127,7 +127,7 @@
 				android:layout_weight="0.3"
 				android:gravity="center|center_vertical"
 		        android:text="@string/tempempty"
-		        android:textSize="32dp" />
+		        android:textSize="32sp" />
 
 <!-- 		    <LinearLayout -->
 <!-- 		        android:id="@+id/tempLayout" -->
@@ -144,7 +144,7 @@
 <!-- 			        android:gravity="right|top" -->
 <!-- 			        android:layout_weight="1" -->
 <!-- 			        android:text="@string/tempempty" -->
-<!-- 			        android:textSize="32dp" /> -->
+<!-- 			        android:textSize="32sp" /> -->
 				
 <!-- 				<LinearLayout -->
 <!-- 			        android:id="@+id/hightlowLayout" -->
@@ -161,7 +161,7 @@
 <!-- 			            android:gravity="center|bottom" -->
 <!-- 			            android:layout_weight="1" -->
 <!-- 			            android:text="@string/tempempty" -->
-<!-- 			            android:textSize="12dp" /> -->
+<!-- 			            android:textSize="12sp" /> -->
 	
 <!-- 			        <TextView -->
 <!-- 			            android:id="@+id/textViewTempLow" -->
@@ -170,7 +170,7 @@
 <!-- 			            android:gravity="center|top" -->
 <!-- 			            android:layout_weight="1" -->
 <!-- 			            android:text="@string/tempempty" -->
-<!-- 			            android:textSize="12dp" /> -->
+<!-- 			            android:textSize="12sp" /> -->
 <!-- 			    </LinearLayout> -->
 <!-- 			</LinearLayout> -->
 

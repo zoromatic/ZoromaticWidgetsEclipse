@@ -64,8 +64,10 @@
 	<string name="selectsoundtoggle">Select sound toggle options</string>
 	<string name="soundtoggle">Sound Toggle Options</string>
 	<string name="weatherforecast">Weather Forecast</string>
-	<string name="versioncode">3</string>
-	<string name="versionname">1.2</string>	
+	<string name="versioncode">1</string>
+	<string name="versionname">1.0</string>	
+	<string name="restartservice">Restart Widgets</string>
+	<string name="restartservicedesc">Restart Zoromatic Widgets service</string>
 	
 	<string name="bluetooth">Bluetooth</string>
 	<string name="gps">GPS</string>

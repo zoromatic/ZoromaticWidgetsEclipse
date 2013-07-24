@@ -35,6 +35,7 @@ import com.zoromatic.sunrisesunset.SunriseSunsetCalculator;
 import com.zoromatic.sunrisesunset.dto.SunriseSunsetLocation;
 import com.zoromatic.widgets.R;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -80,6 +81,7 @@ import android.view.ViewGroup;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
+@SuppressLint("SimpleDateFormat")
 public class WidgetUpdateService extends Service {
 	private static String LOG_TAG = "WidgetUpdateService";
 	public static String BLUETOOTH_WIDGET_UPDATE = "com.zoromatic.widgets.BLUETOOTH_WIDGET_UPDATE";
@@ -192,6 +194,9 @@ public class WidgetUpdateService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d(LOG_TAG, "WidgetUpdateService onStartCommand");
+		
+		if (intent == null)
+			return START_STICKY;
 
 		mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
