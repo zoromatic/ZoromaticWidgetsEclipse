@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -30,12 +29,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import com.zoromatic.sunrisesunset.SunriseSunsetCalculator;
 import com.zoromatic.sunrisesunset.dto.SunriseSunsetLocation;
 import com.zoromatic.widgets.R;
-
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -65,6 +63,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -81,6 +80,7 @@ import android.view.ViewGroup;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 @SuppressLint("SimpleDateFormat")
 public class WidgetUpdateService extends Service {
 	private static String LOG_TAG = "WidgetUpdateService";
@@ -91,6 +91,7 @@ public class WidgetUpdateService extends Service {
 	public static String RINGER_WIDGET_UPDATE = "com.zoromatic.widgets.RINGER_WIDGET_UPDATE";
 	public static String CLOCK_WIDGET_UPDATE = "com.zoromatic.widgets.CLOCK_WIDGET_UPDATE";
 	public static String WEATHER_UPDATE = "com.zoromatic.widgets.WEATHER_UPDATE";
+	public static String AIRPLANE_WIDGET_UPDATE = "com.zoromatic.widgets.AIRPLANE_WIDGET_UPDATE";
 
 	protected static long GPS_UPDATE_TIME_INTERVAL = 3000; // milliseconds
 	protected static float GPS_UPDATE_DISTANCE_INTERVAL = 0; // meters
@@ -126,6 +127,7 @@ public class WidgetUpdateService extends Service {
 		mIntentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
 		mIntentFilter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
 		mIntentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
+		mIntentFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
 
 		mIntentFilter.addAction(BLUETOOTH_WIDGET_UPDATE);
 		mIntentFilter.addAction(WIFI_WIDGET_UPDATE);
@@ -134,6 +136,7 @@ public class WidgetUpdateService extends Service {
 		mIntentFilter.addAction(RINGER_WIDGET_UPDATE);
 		mIntentFilter.addAction(CLOCK_WIDGET_UPDATE);
 		mIntentFilter.addAction(WEATHER_UPDATE);
+		mIntentFilter.addAction(AIRPLANE_WIDGET_UPDATE);
 	}
 
 	private class WidgetGPSListener implements GpsStatus.Listener {
@@ -335,6 +338,12 @@ public class WidgetUpdateService extends Service {
 								RingerAppWidgetProvider.class);
 					}
 					
+					if (intentExtra.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+							|| intentExtra.equals(AIRPLANE_WIDGET_UPDATE)) {
+						thisWidget = new ComponentName(this,
+								AirplaneAppWidgetProvider.class);
+					}
+					
 					if (thisWidget != null) {
 	
 						AppWidgetManager appWidgetManager = AppWidgetManager
@@ -530,7 +539,28 @@ public class WidgetUpdateService extends Service {
 			} catch (Exception e) {
 				Log.e(LOG_TAG, "", e);
 			}
-		}		
+		}	
+		
+		if (intentExtra.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+				|| intentExtra.equals(AIRPLANE_WIDGET_UPDATE)) {
+			updateViews = new RemoteViews(getPackageName(), R.layout.airplanewidget);
+
+			try {
+				updateAirplaneMode(updateViews, intent);
+			} catch (Exception e) {
+				Log.e(LOG_TAG, "", e);
+			}
+
+			try {
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+						0, new Intent(AIRPLANE_WIDGET_UPDATE),
+						PendingIntent.FLAG_UPDATE_CURRENT);
+				updateViews.setOnClickPendingIntent(R.id.airplaneWidget,
+						pendingIntent);
+			} catch (Exception e) {
+				Log.e(LOG_TAG, "", e);
+			}
+		}
 		
 		return updateViews;
 	}
@@ -763,6 +793,63 @@ public class WidgetUpdateService extends Service {
 				+ "%", batteryStatus, pendingIntent);
 		notificationManager.notify(R.string.batterynotification, notification);
 	}
+	
+	public boolean getAirplaneMode() {
+	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+	        return Settings.System.getInt(getContentResolver(), 
+	                Settings.System.AIRPLANE_MODE_ON, 0) != 0;          
+	    } else {
+	        return Settings.Global.getInt(getContentResolver(), 
+	                Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+	    }       
+	}
+	
+	public void setAirplaneMode(boolean airplaneMode) {
+	
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+			Settings.System.putInt(
+			      getContentResolver(),
+			      Settings.System.AIRPLANE_MODE_ON, airplaneMode ? 1 : 0);
+		} else {
+			Settings.System.putInt(
+			      getContentResolver(),
+			      Settings.Global.AIRPLANE_MODE_ON, airplaneMode ? 1 : 0);
+		}
+
+		// Post an intent to reload
+		Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+		intent.putExtra("state", airplaneMode);
+		sendBroadcast(intent);
+	}
+	
+	public void updateAirplaneMode(RemoteViews updateViews, Intent intent) {
+		Log.d(LOG_TAG, "WidgetUpdateService updateAirplaneMode");
+
+		Bundle extras = intent.getExtras();
+
+		if (extras == null)
+			return;
+		
+		String intentExtra = extras.getString(WidgetInfoReceiver.INTENT_EXTRA);
+
+		if (intentExtra.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
+			Boolean airplaneMode = getAirplaneMode();
+			int resource = (airplaneMode == null ? R.drawable.airplane_off
+					: airplaneMode ? R.drawable.airplane_on
+							: R.drawable.airplane_off);
+
+			updateViews.setImageViewResource(R.id.imageViewAirplane, resource);
+		}
+
+		if (intentExtra.equals(AIRPLANE_WIDGET_UPDATE)) {
+			Boolean airplaneMode = getAirplaneMode();
+			// ignore toggle requests if the Airplane mode is currently changing
+			// state
+			if (airplaneMode != null) {
+				setAirplaneMode(!airplaneMode);
+			}
+		}
+	}
 
 	protected Boolean getBluetoothState() {
 
@@ -810,11 +897,30 @@ public class WidgetUpdateService extends Service {
 	public void updateBluetoothStatus(RemoteViews updateViews, Intent intent) {
 		Log.d(LOG_TAG, "WidgetUpdateService updateBluetoothStatus");
 
+		if (getAirplaneMode()) {
+			
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+				String radios = Settings.System.getString(getContentResolver(),
+			            Settings.System.AIRPLANE_MODE_RADIOS);
+				
+				if (radios.contains(Settings.System.RADIO_BLUETOOTH)) {
+					return;
+				}          
+		    } else {
+		    	String radios = Settings.Global.getString(getContentResolver(),
+			            Settings.Global.AIRPLANE_MODE_RADIOS);
+				
+				if (radios.contains(Settings.Global.RADIO_BLUETOOTH)) {
+					return;
+				}
+		    }					
+		}
+		
 		Bundle extras = intent.getExtras();
 
 		if (extras == null)
 			return;
-
+		
 		String intentExtra = extras.getString(WidgetInfoReceiver.INTENT_EXTRA);
 
 		if (intentExtra.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
@@ -879,11 +985,30 @@ public class WidgetUpdateService extends Service {
 	public void updateWifiStatus(RemoteViews updateViews, Intent intent) {
 		Log.d(LOG_TAG, "WidgetUpdateService updateWifiStatus");
 
+		if (getAirplaneMode()) {
+			
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+				String radios = Settings.System.getString(getContentResolver(),
+			            Settings.System.AIRPLANE_MODE_RADIOS);
+				
+				if (radios.contains(Settings.System.RADIO_WIFI)) {
+					return;
+				}          
+		    } else {
+		    	String radios = Settings.Global.getString(getContentResolver(),
+			            Settings.Global.AIRPLANE_MODE_RADIOS);
+				
+				if (radios.contains(Settings.Global.RADIO_WIFI)) {
+					return;
+				}
+		    }					
+		}
+		
 		Bundle extras = intent.getExtras();
 
 		if (extras == null)
 			return;
-
+		
 		String intentExtra = extras.getString(WidgetInfoReceiver.INTENT_EXTRA);
 
 		if (intentExtra.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {

@@ -100,6 +100,12 @@ public class WidgetInfoReceiver extends BroadcastReceiver {
     						RingerAppWidgetProvider.class);
     			}
     			
+    			if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+    					|| action.equals(WidgetUpdateService.AIRPLANE_WIDGET_UPDATE)) {
+    				thisWidget = new ComponentName(context,
+    						AirplaneAppWidgetProvider.class);
+    			}
+    			
     			if (thisWidget != null) {
     				appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
                 	

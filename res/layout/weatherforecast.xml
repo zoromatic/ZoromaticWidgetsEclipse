@@ -6,7 +6,7 @@
     android:gravity="center|center_vertical"
     android:weightSum="1.0"
     android:baselineAligned="false"
-    android:orientation="vertical" >
+    android:orientation="vertical" >
     <RelativeLayout
         android:id="@+id/weatherLayoutToday"
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_centerInParent="true"            
             android:contentDescription="@string/weatherdesc"
             android:scaleType="fitXY"
-            android:src="@drawable/weather_unknown" />
+            android:src="@drawable/weather_unknown" />
 <!--         <LinearLayout -->
 <!--             android:id="@+id/tempLayoutToday" -->
 <!--             android:layout_width="wrap_content" -->
@@ -74,8 +74,7 @@
 	        android:layout_height="wrap_content"
 			android:orientation="horizontal"
 			android:baselineAligned="false" >
-	        
-        	<ImageView
+		 <ImageView
         	    android:id="@+id/imageViewOpenWeatherMapIcon"
         	    android:layout_width="24dp"
         	    android:layout_height="24dp"
@@ -91,7 +90,7 @@
                 android:gravity="center|center_vertical"
                 android:text="@string/openweathermaplink"
                 android:textSize="12sp" />
-	   </LinearLayout>
+	   </LinearLayout>
 <!--         <TextView -->
 <!--             android:id="@+id/textViewOpenWeatherMapLink" -->
 <!--             android:layout_width="wrap_content" -->

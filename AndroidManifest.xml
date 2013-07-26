@@ -39,7 +39,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
     </uses-permission>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" >
-    </uses-permission>    
+    </uses-permission>
      
     <application
         android:icon="@drawable/icon"
@@ -160,14 +160,20 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/ringerwidget_info" />
         </receiver>
-
-        <activity
-            android:name=".DigitalClockAppWidgetConfigure"
-            android:label="@string/clockwidgetprefs" >
+        
+        <receiver
+            android:name=".AirplaneAppWidgetProvider"
+            android:icon="@drawable/airplane"
+            android:label="@string/airplanewidgetname" >
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-        </activity>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/wifiwidget_info" />
+        </receiver>
+
         <activity
             android:name=".DigitalClockAppWidgetPreferences"
             android:label="@string/clockwidgetprefs" >

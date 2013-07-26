@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Zoromatic Widgets</string>
     <string name="app_name">Zoromatic Widgets</string>
-    <string name="buttontxt">Click Me!</string>
-    <string name="buttonsave">Save</string>
-    <string name="buttoncolor">Color</string>
-    <string name="fiveblanks">     </string>	
     <string name="clockwidgetname4x2">Zoromatic Clock Widget 4x2</string>    
     <string name="batterywidgetname">Zoromatic Battery Widget</string>
     <string name="wifiwidgetname">Zoromatic WiFi Widget</string>
@@ -13,17 +8,15 @@
     <string name="gpswidgetname">Zoromatic GPS Widget</string>
     <string name="mobilewidgetname">Zoromatic Mobile Data Widget</string>
     <string name="ringerwidgetname">Zoromatic Ringer Widget</string>
-    <string name="timetxt">--:--</string>
+    <string name="airplanewidgetname">Zoromatic Airplane Widget</string>
     <string name="datebatterytxt">--.--.---- [--%]</string>
     <string name="tempempty">--</string>
     <string name="locationempty">--</string>
     <string name="weatherdesc">Weather</string>
     <string name="dateformat">Date Format</string>
-    <string name="defaultdateformat">dd.MM.yyyy</string>
     <string name="showdate">Show Date</string>
     <string name="show24hrs">24 hrs</string>    
     <string name="showbattery">Show Battery Status</string>    
-    <string name="text_format">hh:mm:ss</string>
     <string name="batterystatus">--%</string>
     <string name="batterydesc">Battery Status</string>
     <string name="wifidesc">WiFi Status</string>
@@ -64,16 +57,16 @@
 	<string name="selectsoundtoggle">Select sound toggle options</string>
 	<string name="soundtoggle">Sound Toggle Options</string>
 	<string name="weatherforecast">Weather Forecast</string>
-	<string name="versioncode">1</string>
-	<string name="versionname">1.0</string>	
 	<string name="restartservice">Restart Widgets</string>
 	<string name="restartservicedesc">Restart Zoromatic Widgets service</string>
+	<string name="airplanedesc">Airplane Mode</string>
 	
 	<string name="bluetooth">Bluetooth</string>
 	<string name="gps">GPS</string>
 	<string name="mobile">Data</string>
 	<string name="ringer">Ringer</string>
 	<string name="wifi">WiFi</string>
+	<string name="airplane">Airplane</string>
 	
 	<string name="locationdescription">Use current location (requires GPS turned on) or enter custom location</string>
     <string name="locationcurrent">Current location</string>
