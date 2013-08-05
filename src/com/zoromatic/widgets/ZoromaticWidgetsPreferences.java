@@ -11,6 +11,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+@SuppressWarnings("deprecation")
 public class ZoromaticWidgetsPreferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	
 	@Override

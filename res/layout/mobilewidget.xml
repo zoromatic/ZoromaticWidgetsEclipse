@@ -13,7 +13,7 @@
         android:id="@+id/imageViewMobile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/mobile_off" 
+        android:src="@drawable/data_off" 
         android:contentDescription="@string/mobiledesc"/>
     
     <TextView
@@ -21,6 +21,6 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:text="@string/mobile"        
-       android:textAppearance="?android:attr/textAppearanceSmall" />
+       android:textSize="12sp"/>
     
 </LinearLayout>

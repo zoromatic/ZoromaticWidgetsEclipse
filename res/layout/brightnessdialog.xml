@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/brightnessdialog"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:minWidth="300dp"
+  android:gravity="center"
+  android:layout_margin="4dp">
+
+    <CheckBox
+        android:id="@+id/checkBoxBrightness"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/autobrightness" />
+
+    <SeekBar
+        android:id="@+id/seekBarBrightness"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+	  android:orientation="horizontal"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:gravity="center">
+	  
+	    <Button
+	        android:id="@+id/buttonSave"
+	        android:layout_width="0sp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:text="@string/buttonsave" />
+	
+	    <Button
+	        android:id="@+id/buttonCancel"
+	        android:layout_width="0sp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:text="@string/buttoncancel" />
+	    
+	</LinearLayout>
+    
+</LinearLayout>

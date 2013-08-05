@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -29,9 +30,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
 import com.zoromatic.sunrisesunset.SunriseSunsetCalculator;
 import com.zoromatic.sunrisesunset.dto.SunriseSunsetLocation;
 import com.zoromatic.widgets.R;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -67,21 +70,25 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.telephony.TelephonyManager;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 //import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 @SuppressLint("SimpleDateFormat")
+@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
 public class WidgetUpdateService extends Service {
 	private static String LOG_TAG = "WidgetUpdateService";
 	public static String BLUETOOTH_WIDGET_UPDATE = "com.zoromatic.widgets.BLUETOOTH_WIDGET_UPDATE";
@@ -92,6 +99,7 @@ public class WidgetUpdateService extends Service {
 	public static String CLOCK_WIDGET_UPDATE = "com.zoromatic.widgets.CLOCK_WIDGET_UPDATE";
 	public static String WEATHER_UPDATE = "com.zoromatic.widgets.WEATHER_UPDATE";
 	public static String AIRPLANE_WIDGET_UPDATE = "com.zoromatic.widgets.AIRPLANE_WIDGET_UPDATE";
+	public static String BRIGHTNESS_WIDGET_UPDATE = "com.zoromatic.widgets.BRIGHTNESS_WIDGET_UPDATE";
 
 	protected static long GPS_UPDATE_TIME_INTERVAL = 3000; // milliseconds
 	protected static float GPS_UPDATE_DISTANCE_INTERVAL = 0; // meters
@@ -128,6 +136,7 @@ public class WidgetUpdateService extends Service {
 		mIntentFilter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
 		mIntentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
 		mIntentFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+		mIntentFilter.addAction(Intent.ACTION_SCREEN_ON);
 
 		mIntentFilter.addAction(BLUETOOTH_WIDGET_UPDATE);
 		mIntentFilter.addAction(WIFI_WIDGET_UPDATE);
@@ -137,6 +146,7 @@ public class WidgetUpdateService extends Service {
 		mIntentFilter.addAction(CLOCK_WIDGET_UPDATE);
 		mIntentFilter.addAction(WEATHER_UPDATE);
 		mIntentFilter.addAction(AIRPLANE_WIDGET_UPDATE);
+		mIntentFilter.addAction(BRIGHTNESS_WIDGET_UPDATE);
 	}
 
 	private class WidgetGPSListener implements GpsStatus.Listener {
@@ -344,6 +354,12 @@ public class WidgetUpdateService extends Service {
 								AirplaneAppWidgetProvider.class);
 					}
 					
+					if (intentExtra.equals(Intent.ACTION_SCREEN_ON)
+							|| intentExtra.equals(BRIGHTNESS_WIDGET_UPDATE)) {
+						thisWidget = new ComponentName(this,
+								BrightnessAppWidgetProvider.class);
+					}
+					
 					if (thisWidget != null) {
 	
 						AppWidgetManager appWidgetManager = AppWidgetManager
@@ -465,7 +481,7 @@ public class WidgetUpdateService extends Service {
 					R.layout.mobilewidget);
 
 			try {
-				updateMobileStatus(updateViews, intent);
+				updateDataStatus(updateViews, intent);
 			} catch (Exception e) {
 				Log.e(LOG_TAG, "", e);
 			}
@@ -562,6 +578,28 @@ public class WidgetUpdateService extends Service {
 			}
 		}
 		
+		if (intentExtra.equals(Intent.ACTION_SCREEN_ON)
+				|| intentExtra.equals(BRIGHTNESS_WIDGET_UPDATE)) {
+			updateViews = new RemoteViews(getPackageName(), R.layout.brightnesswidget);
+			
+			try {
+				updateBrightness(updateViews, intent);
+			} catch (Exception e) {
+				Log.e(LOG_TAG, "", e);
+			}
+			
+			try {
+				Intent brightnessIntent = new Intent(this, ScreenBrightnessActivity.class);
+				
+			    PendingIntent pendingBrightnessIntent = PendingIntent.getActivity(this,
+						0, brightnessIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+				
+			    updateViews.setOnClickPendingIntent(R.id.brightnessWidget, pendingBrightnessIntent);			
+			} catch (Exception e) {
+				Log.e(LOG_TAG, "", e);
+			}    
+		}
+		
 		return updateViews;
 	}
 	
@@ -640,7 +678,7 @@ public class WidgetUpdateService extends Service {
 		int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
 				BatteryManager.BATTERY_STATUS_UNKNOWN);
 		int level = -1;
-		int icon = R.drawable.battery_001;
+		int icon = R.drawable.stat_sys_battery_plain000;
 
 		if (rawlevel >= 0 && scale > 0) {
 			level = (rawlevel * 100) / scale;
@@ -661,37 +699,58 @@ public class WidgetUpdateService extends Service {
 			}
 			status = status1;
 		}
+		
+		String strLevel = String.valueOf(level); 
+		
+		int lnColon = strLevel.length();
+		SpannableString spStrLevel = new SpannableString(strLevel);
+		spStrLevel.setSpan(new StyleSpan(Typeface.BOLD), 0, lnColon, 0);
 
-		updateViews.setTextViewText(R.id.textViewBatteryStatus, level + "%");
+		updateViews.setTextViewText(R.id.textViewBatteryStatus, spStrLevel);
 
-		if (level > 90)
-			icon = R.drawable.battery_010;
-		else if (level <= 90 && level > 75)
-			icon = R.drawable.battery_009;
-		else if (level <= 75 && level > 60)
-			icon = R.drawable.battery_008;
-		else if (level <= 60 && level > 50)
-			icon = R.drawable.battery_007;
-		else if (level <= 50 && level > 40)
-			icon = R.drawable.battery_006;
-		else if (level <= 40 && level > 25)
-			icon = R.drawable.battery_005;
-		else if (level <= 25 && level > 15)
-			icon = R.drawable.battery_004;
-		else if (level <= 15 && level > 5)
-			icon = R.drawable.battery_003;
-		else if (level <= 5)
-			icon = R.drawable.battery_002;
-		else
-			icon = R.drawable.battery_001;
+//		if (level > 90)
+//			icon = R.drawable.battery_010;
+//		else if (level <= 90 && level > 75)
+//			icon = R.drawable.battery_009;
+//		else if (level <= 75 && level > 60)
+//			icon = R.drawable.battery_008;
+//		else if (level <= 60 && level > 50)
+//			icon = R.drawable.battery_007;
+//		else if (level <= 50 && level > 40)
+//			icon = R.drawable.battery_006;
+//		else if (level <= 40 && level > 25)
+//			icon = R.drawable.battery_005;
+//		else if (level <= 25 && level > 15)
+//			icon = R.drawable.battery_004;
+//		else if (level <= 15 && level > 5)
+//			icon = R.drawable.battery_003;
+//		else if (level <= 5)
+//			icon = R.drawable.battery_002;
+//		else
+//			icon = R.drawable.battery_001;
+//		
+//		if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
+//			icon = R.drawable.battery_000;
+//		}
+		
+		switch (status) {
+		
+		case (BatteryManager.BATTERY_STATUS_UNKNOWN):
+			icon = R.drawable.stat_sys_battery_charge_plain000;
+			break;
+		case (BatteryManager.BATTERY_STATUS_FULL):
+			icon = R.drawable.stat_sys_battery_plainfull;
+			break;
+		case (BatteryManager.BATTERY_STATUS_CHARGING):			
+			icon = R.drawable.stat_sys_battery_charge_plain000 + level;
+			break;
+		case (BatteryManager.BATTERY_STATUS_DISCHARGING):
+		case (BatteryManager.BATTERY_STATUS_NOT_CHARGING):
+			icon = R.drawable.stat_sys_battery_plain000 + level;
+			break;
+		}
 
 		updateViews.setImageViewResource(R.id.imageViewBattery, icon);
-
-		if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-			updateViews.setImageViewResource(R.id.imageViewBattery,
-					R.drawable.battery_000);
-			icon = R.drawable.battery_000;
-		}
 	}
 	
 	public void updateNotificationBatteryStatus(Intent intent) {
@@ -712,7 +771,7 @@ public class WidgetUpdateService extends Service {
 		int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
 				BatteryManager.BATTERY_STATUS_UNKNOWN);
 		int level = -1;
-		int icon = R.drawable.stat_sys_battery_circle_charge_anim000;
+		int icon = R.drawable.stat_sys_battery_charge_anim000;
 		
 		if (rawlevel >= 0 && scale > 0) {
 			level = (rawlevel * 100) / scale;
@@ -737,17 +796,17 @@ public class WidgetUpdateService extends Service {
 		switch (status) {
 		
 		case (BatteryManager.BATTERY_STATUS_UNKNOWN):
-			icon = R.drawable.stat_sys_battery_circle_charge_anim000;
+			icon = R.drawable.stat_sys_battery_charge_anim000;
 			break;
 		case (BatteryManager.BATTERY_STATUS_FULL):
-			icon = R.drawable.stat_sys_battery_circle_full;
+			icon = R.drawable.stat_sys_battery_full;
 			break;
 		case (BatteryManager.BATTERY_STATUS_CHARGING):			
-			icon = R.drawable.stat_sys_battery_circle_charge_anim000 + level;
+			icon = R.drawable.stat_sys_battery_charge_anim000 + level;
 			break;
 		case (BatteryManager.BATTERY_STATUS_DISCHARGING):
 		case (BatteryManager.BATTERY_STATUS_NOT_CHARGING):
-			icon = R.drawable.stat_sys_battery_circle_000 + level;
+			icon = R.drawable.stat_sys_battery_000 + level;
 			break;
 		}
 		
@@ -794,6 +853,72 @@ public class WidgetUpdateService extends Service {
 		notificationManager.notify(R.string.batterynotification, notification);
 	}
 	
+	protected int getBrightness() {
+
+		int brightness = 255;
+		
+		try {
+			brightness = Settings.System.getInt(getContentResolver(),
+					Settings.System.SCREEN_BRIGHTNESS);
+		} catch (SettingNotFoundException snfe) {
+			brightness = 255;
+		}
+
+		return brightness;
+	}
+	
+	public boolean isAutoBrightness() {
+		boolean automicBrightness = false;
+		try {
+			automicBrightness = Settings.System.getInt(getContentResolver(),
+					Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+		} catch (SettingNotFoundException e) {
+			e.printStackTrace();
+		}
+		return automicBrightness;
+	}
+
+	public void setBrightness(int brightness) {
+
+		Log.v(LOG_TAG, "setBrightness - " + brightness);		
+	}
+
+	public void updateBrightness(RemoteViews updateViews, Intent intent) {
+		Log.d(LOG_TAG, "WidgetUpdateService updateBrightness");
+
+		Bundle extras = intent.getExtras();
+
+		if (extras == null)
+			return;
+		
+		String intentExtra = extras.getString(WidgetInfoReceiver.INTENT_EXTRA);
+
+		if (intentExtra.equals(Intent.ACTION_SCREEN_ON)) {
+			int resource = R.drawable.brightness_mid;			
+			
+			if (isAutoBrightness()) {
+				//resource = R.drawable.brightness_auto;
+			} else {
+				int brightness = getBrightness();
+				
+				if (brightness < 50) {
+					//resource = R.drawable.brightness_off;
+					resource = R.drawable.brightness_mid;
+				} else {
+					
+					if (brightness >= 50 && brightness < 150) {
+						resource = R.drawable.brightness_mid;
+					} else {
+						//resource = R.drawable.brightness_on;
+						resource = R.drawable.brightness_mid;
+					}					
+				}
+			}
+			
+			updateViews.setImageViewResource(R.id.imageViewBrightness, resource);
+		}		
+	}
+	
 	public boolean getAirplaneMode() {
 	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
 	        return Settings.System.getInt(getContentResolver(), 
@@ -811,7 +936,7 @@ public class WidgetUpdateService extends Service {
 			      getContentResolver(),
 			      Settings.System.AIRPLANE_MODE_ON, airplaneMode ? 1 : 0);
 		} else {
-			Settings.System.putInt(
+			Settings.Global.putInt(
 			      getContentResolver(),
 			      Settings.Global.AIRPLANE_MODE_ON, airplaneMode ? 1 : 0);
 		}
@@ -1074,7 +1199,6 @@ public class WidgetUpdateService extends Service {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void setMobileStateFroyo(boolean mobileState) {
 
 		Method dataConnSwitchmethod = null;
@@ -1162,7 +1286,6 @@ public class WidgetUpdateService extends Service {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void setMobileStateGingerbread(boolean mobileState) {
 
 		ConnectivityManager conman = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1232,8 +1355,27 @@ public class WidgetUpdateService extends Service {
 
 	}
 
-	public void updateMobileStatus(RemoteViews updateViews, Intent intent) {
+	public void updateDataStatus(RemoteViews updateViews, Intent intent) {
 		Log.d(LOG_TAG, "WidgetUpdateService updateMobileStatus");
+
+		if (getAirplaneMode()) {
+			
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+				String radios = Settings.System.getString(getContentResolver(),
+			            Settings.System.AIRPLANE_MODE_RADIOS);
+				
+				if (radios.contains(Settings.System.RADIO_CELL)) {
+					return;
+				}          
+		    } else {
+		    	String radios = Settings.Global.getString(getContentResolver(),
+			            Settings.Global.AIRPLANE_MODE_RADIOS);
+				
+				if (radios.contains(Settings.Global.RADIO_CELL)) {
+					return;
+				}
+		    }					
+		}
 
 		Bundle extras = intent.getExtras();
 
@@ -1244,9 +1386,9 @@ public class WidgetUpdateService extends Service {
 
 		if (intentExtra.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
 			Boolean mobileState = getMobileState();
-			int resource = (mobileState == null ? R.drawable.mobile_off
-					: mobileState ? R.drawable.mobile_on
-							: R.drawable.mobile_off);
+			int resource = (mobileState == null ? R.drawable.data_off
+					: mobileState ? R.drawable.data_on
+							: R.drawable.data_off);
 
 			updateViews.setImageViewResource(R.id.imageViewMobile, resource);
 		}
@@ -1542,10 +1684,25 @@ public class WidgetUpdateService extends Service {
 		spStrMinute.setSpan(new ForegroundColorSpan(systemColor), 0, lnMinute, 0);
 		spStrColon.setSpan(new ForegroundColorSpan(systemColor), 0, lnColon, 0);
 		
+		DisplayMetrics metrics = new DisplayMetrics();
+		WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+		wm.getDefaultDisplay().getMetrics(metrics);
+
+		switch(metrics.densityDpi)
+		{
+			case DisplayMetrics.DENSITY_LOW:  //LDPI	
+			case DisplayMetrics.DENSITY_HIGH: //HDPI			
+			case DisplayMetrics.DENSITY_MEDIUM: //MDPI
+			
+		}
+		
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-			spStrHour.setSpan(new AbsoluteSizeSpan(96), 0, lnHour, 0);
-			spStrMinute.setSpan(new AbsoluteSizeSpan(96), 0, lnMinute, 0);
-			spStrColon.setSpan(new AbsoluteSizeSpan(96), 0, lnColon, 0);
+			
+			if (metrics.densityDpi > DisplayMetrics.DENSITY_LOW) {
+				spStrHour.setSpan(new AbsoluteSizeSpan(96), 0, lnHour, 0);
+				spStrMinute.setSpan(new AbsoluteSizeSpan(96), 0, lnMinute, 0);
+				spStrColon.setSpan(new AbsoluteSizeSpan(96), 0, lnColon, 0);
+			}
 		}
 
 //		boolean bShowAdditional = (bShowBattery || bShowDate);
@@ -1692,10 +1849,14 @@ public class WidgetUpdateService extends Service {
 			info.scheduledUpdate = scheduledUpdate;
 			new HttpTask().execute(info);
 			
+		} catch (IllegalStateException e1) {
+			e1.printStackTrace();
+        	
+        	readCachedWeatherData(updateViews, appWidgetId);
 		} catch (Exception e) {
 			e.printStackTrace();
         	
-        	readCachedWeatherData(updateViews, appWidgetId);
+        	readCachedWeatherData(updateViews, appWidgetId);		
 		}
 				
 	}
@@ -1726,6 +1887,7 @@ public class WidgetUpdateService extends Service {
 	
 	@SuppressWarnings("unused")
 	boolean getCurrentWeatherData(RemoteViews updateViews, int appWidgetId, boolean scheduledUpdate) {
+		boolean ret = true;
 		try {
         	Reader responseReader = null;
 	        HttpClient client = new DefaultHttpClient();
@@ -1786,23 +1948,48 @@ public class WidgetUpdateService extends Service {
             
         } catch (UnknownHostException e) {
         	e.printStackTrace();
+        	
+        	if (scheduledUpdate)
+				Preferences.setWeatherSuccess(WidgetUpdateService.this, appWidgetId, false);
+        	
         	readCachedWeatherData(updateViews, appWidgetId);
+        	
+        	ret = false;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+            
+            if (scheduledUpdate)
+				Preferences.setWeatherSuccess(WidgetUpdateService.this, appWidgetId, false);
+            
             readCachedWeatherData(updateViews, appWidgetId);
+            
+            ret = false;
         } catch (ClientProtocolException e) {
             e.printStackTrace();
+            
+            if (scheduledUpdate)
+				Preferences.setWeatherSuccess(WidgetUpdateService.this, appWidgetId, false);
+            
             readCachedWeatherData(updateViews, appWidgetId);
+            
+            ret = false;
         } catch (IOException e) {
             e.printStackTrace();
+            
+            if (scheduledUpdate)
+				Preferences.setWeatherSuccess(WidgetUpdateService.this, appWidgetId, false);
+            
             readCachedWeatherData(updateViews, appWidgetId);
+            
+            ret = false;
         }
 
-        return true;
+        return ret;
 	}
 	
 	@SuppressWarnings("unused")
 	boolean getForecastData(RemoteViews updateViews, int appWidgetId, boolean scheduledUpdate) {
+		boolean ret = true;
 		try {
         	Reader responseReader = null;
 	        HttpClient client = new DefaultHttpClient();
@@ -1859,16 +2046,36 @@ public class WidgetUpdateService extends Service {
             cacheWriter.close();
             
         } catch (UnknownHostException e) {
-        	e.printStackTrace();        	
+        	e.printStackTrace();    
+        	
+        	if (scheduledUpdate)
+				Preferences.setForecastSuccess(WidgetUpdateService.this, appWidgetId, false);
+        	
+        	ret = false;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();            
+            
+            if (scheduledUpdate)
+				Preferences.setForecastSuccess(WidgetUpdateService.this, appWidgetId, false);
+            
+            ret = false;
         } catch (ClientProtocolException e) {
             e.printStackTrace();            
+            
+            if (scheduledUpdate)
+				Preferences.setForecastSuccess(WidgetUpdateService.this, appWidgetId, false);
+            
+            ret = false;
         } catch (IOException e) {
             e.printStackTrace();            
+            
+            if (scheduledUpdate)
+				Preferences.setForecastSuccess(WidgetUpdateService.this, appWidgetId, false);
+            
+            ret = false;
         }
 
-        return true;
+        return ret;
 	}
 	
 	void readCachedWeatherData(RemoteViews updateViews, int appWidgetId) {

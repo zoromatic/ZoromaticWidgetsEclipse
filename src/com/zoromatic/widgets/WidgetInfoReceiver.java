@@ -106,6 +106,12 @@ public class WidgetInfoReceiver extends BroadcastReceiver {
     						AirplaneAppWidgetProvider.class);
     			}
     			
+    			if (action.equals(Intent.ACTION_SCREEN_ON)
+    					|| action.equals(WidgetUpdateService.BRIGHTNESS_WIDGET_UPDATE)) {
+    				thisWidget = new ComponentName(context,
+    						BrightnessAppWidgetProvider.class);
+    			}
+    			
     			if (thisWidget != null) {
     				appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
                 	

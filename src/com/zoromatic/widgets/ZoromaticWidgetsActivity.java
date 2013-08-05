@@ -1,7 +1,6 @@
 package com.zoromatic.widgets;
 
 import com.zoromatic.widgets.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

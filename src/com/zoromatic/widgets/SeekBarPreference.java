@@ -5,6 +5,7 @@
  */
 package com.zoromatic.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
@@ -17,6 +18,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 
+@SuppressLint("UseValueOf")
+@SuppressWarnings("deprecation")
 public class SeekBarPreference extends DialogPreference implements
 		OnSeekBarChangeListener {
 	private static final String androidns = "http://schemas.android.com/apk/res/android";
@@ -32,7 +35,7 @@ public class SeekBarPreference extends DialogPreference implements
 		super(context, attrs);
 		mContext = context;
 
-		mDialogMessage = attrs.getAttributeValue(androidns, "dialogMessage");
+		mDialogMessage = context.getResources().getString(R.string.opacitydescription); //attrs.getAttributeValue(androidns, "dialogMessage");
 		mSuffix = attrs.getAttributeValue(androidns, "text");
 		mDefault = attrs.getAttributeIntValue(androidns, "defaultValue", 100);
 		mMax = attrs.getAttributeIntValue(androidns, "max", 100);

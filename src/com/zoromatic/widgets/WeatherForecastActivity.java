@@ -9,15 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import com.zoromatic.sunrisesunset.SunriseSunsetCalculator;
 import com.zoromatic.sunrisesunset.dto.SunriseSunsetLocation;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
@@ -33,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@SuppressLint("SimpleDateFormat")
 public class WeatherForecastActivity extends Activity {
 
 	private static String LOG_TAG = "WeatherForecastActivity";

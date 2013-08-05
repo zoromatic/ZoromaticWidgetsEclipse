@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zoromatic.widgets"
-    android:versionCode="3"
-    android:versionName="1.1" >
+    android:versionCode="4"
+    android:versionName="1.2" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -124,7 +124,7 @@
         
         <receiver
             android:name=".MobileAppWidgetProvider"
-            android:icon="@drawable/mobile"
+            android:icon="@drawable/data"
             android:label="@string/mobilewidgetname" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -171,7 +171,20 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/wifiwidget_info" />
+                android:resource="@xml/airplanewidget_info" />
+        </receiver>
+        
+        <receiver
+            android:name=".BrightnessAppWidgetProvider"
+            android:icon="@drawable/brightness"
+            android:label="@string/brightnesswidgetname" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/brightnesswidget_info" />
         </receiver>
 
         <activity
@@ -203,6 +216,12 @@
             android:name=".WeatherForecastActivity"
             android:label="@string/weatherforecast" >            	                  
         </activity>
+        <activity
+            android:name=".ScreenBrightnessActivity"
+            android:label="@string/brightnessdesc" 
+            android:theme="@android:style/Theme.Dialog">            	                  
+        </activity>
+                     
     </application>
 
 </manifest>
