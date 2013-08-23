@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zoromatic.widgets"
-    android:versionCode="4"
-    android:versionName="1.2" >
+    android:versionCode="5"
+    android:versionName="1.2.1" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -15,6 +15,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
     </uses-permission>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.NFC" >
     </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
     </uses-permission>
@@ -39,6 +41,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
     </uses-permission>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" >        
+    </uses-permission>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" >        
     </uses-permission>
      
     <application
@@ -185,6 +191,45 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/brightnesswidget_info" />
+        </receiver>
+        
+        <receiver
+            android:name=".NfcAppWidgetProvider"
+            android:icon="@drawable/nfc"
+            android:label="@string/nfcwidgetname" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/nfcwidget_info" />
+        </receiver>
+        
+        <receiver
+            android:name=".SyncAppWidgetProvider"
+            android:icon="@drawable/sync"
+            android:label="@string/syncwidgetname" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/syncwidget_info" />
+        </receiver>
+        
+        <receiver
+            android:name=".OrientationAppWidgetProvider"
+            android:icon="@drawable/orientation"
+            android:label="@string/orientationwidgetname" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/orientationwidget_info" />
         </receiver>
 
         <activity

@@ -7,7 +7,8 @@
     android:weightSum="1.0"
     android:baselineAligned="false"
     android:orientation="vertical" >
-    <RelativeLayout
+  
+  <RelativeLayout
         android:id="@+id/weatherLayoutToday"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -22,52 +23,7 @@
             android:contentDescription="@string/weatherdesc"
             android:scaleType="fitXY"
             android:src="@drawable/weather_unknown" />
-<!--         <LinearLayout -->
-<!--             android:id="@+id/tempLayoutToday" -->
-<!--             android:layout_width="wrap_content" -->
-<!--             android:layout_height="match_parent" -->
-<!--             android:layout_alignParentRight="true" -->
-<!--             android:layout_alignParentTop="true" -->
-<!--             android:layout_toRightOf="@+id/imageViewWeatherToday" -->
-<!--             android:gravity="center|center_vertical" -->
-<!--             android:orientation="horizontal" > -->
 
-<!--             <TextView -->
-<!--                 android:id="@+id/textViewTempToday" -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:layout_weight="1" -->
-<!--                 android:gravity="right|top" -->
-<!--                 android:text="@string/tempempty" -->
-<!--                 android:textSize="48dp" /> -->
-
-<!--             <LinearLayout -->
-<!--                 android:id="@+id/hightlowLayoutToday" -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="match_parent" -->
-<!--                 android:layout_weight="1" -->
-<!--                 android:gravity="center|center_vertical" -->
-<!--                 android:orientation="vertical" > -->
-
-<!--                 <TextView -->
-<!--                     android:id="@+id/textViewTempHighToday" -->
-<!--                     android:layout_width="wrap_content" -->
-<!--                     android:layout_height="wrap_content" -->
-<!--                     android:layout_weight="1" -->
-<!--                     android:gravity="center|bottom" -->
-<!--                     android:text="@string/tempempty" -->
-<!--                     android:textSize="18dp" /> -->
-
-<!--                 <TextView -->
-<!--                     android:id="@+id/textViewTempLowToday" -->
-<!--                     android:layout_width="wrap_content" -->
-<!--                     android:layout_height="wrap_content" -->
-<!--                     android:layout_weight="1" -->
-<!--                     android:gravity="center|top" -->
-<!--                     android:text="@string/tempempty" -->
-<!--                     android:textSize="18dp" /> -->
-<!--             </LinearLayout> -->
-<!--         </LinearLayout> -->
 	    <LinearLayout
 	        android:id="@+id/openWeatherMapIcon"
 	        android:layout_width="wrap_content"
@@ -91,18 +47,7 @@
                 android:text="@string/openweathermaplink"
                 android:textSize="12sp" />
 	   </LinearLayout>
-<!--         <TextView -->
-<!--             android:id="@+id/textViewOpenWeatherMapLink" -->
-<!--             android:layout_width="wrap_content" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:layout_alignParentLeft="true" -->
-<!--             android:layout_alignParentRight="true" -->
-<!--             android:layout_alignParentTop="true" -->
-<!--             android:autoLink="web" -->
-<!--             android:drawableLeft="@drawable/open_weather_map" -->
-<!--             android:gravity="center|center_vertical" -->
-<!--             android:text="@string/openweathermaplink" -->
-<!--             android:textSize="8dp" /> -->
+
 
 	    <TextView
 	        android:id="@+id/textViewTempToday"
@@ -145,7 +90,7 @@
     <LinearLayout
         android:id="@+id/weatherLayoutForecast"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="0sp"
 		android:layout_weight=".3"
 		android:layout_gravity="bottom"
 		android:orientation="horizontal"
@@ -153,446 +98,288 @@
         
         <LinearLayout
 	        android:id="@+id/weatherLayout1"
-	        android:layout_width="0dp"
+	        android:layout_width="0sp"
 	        android:layout_height="match_parent"
 			android:layout_weight=".2"
 			android:gravity="center|center_vertical"   
-	        android:orientation="horizontal"
-	        android:baselineAligned="false" >        
-	
-	        <LinearLayout
-                android:id="@+id/descLayout1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+	        android:orientation="vertical"
+	        android:baselineAligned="false" >   
+	        
+            <TextView
+                android:id="@+id/textViewDate1"
+                android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight=".2"
+		       	android:gravity="center|bottom"
+                android:text="@string/locationempty"
+                android:textSize="12sp" />
+            
+            <TextView
+                android:id="@+id/textViewDesc1"
+                android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight=".2"
+		       	android:gravity="center|center_vertical"
+                android:text="@string/locationempty"
+                android:textSize="12sp" />
+            
+            <ImageView
+		    	android:id="@+id/imageViewWeather1"
+		    	android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight="0.5"
+		       	android:gravity="center|bottom"
+		       	android:scaleType="fitCenter"
+		       	android:contentDescription="@string/weatherdesc"
+		    	android:src="@drawable/weather_unknown" />	           
+            
+	        <TextView
+                android:id="@+id/textViewTempHigh1"
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:layout_weight=".2"
                 android:gravity="center|center_vertical"
-                android:orientation="vertical" >
-                
-		        <TextView
-	                android:id="@+id/textViewDate1"
-	                android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|bottom"
-	                android:text="@string/locationempty"
-	                android:textSize="12sp" />
-		        
-		        <ImageView
-			    	android:id="@+id/imageViewWeather1"
-			    	android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|bottom"
-			       	android:scaleType="fitCenter"
-			       	android:contentDescription="@string/weatherdesc"
-			    	android:src="@drawable/weather_unknown" />
-		        
-		        <TextView
-	                android:id="@+id/textViewDesc1"
-	                android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|top"
-	                android:text="@string/locationempty"
-	                android:textSize="12sp" />
-		    </LinearLayout>
-	
-	        <LinearLayout
-                android:id="@+id/hightlowLayout1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:text="@string/tempempty"
+                android:textSize="12sp" />                              
+
+            <TextView
+                android:id="@+id/textViewTempLow1"
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:layout_weight=".2"
                 android:gravity="center|center_vertical"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/textViewTempHigh1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center|bottom"
-                    android:text="@string/tempempty"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/textViewTempLow1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center|top"
-                    android:text="@string/tempempty"
-                    android:textSize="12sp" />
-            </LinearLayout>	        
+                android:text="@string/tempempty"
+                android:textSize="12sp" />	       	       
+	        
 	    </LinearLayout>
 	    
         <LinearLayout
 	        android:id="@+id/weatherLayout2"
-	        android:layout_width="0dp"
+	        android:layout_width="0sp"
 	        android:layout_height="match_parent"
 			android:layout_weight=".2"
 			android:gravity="center|center_vertical"   
-	        android:orientation="horizontal"
-	        android:baselineAligned="false" >        
-	
-	        <LinearLayout
-                android:id="@+id/descLayout2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+	        android:orientation="vertical"
+	        android:baselineAligned="false" >   
+	        
+            <TextView
+                android:id="@+id/textViewDate2"
+                android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight=".2"
+		       	android:gravity="center|bottom"
+                android:text="@string/locationempty"
+                android:textSize="12sp" />
+            
+            <TextView
+                android:id="@+id/textViewDesc2"
+                android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight=".2"
+		       	android:gravity="center|center_vertical"
+                android:text="@string/locationempty"
+                android:textSize="12sp" />
+	                    
+            <ImageView
+		    	android:id="@+id/imageViewWeather2"
+		    	android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight="0.5"
+		       	android:gravity="center|bottom"
+		       	android:scaleType="fitCenter"
+		       	android:contentDescription="@string/weatherdesc"
+		    	android:src="@drawable/weather_unknown" />	           
+            
+	        <TextView
+                android:id="@+id/textViewTempHigh2"
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:layout_weight=".2"
                 android:gravity="center|center_vertical"
-                android:orientation="vertical" >
-                
-	            <TextView
-	                android:id="@+id/textViewDate2"
-	                android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|bottom"
-	                android:text="@string/locationempty"
-	                android:textSize="12sp" />
-                
-		        <ImageView
-			    	android:id="@+id/imageViewWeather2"
-			    	android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|bottom"
-			       	android:scaleType="fitCenter"
-			       	android:contentDescription="@string/weatherdesc"
-			    	android:src="@drawable/weather_unknown" />
-		        
-		        <TextView
-	                android:id="@+id/textViewDesc2"
-	                android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|top"
-	                android:text="@string/locationempty"
-	                android:textSize="12sp" />
-		    </LinearLayout>
-	
-	        <LinearLayout
-                android:id="@+id/hightlowLayout2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:text="@string/tempempty"
+                android:textSize="12sp" />                              
+
+            <TextView
+                android:id="@+id/textViewTempLow2"
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:layout_weight=".2"
                 android:gravity="center|center_vertical"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/textViewTempHigh2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center|bottom"
-                    android:text="@string/tempempty"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/textViewTempLow2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center|top"
-                    android:text="@string/tempempty"
-                    android:textSize="12sp" />
-            </LinearLayout>	        
+                android:text="@string/tempempty"
+                android:textSize="12sp" />
+	        
 	    </LinearLayout>
 	    
         <LinearLayout
 	        android:id="@+id/weatherLayout3"
-	        android:layout_width="0dp"
+	        android:layout_width="0sp"
 	        android:layout_height="match_parent"
 			android:layout_weight=".2"
 			android:gravity="center|center_vertical"   
-	        android:orientation="horizontal"
-	        android:baselineAligned="false" >        
-	
-	        <LinearLayout
-                android:id="@+id/descLayout3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+	        android:orientation="vertical"
+	        android:baselineAligned="false" >   
+	        
+            <TextView
+                android:id="@+id/textViewDate3"
+                android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight=".2"
+		       	android:gravity="center|bottom"
+                android:text="@string/locationempty"
+                android:textSize="12sp" />
+            
+            <TextView
+                android:id="@+id/textViewDesc3"
+                android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight=".2"
+		       	android:gravity="center|center_vertical"
+                android:text="@string/locationempty"
+                android:textSize="12sp" />
+	        
+            <ImageView
+		    	android:id="@+id/imageViewWeather3"
+		    	android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight="0.5"
+		       	android:gravity="center|bottom"
+		       	android:scaleType="fitCenter"
+		       	android:contentDescription="@string/weatherdesc"
+		    	android:src="@drawable/weather_unknown" />	           
+            
+	        <TextView
+                android:id="@+id/textViewTempHigh3"
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:layout_weight=".2"
                 android:gravity="center|center_vertical"
-                android:orientation="vertical" >
-                
-	            <TextView
-	                android:id="@+id/textViewDate3"
-	                android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|bottom"
-	                android:text="@string/locationempty"
-	                android:textSize="12sp" />
-                
-		        <ImageView
-			    	android:id="@+id/imageViewWeather3"
-			    	android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|bottom"
-			       	android:scaleType="fitCenter"
-			       	android:contentDescription="@string/weatherdesc"
-			    	android:src="@drawable/weather_unknown" />
-		        
-		        <TextView
-	                android:id="@+id/textViewDesc3"
-	                android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|top"
-	                android:text="@string/locationempty"
-	                android:textSize="12sp" />
-		    </LinearLayout>
-	
-	        <LinearLayout
-                android:id="@+id/hightlowLayout3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:text="@string/tempempty"
+                android:textSize="12sp" />                              
+
+            <TextView
+                android:id="@+id/textViewTempLow3"
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:layout_weight=".2"
                 android:gravity="center|center_vertical"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/textViewTempHigh3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center|bottom"
-                    android:text="@string/tempempty"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/textViewTempLow3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center|top"
-                    android:text="@string/tempempty"
-                    android:textSize="12sp" />
-            </LinearLayout>	        
+                android:text="@string/tempempty"
+                android:textSize="12sp" />
+	        
 	    </LinearLayout>
 	    
         <LinearLayout
 	        android:id="@+id/weatherLayout4"
-	        android:layout_width="0dp"
+	        android:layout_width="0sp"
 	        android:layout_height="match_parent"
 			android:layout_weight=".2"
 			android:gravity="center|center_vertical"   
-	        android:orientation="horizontal"
-	        android:baselineAligned="false" >        
-	
-	        <LinearLayout
-                android:id="@+id/descLayout4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+	        android:orientation="vertical"
+	        android:baselineAligned="false" >   
+	        
+            <TextView
+                android:id="@+id/textViewDate4"
+                android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight=".2"
+		       	android:gravity="center|bottom"
+                android:text="@string/locationempty"
+                android:textSize="12sp" />
+            
+            <TextView
+                android:id="@+id/textViewDesc4"
+                android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight=".2"
+		       	android:gravity="center|center_vertical"
+                android:text="@string/locationempty"
+                android:textSize="12sp" />
+	        
+            <ImageView
+		    	android:id="@+id/imageViewWeather4"
+		    	android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight="0.5"
+		       	android:gravity="center|bottom"
+		       	android:scaleType="fitCenter"
+		       	android:contentDescription="@string/weatherdesc"
+		    	android:src="@drawable/weather_unknown" />	           
+            
+	        <TextView
+                android:id="@+id/textViewTempHigh4"
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:layout_weight=".2"
                 android:gravity="center|center_vertical"
-                android:orientation="vertical" >
-                
-	            <TextView
-	                android:id="@+id/textViewDate4"
-	                android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|bottom"
-	                android:text="@string/locationempty"
-	                android:textSize="12sp" />
-                
-		        <ImageView
-			    	android:id="@+id/imageViewWeather4"
-			    	android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|bottom"
-			       	android:scaleType="fitCenter"
-			       	android:contentDescription="@string/weatherdesc"
-			    	android:src="@drawable/weather_unknown" />
-		        
-		        <TextView
-	                android:id="@+id/textViewDesc4"
-	                android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|top"
-	                android:text="@string/locationempty"
-	                android:textSize="12sp" />
-		    </LinearLayout>
-	
-	        <LinearLayout
-                android:id="@+id/hightlowLayout4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:text="@string/tempempty"
+                android:textSize="12sp" />                              
+
+            <TextView
+                android:id="@+id/textViewTempLow4"
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:layout_weight=".2"
                 android:gravity="center|center_vertical"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/textViewTempHigh4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center|bottom"
-                    android:text="@string/tempempty"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/textViewTempLow4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center|top"
-                    android:text="@string/tempempty"
-                    android:textSize="12sp" />
-            </LinearLayout>	        
+                android:text="@string/tempempty"
+                android:textSize="12sp" />
+	        
 	    </LinearLayout>
 	    
         <LinearLayout
 	        android:id="@+id/weatherLayout5"
-	        android:layout_width="0dp"
+	        android:layout_width="0sp"
 	        android:layout_height="match_parent"
 			android:layout_weight=".2"
 			android:gravity="center|center_vertical"   
-	        android:orientation="horizontal"
-	        android:baselineAligned="false" >        
-	
-	        <LinearLayout
-                android:id="@+id/descLayout5"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+	        android:orientation="vertical"
+	        android:baselineAligned="false" >   
+	        
+            <TextView
+                android:id="@+id/textViewDate5"
+                android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight=".2"
+		       	android:gravity="center|bottom"
+                android:text="@string/locationempty"
+                android:textSize="12sp" />
+            
+            <TextView
+                android:id="@+id/textViewDesc5"
+                android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight=".2"
+		       	android:gravity="center|center_vertical"
+                android:text="@string/locationempty"
+                android:textSize="12sp" />
+	        
+            <ImageView
+		    	android:id="@+id/imageViewWeather5"
+		    	android:layout_width="match_parent"
+		       	android:layout_height="0sp"
+		       	android:layout_weight="0.5"
+		       	android:gravity="center|bottom"
+		       	android:scaleType="fitCenter"
+		       	android:contentDescription="@string/weatherdesc"
+		    	android:src="@drawable/weather_unknown" />	           
+            
+	        <TextView
+                android:id="@+id/textViewTempHigh5"
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:layout_weight=".2"
                 android:gravity="center|center_vertical"
-                android:orientation="vertical" >
-                
-	            <TextView
-	                android:id="@+id/textViewDate5"
-	                android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|bottom"
-	                android:text="@string/locationempty"
-	                android:textSize="12sp" />
-                
-		        <ImageView
-			    	android:id="@+id/imageViewWeather5"
-			    	android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|bottom"
-			       	android:scaleType="fitCenter"
-			       	android:contentDescription="@string/weatherdesc"
-			    	android:src="@drawable/weather_unknown" />
-		        
-		        <TextView
-	                android:id="@+id/textViewDesc5"
-	                android:layout_width="wrap_content"
-			       	android:layout_height="0dp"
-			       	android:layout_weight="1"
-			       	android:gravity="center|top"
-	                android:text="@string/locationempty"
-	                android:textSize="12sp" />
-		    </LinearLayout>
-	
-	        <LinearLayout
-                android:id="@+id/hightlowLayout5"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:text="@string/tempempty"
+                android:textSize="12sp" />                              
+
+            <TextView
+                android:id="@+id/textViewTempLow5"
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:layout_weight=".2"
                 android:gravity="center|center_vertical"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/textViewTempHigh5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center|bottom"
-                    android:text="@string/tempempty"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/textViewTempLow5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center|top"
-                    android:text="@string/tempempty"
-                    android:textSize="12sp" />
-            </LinearLayout>	        
+                android:text="@string/tempempty"
+                android:textSize="12sp" />
+	        
 	    </LinearLayout>
-	    
-<!--         <LinearLayout -->
-<!-- 	        android:id="@+id/weatherLayout5" -->
-<!-- 	        android:layout_width="0dp" -->
-<!-- 	        android:layout_height="match_parent" -->
-<!-- 			android:layout_weight=".2" -->
-<!-- 			android:gravity="center|center_vertical"    -->
-<!-- 	        android:orientation="horizontal" >         -->
-	
-<!-- 	        <LinearLayout -->
-<!--                 android:id="@+id/descLayout5" -->
-<!--                 android:layout_width="0dp" -->
-<!--                 android:layout_height="match_parent" -->
-<!--                 android:layout_weight="1" -->
-<!--                 android:gravity="center|center_vertical" -->
-<!--                 android:orientation="vertical" > -->
-                
-<!-- 	            <TextView -->
-<!-- 	                android:id="@+id/textViewDate5" -->
-<!-- 	                android:layout_width="wrap_content" -->
-<!-- 			       	android:layout_height="0dp" -->
-<!-- 			       	android:layout_weight="1" -->
-<!-- 			       	android:gravity="center|bottom" -->
-<!-- 	                android:text="@string/locationempty" -->
-<!-- 	                android:textSize="12sp" /> -->
-                
-<!-- 		        <ImageView -->
-<!-- 			    	android:id="@+id/imageViewWeather5" -->
-<!-- 			    	android:layout_width="wrap_content" -->
-<!-- 			       	android:layout_height="0dp" -->
-<!-- 			       	android:layout_weight="1" -->
-<!-- 			       	android:gravity="center|bottom" -->
-<!-- 			       	android:scaleType="fitCenter" -->
-<!-- 			       	android:contentDescription="@string/weatherdesc" -->
-<!-- 			    	android:src="@drawable/weather_unknown" /> -->
-		        
-<!-- 		        <TextView -->
-<!-- 	                android:id="@+id/textViewDesc5" -->
-<!-- 	                android:layout_width="wrap_content" -->
-<!-- 			       	android:layout_height="0dp" -->
-<!-- 			       	android:layout_weight="1" -->
-<!-- 			       	android:gravity="center|top" -->
-<!-- 	                android:text="@string/locationempty" -->
-<!-- 	                android:textSize="12sp" /> -->
-<!-- 		    </LinearLayout> -->
-	
-<!-- 	        <LinearLayout -->
-<!--                 android:id="@+id/hightlowLayout5" -->
-<!--                 android:layout_width="0dp" -->
-<!--                 android:layout_height="match_parent" -->
-<!--                 android:layout_weight="1" -->
-<!--                 android:gravity="center|center_vertical" -->
-<!--                 android:orientation="vertical" > -->
-
-<!--                 <TextView -->
-<!--                     android:id="@+id/textViewTempHigh5" -->
-<!--                     android:layout_width="wrap_content" -->
-<!--                     android:layout_height="0dp" -->
-<!--                     android:layout_weight="1" -->
-<!--                     android:gravity="center|bottom" -->
-<!--                     android:text="@string/tempempty" -->
-<!--                     android:textSize="12sp" /> -->
-
-<!--                 <TextView -->
-<!--                     android:id="@+id/textViewTempLow5" -->
-<!--                     android:layout_width="wrap_content" -->
-<!--                     android:layout_height="0dp" -->
-<!--                     android:layout_weight="1" -->
-<!--                     android:gravity="center|top" -->
-<!--                     android:text="@string/tempempty" -->
-<!--                     android:textSize="12sp" /> -->
-<!--             </LinearLayout>	         -->
-<!-- 	    </LinearLayout> -->
         
      </LinearLayout>
      

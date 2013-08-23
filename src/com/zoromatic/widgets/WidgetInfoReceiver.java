@@ -112,6 +112,24 @@ public class WidgetInfoReceiver extends BroadcastReceiver {
     						BrightnessAppWidgetProvider.class);
     			}
     			
+    			if (action.equals("android.nfc.action.ADAPTER_STATE_CHANGED")
+    					|| action.equals(WidgetUpdateService.NFC_WIDGET_UPDATE)) {
+    				thisWidget = new ComponentName(context,
+    						NfcAppWidgetProvider.class);
+    			}
+    			
+    			if (action.equals("com.android.sync.SYNC_CONN_STATUS_CHANGED")
+    					|| action.equals(WidgetUpdateService.SYNC_WIDGET_UPDATE)) {
+    				thisWidget = new ComponentName(context,
+    						SyncAppWidgetProvider.class);
+    			}
+    			
+    			if (action.equals(WidgetUpdateService.AUTO_ROTATE_CHANGED)
+    					|| action.equals(WidgetUpdateService.ORIENTATION_WIDGET_UPDATE)) {
+    				thisWidget = new ComponentName(context,
+    						OrientationAppWidgetProvider.class);
+    			}
+    			
     			if (thisWidget != null) {
     				appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
                 	

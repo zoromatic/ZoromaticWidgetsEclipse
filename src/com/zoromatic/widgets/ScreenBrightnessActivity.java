@@ -29,7 +29,7 @@ public class ScreenBrightnessActivity extends Activity {
 	public int mOldBrightness = MAXIMUM_BACKLIGHT;
 	public int mOldAutomatic = 0;
 
-	private static int mScreenBrightnessDim = 20;
+	private static int mScreenBrightnessDim = 20 + 10;
 	private static final int MAXIMUM_BACKLIGHT = 255;
 	private static final int SEEK_BAR_RANGE = MAXIMUM_BACKLIGHT - mScreenBrightnessDim;
 

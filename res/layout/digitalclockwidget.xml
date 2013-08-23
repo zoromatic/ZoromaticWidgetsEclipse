@@ -56,7 +56,7 @@
 				        android:gravity="center|fill_vertical"
 				        android:text="@string/tempempty"
 				        android:background="@drawable/bck_left"
-				        android:textSize="72sp" />
+				        android:textSize="64sp" />
 				    
 				    <TextView
 				        android:id="@+id/textViewClockSpace"
@@ -65,7 +65,7 @@
 				        android:layout_weight=".1"
 				        android:gravity="center|fill_vertical"
 				        android:text=""
-				        android:textSize="72sp" />
+				        android:textSize="64sp" />
 				    
 				    <TextView
 				        android:id="@+id/textViewClockMinute"
@@ -75,7 +75,7 @@
 				        android:gravity="center|fill_vertical"
 				        android:text="@string/tempempty"
 				        android:background="@drawable/bck_right"
-				        android:textSize="72sp" />
+				        android:textSize="64sp" />
 			</LinearLayout>
 				    		    
 		</LinearLayout>

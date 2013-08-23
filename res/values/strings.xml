@@ -10,6 +10,9 @@
     <string name="ringerwidgetname">Zoromatic Ringer Widget</string>
     <string name="airplanewidgetname">Zoromatic Airplane Widget</string>
     <string name="brightnesswidgetname">Zoromatic Brightness Widget</string>
+    <string name="nfcwidgetname">Zoromatic NFC Widget</string>
+    <string name="syncwidgetname">Zoromatic Sync Widget</string>
+    <string name="orientationwidgetname">Zoromatic Orientation Widget</string>
     <string name="datebatterytxt">--.--.---- [--%]</string>
     <string name="tempempty">--</string>
     <string name="locationempty">--</string>
@@ -24,7 +27,7 @@
     <string name="bluetoothdesc">Bluetooth Status</string>
     <string name="gpsdesc">GPS Status</string>
     <string name="mobiledesc">Mobile Data Status</string>
-    <string name="ringerdesc">Ringer Status</string>
+    <string name="ringerdesc">Ringer Status</string>    
     <string name="batterynotification">Battery Notification</string>
     <string name="showbatterynotification">Show Battery Notification</string>
     <string name="configurewidgets">Configure Widgets</string>
@@ -62,6 +65,9 @@
 	<string name="restartservicedesc">Restart Zoromatic Widgets service</string>
 	<string name="airplanedesc">Airplane Mode</string>
 	<string name="brightnessdesc">Brightness Settings</string>
+	<string name="nfcdesc">NFC Status</string>
+	<string name="syncdesc">Sync Status</string>
+	<string name="orientationdesc">Orientation Status</string>
 	<string name="autobrightness">Automatic Brightness</string>
 	<string name="buttonsave">Save</string>
 	<string name="buttoncancel">Cancel</string>
@@ -73,6 +79,9 @@
 	<string name="wifi">WiFi</string>
 	<string name="airplane">Airplane</string>
 	<string name="brightness">Brightness</string>
+	<string name="nfc">NFC</string>
+	<string name="sync">Sync</string>
+	<string name="orientation">Orientation</string>
 	
 	<string name="locationdescription">Use current location (requires GPS turned on) or enter custom location</string>
     <string name="locationcurrent">Current location</string>
