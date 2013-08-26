@@ -82,10 +82,12 @@ import android.telephony.TelephonyManager;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 //import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1078,20 +1080,22 @@ public class WidgetUpdateService extends Service {
 	}
 	
 	public boolean canToggleAirplane() {
-		 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1)
+		 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
 			 return true; 
-		 else
-			 return false;		
+		 } else {
+			 return false;
+		 }
 	}
 	
 	public boolean getAirplaneMode() {
 		
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1)
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
 			return Settings.System.getInt(getContentResolver(), 
-					Settings.System.AIRPLANE_MODE_ON, 0) != 0;		    
-		else
+					Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+		} else {
 			return Settings.Global.getInt(getContentResolver(), 
-					 Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+					Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+		}
 	}
 	
 	public void setAirplaneMode(boolean airplaneMode) {
@@ -1997,12 +2001,23 @@ public class WidgetUpdateService extends Service {
 		DisplayMetrics metrics = new DisplayMetrics();
 		WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 		wm.getDefaultDisplay().getMetrics(metrics);
+		
+		int originalSize = 36;
 
 		switch(metrics.densityDpi)
 		{
-			case DisplayMetrics.DENSITY_LOW:  //LDPI	
-			case DisplayMetrics.DENSITY_HIGH: //HDPI			
-			case DisplayMetrics.DENSITY_MEDIUM: //MDPI			
+			case DisplayMetrics.DENSITY_LOW:  //LDPI
+				originalSize = 36;
+				break;
+			case DisplayMetrics.DENSITY_MEDIUM: //MDPI
+				originalSize = 48;
+				break;
+			case DisplayMetrics.DENSITY_HIGH: //HDPI
+				originalSize = 72;
+				break;
+			case DisplayMetrics.DENSITY_XHIGH: //XHDPI
+				originalSize = 128;
+				break;
 		}
 		
 //		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -2038,25 +2053,25 @@ public class WidgetUpdateService extends Service {
 
 //		boolean bShowAdditional = (bShowBattery || bShowDate);
 
-//		float fDecreaseSpan = 0;
-
+		
+//		float fDecreaseSpan = 0f;
+//
 //		if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_PORTRAIT) {
-//			fDecreaseSpan = 2.0f;
+//			fDecreaseSpan = (float)metrics.heightPixels / (float)metrics.widthPixels;
 //		}
-
-//		if (bShowAdditional) {		
-//			spStrHour.setSpan(new RelativeSizeSpan(3.5f - fDecreaseSpan), 0, lnHour, 0);
-//			spStrMinute.setSpan(new RelativeSizeSpan(3.5f - fDecreaseSpan), 0, lnMinute, 0);
-//		}
-//		else {
-//			spStrHour.setSpan(new RelativeSizeSpan(2.0f - fDecreaseSpan), 0, lnHour, 0);
-//			spStrMinute.setSpan(new RelativeSizeSpan(2.0f - fDecreaseSpan), 0, lnMinute, 0);
-//		}
+//				
+//		spStrHour.setSpan(new AbsoluteSizeSpan(originalSize), 0, lnHour, 0);
+//		spStrMinute.setSpan(new AbsoluteSizeSpan(originalSize), 0, lnMinute, 0);
+//		spStrColon.setSpan(new AbsoluteSizeSpan(originalSize), 0, lnColon, 0);
+//
+//		spStrHour.setSpan(new RelativeSizeSpan(1.0f - fDecreaseSpan), 0, lnHour, 0);
+//		spStrMinute.setSpan(new RelativeSizeSpan(1.0f - fDecreaseSpan), 0, lnMinute, 0);
+//		spStrColon.setSpan(new RelativeSizeSpan(1.0f - fDecreaseSpan), 0, lnColon, 0);
 		
 		updateViews.setTextViewText(R.id.textViewClockHour, spStrHour);
 		updateViews.setTextViewText(R.id.textViewClockMinute, spStrMinute);
-		updateViews.setTextViewText(R.id.textViewClockSpace, spStrColon);		
-		
+		updateViews.setTextViewText(R.id.textViewClockSpace, spStrColon);	
+						
 		String currentDate = "";
 		String[] mTestArray = getResources().getStringArray(R.array.dateFormat);
 
@@ -2129,13 +2144,13 @@ public class WidgetUpdateService extends Service {
 			ViewGroup localView = (ViewGroup) inflater.inflate(updateViews.getLayoutId(), null);
 			updateViews.reapply(getApplicationContext(), localView);
 			
-			 TextView tv = (TextView) localView.findViewById(R.id.textViewLoc);
-			 Log.d("blah", (String) tv.getText());
+			TextView tv = (TextView) localView.findViewById(R.id.textViewLoc);
+			Log.d("blah", (String) tv.getText());
 			 
-			 if ((String)tv.getText() == getResources().getString(R.string.locationempty)) {
-				 // update weather info from cache
-				 readCachedWeatherData(updateViews, appWidgetId);
-			 }
+			if ((String)tv.getText() == getResources().getString(R.string.locationempty)) {
+				// update weather info from cache
+				readCachedWeatherData(updateViews, appWidgetId);
+			}
 		}
 		
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
