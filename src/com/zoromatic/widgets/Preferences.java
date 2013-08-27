@@ -41,7 +41,7 @@ public class Preferences {
 
 	public static boolean getShowDate(Context context, int appWidgetId) {
 		return getPreferences(context).getBoolean(PREF_DATE_KEY + appWidgetId,
-				false);
+				true);
 	}
 
 	public static boolean getShow24Hrs(Context context, int appWidgetId) {
@@ -50,7 +50,7 @@ public class Preferences {
 	}
 
 	public static int getColorItem(Context context, int appWidgetId) {
-		return getPreferences(context).getInt(PREF_COLOR_KEY + appWidgetId, 0);
+		return getPreferences(context).getInt(PREF_COLOR_KEY + appWidgetId, 3);
 	}
 
 	public static int getDateFormatItem(Context context, int appWidgetId) {

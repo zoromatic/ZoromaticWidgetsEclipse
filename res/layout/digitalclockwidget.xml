@@ -16,7 +16,6 @@
 	    android:id="@+id/clockWidget"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:gravity="center|center_vertical"
 	    android:weightSum="1.0"
 	    android:baselineAligned="false"
 	    android:orientation="vertical" 
@@ -44,8 +43,8 @@
 			        android:id="@+id/timeLayout"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
+			        android:layout_gravity="center|fill_vertical"
 			        android:weightSum="1.0"
-			        android:gravity="center|center_horizontal"
 			        android:orientation="horizontal" >
             
 				    <TextView
@@ -53,29 +52,29 @@
 				        android:layout_width="0dp"
 				        android:layout_height="wrap_content"
 				        android:layout_weight=".45"
-				        android:gravity="center"
+				        android:gravity="center|fill_vertical"
 				        android:text="@string/tempempty"
 				        android:background="@drawable/bck_left"
-				        android:textSize="64sp" />
+				        android:textSize="96sp" />
 				    
 				    <TextView
 				        android:id="@+id/textViewClockSpace"
 				        android:layout_width="0dp"
 				        android:layout_height="wrap_content"
 				        android:layout_weight=".1"
-				        android:gravity="center"
+				        android:gravity="center|fill_vertical"
 				        android:text=""
-				        android:textSize="64sp" />
+				        android:textSize="96sp" />
 				    
 				    <TextView
 				        android:id="@+id/textViewClockMinute"
 				        android:layout_width="0dp"
 				        android:layout_height="wrap_content"
 				        android:layout_weight=".45"
-				        android:gravity="center"
+				        android:gravity="center|fill_vertical"
 				        android:text="@string/tempempty"
 				        android:background="@drawable/bck_right"
-				        android:textSize="64sp" />
+				        android:textSize="96sp" />
 			</LinearLayout>
 				    		    
 		</LinearLayout>
