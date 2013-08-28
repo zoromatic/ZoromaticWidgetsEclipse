@@ -143,7 +143,7 @@
     <string-array name="weatherIconsArray">
         <item>Tick</item>
         <item>Touch</item>
-        <item>Set</item>
+        <item>Icon Set</item>
         <item>Weezle</item>
     </string-array>
     <string-array name="weatherIconsValues">
