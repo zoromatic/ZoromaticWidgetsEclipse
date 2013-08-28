@@ -79,17 +79,12 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.telephony.TelephonyManager;
-import android.text.Layout;
 import android.text.SpannableString;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.AlignmentSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-//import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,11 +123,8 @@ public class WidgetUpdateService extends Service {
 	private static IntentFilter mIntentFilter;
 	private WidgetInfoReceiver mWidgetInfo = null;
 	
-	//public static String WEATHER_SERVICE_COORD_URL = "http://openweathermap.org/data/2.1/find/city?lat=%f&lon=%f&APPID=364a27c67e53df61c49db6e5bdf26aa5";
 	public static String WEATHER_SERVICE_COORD_URL = "http://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&APPID=364a27c67e53df61c49db6e5bdf26aa5";
-	//public static String WEATHER_SERVICE_ID_URL = "http://api.openweathermap.org/data/2.1/weather/city/%d?type=json&APPID=364a27c67e53df61c49db6e5bdf26aa5";
 	public static String WEATHER_SERVICE_ID_URL = "http://api.openweathermap.org/data/2.5/weather?id=%d&APPID=364a27c67e53df61c49db6e5bdf26aa5";
-	//public static String WEATHER_FORECAST_ID_URL = "http://api.openweathermap.org/data/2.1/forecast/city/%d?mode=daily_compact&APPID=364a27c67e53df61c49db6e5bdf26aa5";
 	public static String WEATHER_FORECAST_COORD_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?lat=%f&lon=%f&cnt=7&APPID=364a27c67e53df61c49db6e5bdf26aa5";
 	public static String WEATHER_FORECAST_ID_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?id=%d&cnt=7&APPID=364a27c67e53df61c49db6e5bdf26aa5";
 
@@ -275,27 +267,6 @@ public class WidgetUpdateService extends Service {
 		String intentExtra = extras.getString(WidgetInfoReceiver.INTENT_EXTRA);
 		boolean updateWeather = extras.getBoolean(WidgetInfoReceiver.UPDATE_WEATHER, false);
 		boolean scheduledUpdate = intent.getBooleanExtra(WidgetInfoReceiver.SCHEDULED_UPDATE, false);
-
-//		String action = intent.getAction();
-//		if (action != null && action.equals(Intent.ACTION_BOOT_COMPLETED)) {
-//			AppWidgetManager widgetManager = AppWidgetManager.getInstance(this);
-//			int[] allWidgetIds = null;
-//			ComponentName widget = new ComponentName(this,
-//        			DigitalClockAppWidgetProvider.class);
-//			
-//			if (widget != null) {
-//				allWidgetIds = widgetManager.getAppWidgetIds(widget);
-//            	
-//            	if (allWidgetIds.length > 0) {
-//            		for (int widgetId : allWidgetIds) {
-//    					
-//    					RemoteViews remoteViews = buildClockUpdate(widgetId);    					
-//    					updateWeatherStatus(remoteViews, widgetId, false);    					
-//    					widgetManager.updateAppWidget(widgetId, remoteViews);
-//    				}            		
-//            	}			
-//			}
-//		}
 		
 		if (intentExtra.equals(Intent.ACTION_BATTERY_CHANGED))
 			updateNotificationBatteryStatus(intent);
@@ -320,10 +291,7 @@ public class WidgetUpdateService extends Service {
 					if (intentExtra.equals(WEATHER_UPDATE))
 						updateWeatherStatus(updateViews, appWidgetId, scheduledUpdate);					
 					else
-						updateClockStatus(updateViews, appWidgetId, updateWeather);					
-					
-					//appWidgetManager.updateAppWidget(appWidgetId, updateViews);	
-					
+						updateClockStatus(updateViews, appWidgetId, updateWeather);										
 				}
 			}
 			else {
@@ -333,9 +301,7 @@ public class WidgetUpdateService extends Service {
 					if (intentExtra.equals(WEATHER_UPDATE))
 						updateWeatherStatus(updateViews, appWidgetIdSingle, scheduledUpdate);
 					else
-						updateClockStatus(updateViews, appWidgetIdSingle, updateWeather);					
-					
-					//appWidgetManager.updateAppWidget(appWidgetIdSingle, updateViews);
+						updateClockStatus(updateViews, appWidgetIdSingle, updateWeather);
 				}				
 			}
 		}
@@ -1091,14 +1057,6 @@ public class WidgetUpdateService extends Service {
 	
 	public boolean getAirplaneMode() {
 		
-//		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-//			return Settings.System.getInt(getContentResolver(), 
-//					Settings.System.AIRPLANE_MODE_ON, 0) != 0;
-//		} else {
-//			return Settings.Global.getInt(getContentResolver(), 
-//					Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
-//		}
-		
 		return Settings.System.getInt(getContentResolver(), 
 				Settings.System.AIRPLANE_MODE_ON, 0) != 0;
 	}
@@ -1191,29 +1149,6 @@ public class WidgetUpdateService extends Service {
 	public void updateBluetoothStatus(RemoteViews updateViews, Intent intent) {
 		Log.d(LOG_TAG, "WidgetUpdateService updateBluetoothStatus");
 
-		/*try {
-			if (getAirplaneMode()) {
-				
-				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-					String radios = Settings.System.getString(getContentResolver(),
-				            Settings.System.AIRPLANE_MODE_RADIOS);
-					
-					if (radios.contains(Settings.System.RADIO_BLUETOOTH)) {
-						return;
-					}          
-			    } else {
-			    	String radios = Settings.Global.getString(getContentResolver(),
-				            Settings.Global.AIRPLANE_MODE_RADIOS);
-					
-					if (radios.contains(Settings.Global.RADIO_BLUETOOTH)) {
-						return;
-					}
-			    }					
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
-		
 		Bundle extras = intent.getExtras();
 
 		if (extras == null)
@@ -1283,29 +1218,6 @@ public class WidgetUpdateService extends Service {
 	public void updateWifiStatus(RemoteViews updateViews, Intent intent) {
 		Log.d(LOG_TAG, "WidgetUpdateService updateWifiStatus");
 
-		/*try {
-			if (getAirplaneMode()) {
-				
-				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-					String radios = Settings.System.getString(getContentResolver(),
-				            Settings.System.AIRPLANE_MODE_RADIOS);
-					
-					if (radios.contains(Settings.System.RADIO_WIFI)) {
-						return;
-					}          
-			    } else {
-			    	String radios = Settings.Global.getString(getContentResolver(),
-				            Settings.Global.AIRPLANE_MODE_RADIOS);
-					
-					if (radios.contains(Settings.Global.RADIO_WIFI)) {
-						return;
-					}
-			    }					
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}*/		
-		
 		Bundle extras = intent.getExtras();
 
 		if (extras == null)
@@ -1673,29 +1585,6 @@ public class WidgetUpdateService extends Service {
 	public void updateDataStatus(RemoteViews updateViews, Intent intent) {
 		Log.d(LOG_TAG, "WidgetUpdateService updateMobileStatus");
 
-		/*try {
-			if (getAirplaneMode()) {
-				
-				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-					String radios = Settings.System.getString(getContentResolver(),
-				            Settings.System.AIRPLANE_MODE_RADIOS);
-					
-					if (radios.contains(Settings.System.RADIO_CELL)) {
-						return;
-					}          
-			    } else {
-			    	String radios = Settings.Global.getString(getContentResolver(),
-				            Settings.Global.AIRPLANE_MODE_RADIOS);
-					
-					if (radios.contains(Settings.Global.RADIO_CELL)) {
-						return;
-					}
-			    }					
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
-
 		Bundle extras = intent.getExtras();
 
 		if (extras == null)
@@ -2023,40 +1912,7 @@ public class WidgetUpdateService extends Service {
 			case DisplayMetrics.DENSITY_XHIGH: //XHDPI
 				originalSize = 96;
 				break;
-		}
-		
-//		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-//			
-//			if (metrics.densityDpi >= DisplayMetrics.DENSITY_HIGH) {
-//				spStrHour.setSpan(new AbsoluteSizeSpan(128), 0, lnHour, 0);
-//				spStrMinute.setSpan(new AbsoluteSizeSpan(128), 0, lnMinute, 0);
-//				spStrColon.setSpan(new AbsoluteSizeSpan(128), 0, lnColon, 0);
-//			} else if (metrics.densityDpi >= DisplayMetrics.DENSITY_MEDIUM) {
-//				spStrHour.setSpan(new AbsoluteSizeSpan(96), 0, lnHour, 0);
-//				spStrMinute.setSpan(new AbsoluteSizeSpan(96), 0, lnMinute, 0);
-//				spStrColon.setSpan(new AbsoluteSizeSpan(96), 0, lnColon, 0);
-//			} else {
-//				spStrHour.setSpan(new AbsoluteSizeSpan(72), 0, lnHour, 0);
-//				spStrMinute.setSpan(new AbsoluteSizeSpan(72), 0, lnMinute, 0);
-//				spStrColon.setSpan(new AbsoluteSizeSpan(72), 0, lnColon, 0);
-//			}
-//		} else {
-//			if (metrics.densityDpi >= DisplayMetrics.DENSITY_HIGH) {
-//				spStrHour.setSpan(new AbsoluteSizeSpan(96), 0, lnHour, 0);
-//				spStrMinute.setSpan(new AbsoluteSizeSpan(96), 0, lnMinute, 0);
-//				spStrColon.setSpan(new AbsoluteSizeSpan(96), 0, lnColon, 0);
-//			} else if (metrics.densityDpi >= DisplayMetrics.DENSITY_MEDIUM) {
-//				spStrHour.setSpan(new AbsoluteSizeSpan(72), 0, lnHour, 0);
-//				spStrMinute.setSpan(new AbsoluteSizeSpan(72), 0, lnMinute, 0);
-//				spStrColon.setSpan(new AbsoluteSizeSpan(72), 0, lnColon, 0);
-//			} else {
-//				spStrHour.setSpan(new AbsoluteSizeSpan(48), 0, lnHour, 0);
-//				spStrMinute.setSpan(new AbsoluteSizeSpan(48), 0, lnMinute, 0);
-//				spStrColon.setSpan(new AbsoluteSizeSpan(48), 0, lnColon, 0);
-//			}
-//		}
-
-//		boolean bShowAdditional = (bShowBattery || bShowDate);
+		}	
 
 		float fDecreaseSpan = 1.0f;
 
@@ -2069,10 +1925,6 @@ public class WidgetUpdateService extends Service {
 		
 		fDecreaseSpan = (float)(originalSize / 96.0f) * fDecreaseSpan;		
 				
-//		spStrHour.setSpan(new AbsoluteSizeSpan(originalSize, true), 0, lnHour, 0);
-//		spStrMinute.setSpan(new AbsoluteSizeSpan(originalSize, true), 0, lnMinute, 0);
-//		spStrColon.setSpan(new AbsoluteSizeSpan(originalSize, true), 0, lnColon, 0);
-
 		spStrHour.setSpan(new RelativeSizeSpan(fDecreaseSpan), 0, lnHour, 0);
 		spStrMinute.setSpan(new RelativeSizeSpan(fDecreaseSpan), 0, lnMinute, 0);
 		spStrColon.setSpan(new RelativeSizeSpan(fDecreaseSpan), 0, lnColon, 0);
@@ -2539,34 +2391,6 @@ public class WidgetUpdateService extends Service {
                 
             } catch (JSONException e) {	                
             }
-//            try {
-//                double minTemp = main.getDouble("temp_min") - 273.15;
-//                String min = "";
-//                
-//                if (tempScale == 1)
-//                	min = "L: " + String.valueOf((int)(minTemp*1.8+32)) + "°";
-//                else
-//                	min = "L: " + String.valueOf((int)minTemp) + "°";
-//                
-//                updateViews.setTextViewText(R.id.textViewTempLow, min);                
-//            } catch (JSONException e) {
-//            }
-//            try {
-//                double maxTemp = main.getDouble("temp_max") - 273.15;	
-//                String max = "";
-//                
-//                if (tempScale == 1)
-//                	max = "H: " + String.valueOf((int)(maxTemp*1.8+32)) + "°";
-//                else
-//                	max = "H: " + String.valueOf((int)maxTemp) + "°";
-//                
-//                int lnMax = max.length();
-//        		SpannableString spStrMax = new SpannableString(max);
-//        		spStrMax.setSpan(new StyleSpan(Typeface.BOLD), 0, lnMax, 0);
-//                
-//                updateViews.setTextViewText(R.id.textViewTempHigh, spStrMax);                
-//            } catch (JSONException e) {
-//            }
             
             JSONObject windJSON = null;
             try {
@@ -2596,8 +2420,38 @@ public class WidgetUpdateService extends Service {
                     String iconName = weather.getString("icon");
                     String iconNameAlt = iconName + "d";
                     
+                    WeatherConditions conditions = new WeatherConditions();
+                    
+                    int icons = Preferences.getWeatherIcons(this, appWidgetId);
+                    int resource = R.drawable.tick_weather_04d;
+                    WeatherIcon[] imageArr;
+                    
                     updateViews.setTextViewText(R.id.textViewDesc, weatherMain);
-                    updateViews.setImageViewResource(R.id.imageViewWeather, R.drawable.weather_04d);
+                    
+                    switch (icons) {
+					case 0:
+						resource = R.drawable.tick_weather_04d;
+						imageArr = conditions.m_ImageArrTick;
+						break;
+					case 1:
+						resource = R.drawable.touch_weather_04d;
+						imageArr = conditions.m_ImageArrTouch;
+						break;
+					case 2:
+						resource = R.drawable.icon_set_weather_04d;
+						imageArr = conditions.m_ImageArrIconSet;
+						break;
+					case 3:
+						resource = R.drawable.weezle_weather_04d;
+						imageArr = conditions.m_ImageArrWeezle;
+						break;
+					default:
+						resource = R.drawable.tick_weather_04d;
+						imageArr = conditions.m_ImageArrTick;
+						break;
+					}
+                    
+                    updateViews.setImageViewResource(R.id.imageViewWeather, resource);
                     
                     float lat = Preferences.getLocationLat(this, appWidgetId);
                     float lon = Preferences.getLocationLon(this, appWidgetId);
@@ -2617,15 +2471,13 @@ public class WidgetUpdateService extends Service {
                     		bDay = true;                    	
                     }
                     
-                    WeatherConditions conditions = new WeatherConditions();
-                    
-                    for (int j=0; j<conditions.m_ImageArr.length; j++) {
-                    	if (iconName.equals(conditions.m_ImageArr[j].iconName) || iconNameAlt.equals(conditions.m_ImageArr[j].iconName)) {
+                    for (int j=0; j<imageArr.length; j++) {
+                    	if (iconName.equals(imageArr[j].iconName) || iconNameAlt.equals(imageArr[j].iconName)) {
                     		
-                    		if (conditions.m_ImageArr[j].bDay != bDay)
-                    			updateViews.setImageViewResource(R.id.imageViewWeather, conditions.m_ImageArr[j].altIconId);
+                    		if (imageArr[j].bDay != bDay)
+                    			updateViews.setImageViewResource(R.id.imageViewWeather, imageArr[j].altIconId);
                     		else
-                    			updateViews.setImageViewResource(R.id.imageViewWeather, conditions.m_ImageArr[j].iconId);
+                    			updateViews.setImageViewResource(R.id.imageViewWeather, imageArr[j].iconId);
                     	}
                     }                    
                 }

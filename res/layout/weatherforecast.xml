@@ -22,7 +22,7 @@
             android:layout_centerInParent="true"            
             android:contentDescription="@string/weatherdesc"
             android:scaleType="fitXY"
-            android:src="@drawable/weather_unknown" />
+            android:src="@drawable/tick_weather_unknown" />
 
 	    <LinearLayout
 	        android:id="@+id/openWeatherMapIcon"
@@ -131,7 +131,7 @@
 		       	android:gravity="center|bottom"
 		       	android:scaleType="fitCenter"
 		       	android:contentDescription="@string/weatherdesc"
-		    	android:src="@drawable/weather_unknown" />	           
+		    	android:src="@drawable/tick_weather_unknown" />	           
             
 	        <TextView
                 android:id="@+id/textViewTempHigh1"
@@ -188,7 +188,7 @@
 		       	android:gravity="center|bottom"
 		       	android:scaleType="fitCenter"
 		       	android:contentDescription="@string/weatherdesc"
-		    	android:src="@drawable/weather_unknown" />	           
+		    	android:src="@drawable/tick_weather_unknown" />	           
             
 	        <TextView
                 android:id="@+id/textViewTempHigh2"
@@ -245,7 +245,7 @@
 		       	android:gravity="center|bottom"
 		       	android:scaleType="fitCenter"
 		       	android:contentDescription="@string/weatherdesc"
-		    	android:src="@drawable/weather_unknown" />	           
+		    	android:src="@drawable/tick_weather_unknown" />	           
             
 	        <TextView
                 android:id="@+id/textViewTempHigh3"
@@ -302,7 +302,7 @@
 		       	android:gravity="center|bottom"
 		       	android:scaleType="fitCenter"
 		       	android:contentDescription="@string/weatherdesc"
-		    	android:src="@drawable/weather_unknown" />	           
+		    	android:src="@drawable/tick_weather_unknown" />	           
             
 	        <TextView
                 android:id="@+id/textViewTempHigh4"
@@ -359,7 +359,7 @@
 		       	android:gravity="center|bottom"
 		       	android:scaleType="fitCenter"
 		       	android:contentDescription="@string/weatherdesc"
-		    	android:src="@drawable/weather_unknown" />	           
+		    	android:src="@drawable/tick_weather_unknown" />	           
             
 	        <TextView
                 android:id="@+id/textViewTempHigh5"

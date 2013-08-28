@@ -16,6 +16,7 @@
 	    android:id="@+id/clockWidget"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
+	    android:gravity="center|center_vertical"	    
 	    android:weightSum="1.0"
 	    android:baselineAligned="false"
 	    android:orientation="vertical" 
@@ -34,7 +35,7 @@
 		        android:id="@+id/textViewDate"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-		        android:gravity="center"
+		        android:gravity="center|center_vertical"
 		        android:text="@string/datebatterytxt"
 		        android:textSize="14sp"
 		        android:visibility="invisible" />
@@ -42,9 +43,9 @@
             <LinearLayout
 			        android:id="@+id/timeLayout"
 			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
-			        android:layout_gravity="center|fill_vertical"
+			        android:layout_height="wrap_content"			        
 			        android:weightSum="1.0"
+			        android:gravity="center|center_horizontal"			        
 			        android:orientation="horizontal" >
             
 				    <TextView
@@ -115,7 +116,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="wrap_content"
 		        android:layout_weight=".4"
-		        android:gravity="center"
+		        android:gravity="center|fill_vertical"		        
 		        android:text=""
 		        android:textSize="72sp" />		    
 		    
@@ -124,7 +125,7 @@
 		        android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="0.3"
-				android:gravity="center"
+				android:gravity="center|center_vertical"				
 		        android:text="@string/tempempty"
 		        android:textSize="32sp" />
 
@@ -132,12 +133,13 @@
 	</LinearLayout>
 	
     <ImageView
-    	android:id="@+id/imageViewWeather"
-    	android:layout_width="wrap_content"
-       	android:layout_height="wrap_content"
-       	android:layout_centerHorizontal="true"
-       	android:layout_alignParentBottom="true"
-       	android:scaleType="fitCenter"
-       	android:contentDescription="@string/weatherdesc"
-    	android:src="@drawable/weather_unknown" />
+        android:id="@+id/imageViewWeather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/weatherdesc"
+        android:scaleType="fitCenter"
+        android:src="@drawable/tick_weather_unknown" />
+
 </RelativeLayout>

@@ -9,12 +9,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
 import com.zoromatic.sunrisesunset.SunriseSunsetCalculator;
 import com.zoromatic.sunrisesunset.dto.SunriseSunsetLocation;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
@@ -155,37 +158,6 @@ public class WeatherForecastActivity extends Activity {
                 
             } catch (JSONException e) {	                
             }
-//            try {
-//                double minTemp = main.getDouble("temp_min") - 273.15;
-//                String min = "";
-//                
-//                if (tempScale == 1)
-//                	min = "L: " + String.valueOf((int)(minTemp*1.8+32)) + "°";
-//                else
-//                	min = "L: " + String.valueOf((int)minTemp) + "°";
-//                
-//                text = (TextView) findViewById(R.id.textViewTempLowToday);
-//        		text.setText(min);                
-//            } catch (JSONException e) {
-//            }
-//            try {
-//                double maxTemp = main.getDouble("temp_max") - 273.15;	
-//                String max = "";
-//                
-//                if (tempScale == 1)
-//                	max = "H: " + String.valueOf((int)(maxTemp*1.8+32)) + "°";
-//                else
-//                	max = "H: " + String.valueOf((int)maxTemp) + "°";
-//                
-//                int lnMax = max.length();
-//        		SpannableString spStrMax = new SpannableString(max);
-//        		spStrMax.setSpan(new StyleSpan(Typeface.BOLD), 0, lnMax, 0);
-//                
-//        		text = (TextView) findViewById(R.id.textViewTempHighToday);        		
-//        		text.setText(spStrMax);                
-//        		
-//            } catch (JSONException e) {
-//            }
             
             JSONObject windJSON = null;
             try {
@@ -220,7 +192,36 @@ public class WeatherForecastActivity extends Activity {
             		
             		ImageView image = (ImageView)findViewById(R.id.imageViewWeatherToday);
             		
-            		image.setImageResource(R.drawable.weather_04d);
+            		WeatherConditions conditions = new WeatherConditions();
+                     
+                    int icons = Preferences.getWeatherIcons(this, appWidgetId);
+                    int resource = R.drawable.tick_weather_04d;
+                    WeatherIcon[] imageArr;
+                     
+                    switch (icons) {
+ 					case 0:
+ 						resource = R.drawable.tick_weather_04d;
+ 						imageArr = conditions.m_ImageArrTick;
+ 						break;
+ 					case 1:
+ 						resource = R.drawable.touch_weather_04d;
+ 						imageArr = conditions.m_ImageArrTouch;
+ 						break;
+ 					case 2:
+ 						resource = R.drawable.icon_set_weather_04d;
+ 						imageArr = conditions.m_ImageArrIconSet;
+ 						break;
+ 					case 3:
+ 						resource = R.drawable.weezle_weather_04d;
+ 						imageArr = conditions.m_ImageArrWeezle;
+ 						break;
+ 					default:
+ 						resource = R.drawable.tick_weather_04d;
+ 						imageArr = conditions.m_ImageArrTick;
+ 						break;
+ 					}
+            		
+            		image.setImageResource(resource);
             		
             		float lat = Preferences.getLocationLat(this, appWidgetId);
                     float lon = Preferences.getLocationLon(this, appWidgetId);
@@ -240,14 +241,12 @@ public class WeatherForecastActivity extends Activity {
                     		bDay = true;                    	
                     }
                     
-                    WeatherConditions conditions = new WeatherConditions();
-                    
-                    for (int j=0; j<conditions.m_ImageArr.length; j++) {
-                    	if (iconName.equals(conditions.m_ImageArr[j].iconName) || iconNameAlt.equals(conditions.m_ImageArr[j].iconName)) {
-                    		if (conditions.m_ImageArr[j].bDay != bDay)
-                    			image.setImageResource(conditions.m_ImageArr[j].altIconId);
+                    for (int j=0; j<imageArr.length; j++) {
+                    	if (iconName.equals(imageArr[j].iconName) || iconNameAlt.equals(imageArr[j].iconName)) {
+                    		if (imageArr[j].bDay != bDay)
+                    			image.setImageResource(imageArr[j].altIconId);
                     		else
-                    			image.setImageResource(conditions.m_ImageArr[j].iconId);
+                    			image.setImageResource(imageArr[j].iconId);
                     	}
                     }                    
                 }
@@ -341,7 +340,36 @@ public class WeatherForecastActivity extends Activity {
             	TextView textTempLow = null;
             	TextView textMain = null;
         		ImageView image = null;
-        		int iconID = R.drawable.weather_04d;
+        		
+        		WeatherConditions conditions = new WeatherConditions();
+                
+                int icons = Preferences.getWeatherIcons(this, appWidgetId);
+                int iconID = R.drawable.tick_weather_04d;
+                WeatherIcon[] imageArr;
+                 
+                switch (icons) {
+				case 0:
+					iconID = R.drawable.tick_weather_04d;
+					imageArr = conditions.m_ImageArrTick;
+					break;
+				case 1:
+					iconID = R.drawable.touch_weather_04d;
+					imageArr = conditions.m_ImageArrTouch;
+					break;
+				case 2:
+					iconID = R.drawable.icon_set_weather_04d;
+					imageArr = conditions.m_ImageArrIconSet;
+					break;
+				case 3:
+					iconID = R.drawable.weezle_weather_04d;
+					imageArr = conditions.m_ImageArrWeezle;
+					break;
+				default:
+					iconID = R.drawable.tick_weather_04d;
+					imageArr = conditions.m_ImageArrTick;
+					break;
+				}
+                
         		String sTempHigh = "";
         		String sTempLow = "";
         		String weatherMain = "";
@@ -381,11 +409,9 @@ public class WeatherForecastActivity extends Activity {
                     String iconName = weather.getString("icon");
                     String iconNameAlt = iconName + "d";
                     
-                    WeatherConditions conditions = new WeatherConditions();
-                    
-                    for (int k=0; k<conditions.m_ImageArr.length; k++) {
-                    	if (iconName.equals(conditions.m_ImageArr[k].iconName) || iconNameAlt.equals(conditions.m_ImageArr[k].iconName)) {
-                    		iconID = conditions.m_ImageArr[k].iconId;
+                    for (int k=0; k<imageArr.length; k++) {
+                    	if (iconName.equals(imageArr[k].iconName) || iconNameAlt.equals(imageArr[k].iconName)) {
+                    		iconID = imageArr[k].iconId;
                     		break;
                     	}
                     }                    

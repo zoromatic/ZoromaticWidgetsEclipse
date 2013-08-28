@@ -48,6 +48,8 @@
 	<string name="selectlocation">Select Location</string>
 	<string name="tempscale">Temperature Scale</string>
 	<string name="selecttempscale">Select temperature scale</string>
+	<string name="weathericons">Weather Icons</string>
+	<string name="selectweathericons">Select weather icons</string>
 	<string name="weatherprovider">Weather Information Provider</string>
 	<string name="openweathermaplink">www.openweathermap.org</string>
 	<string name="lastrefresh">Last refresh: </string>

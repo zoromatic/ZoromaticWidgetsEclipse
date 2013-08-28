@@ -159,6 +159,14 @@ public class DigitalClockAppWidgetPreferences extends PreferenceActivity impleme
         	tempScale.setSummary(tempScale.getEntries()[Preferences.getTempScale(this, mAppWidgetId)]);
         }
         
+        ListPreference weatherIcons = (ListPreference)findPreference(Preferences.PREF_WEATHER_ICONS_KEY);
+        
+        if (weatherIcons != null)
+        {
+        	weatherIcons.setValueIndex(Preferences.getWeatherIcons(this, mAppWidgetId));
+        	weatherIcons.setSummary(weatherIcons.getEntries()[Preferences.getWeatherIcons(this, mAppWidgetId)]);
+        }
+        
         Preference refreshNow = findPreference(Preferences.PREF_REFRESH_NOW_KEY);
         
         if (refreshNow != null)
@@ -337,6 +345,11 @@ public class DigitalClockAppWidgetPreferences extends PreferenceActivity impleme
         if (tempScale != null)
         	Preferences.setTempScale(this, mAppWidgetId, tempScale.findIndexOfValue(tempScale.getValue()));
         
+        ListPreference weatherIcons = (ListPreference)findPreference(Preferences.PREF_WEATHER_ICONS_KEY);
+        
+        if (weatherIcons != null)
+        	Preferences.setWeatherIcons(this, mAppWidgetId, weatherIcons.findIndexOfValue(weatherIcons.getValue()));
+        
         CheckBoxPreference refreshWiFiOnly = (CheckBoxPreference)findPreference(Preferences.PREF_REFRESH_WIFI_ONLY);
         
         if (refreshWiFiOnly != null)
@@ -482,6 +495,16 @@ public class DigitalClockAppWidgetPreferences extends PreferenceActivity impleme
 	        {
 	        	Preferences.setTempScale(this, mAppWidgetId, tempScale.findIndexOfValue(tempScale.getValue()));
 	        	tempScale.setSummary(tempScale.getEntries()[Preferences.getTempScale(this, mAppWidgetId)]);
+	        }
+		}
+		
+		if (key.equals(Preferences.PREF_WEATHER_ICONS_KEY)) {
+			ListPreference weatherIcons = (ListPreference)findPreference(Preferences.PREF_WEATHER_ICONS_KEY);
+	        
+	        if (weatherIcons != null)
+	        {
+	        	Preferences.setWeatherIcons(this, mAppWidgetId, weatherIcons.findIndexOfValue(weatherIcons.getValue()));
+	        	weatherIcons.setSummary(weatherIcons.getEntries()[Preferences.getWeatherIcons(this, mAppWidgetId)]);
 	        }
 		}
 		
