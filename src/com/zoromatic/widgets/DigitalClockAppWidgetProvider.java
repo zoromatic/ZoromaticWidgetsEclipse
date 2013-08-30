@@ -2,6 +2,7 @@ package com.zoromatic.widgets;
 
 import java.io.File;
 import java.util.Calendar;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -9,7 +10,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-
 import android.util.Log;
 
 public class DigitalClockAppWidgetProvider extends AppWidgetProvider {
@@ -109,9 +109,9 @@ public class DigitalClockAppWidgetProvider extends AppWidgetProvider {
 				
 		//refreshInterval = 2*60*1000; // test on 2 minutes 
 		calendar.setTimeInMillis(lastRefresh);
-		long startAlarm = calendar.getTimeInMillis() + refreshInterval; 
+		//long startAlarm = calendar.getTimeInMillis() + refreshInterval; 
 		
-		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startAlarm,
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
 				refreshInterval, createClockTickIntent(context, appWidgetId));
 	}
 	
@@ -120,8 +120,8 @@ public class DigitalClockAppWidgetProvider extends AppWidgetProvider {
 		Intent intent = new Intent(WidgetUpdateService.WEATHER_UPDATE);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		intent.putExtra(WidgetInfoReceiver.SCHEDULED_UPDATE, true);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
-				intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		return pendingIntent;
 	}

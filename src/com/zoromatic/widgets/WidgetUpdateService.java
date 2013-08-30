@@ -2060,10 +2060,12 @@ public class WidgetUpdateService extends Service {
 		} catch (IllegalStateException e1) {
 			e1.printStackTrace();
         	
+			Preferences.setWeatherSuccess(this, appWidgetId, false);
         	readCachedWeatherData(updateViews, appWidgetId);
 		} catch (Exception e) {
 			e.printStackTrace();
         	
+			Preferences.setWeatherSuccess(this, appWidgetId, false);
         	readCachedWeatherData(updateViews, appWidgetId);		
 		}
 				

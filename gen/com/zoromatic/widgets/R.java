@@ -23,9 +23,14 @@ public final class R {
         public static final int tempScaleArray=0x7f060007;
         public static final int tempScaleValues=0x7f060008;
         public static final int weatherIconsArray=0x7f06000d;
+        public static final int weatherIconsImageValues=0x7f06000f;
         public static final int weatherIconsValues=0x7f06000e;
     }
     public static final class attr {
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int entryImages=0x7f010000;
     }
     public static final class drawable {
         public static final int airplane=0x7f020000;
@@ -577,7 +582,7 @@ public final class R {
         public static final int wifi_on=0x7f020222;
     }
     public static final class id {
-        public static final int Corners=0x7f090067;
+        public static final int Corners=0x7f090069;
         public static final int airplaneWidget=0x7f090002;
         public static final int backgroundImage=0x7f090018;
         public static final int batteryWidget=0x7f090005;
@@ -587,50 +592,52 @@ public final class R {
         public static final int buttonCancel=0x7f09000f;
         public static final int buttonSave=0x7f09000e;
         public static final int buttonSearch=0x7f090017;
+        public static final int check=0x7f09002b;
         public static final int checkBoxBrightness=0x7f09000c;
-        public static final int checkBoxShowBatteryNotif=0x7f09002b;
+        public static final int checkBoxShowBatteryNotif=0x7f09002d;
         public static final int clockLayout=0x7f09001a;
         public static final int clockWidget=0x7f090019;
         public static final int editTextLocation=0x7f090016;
         public static final int gpsWidget=0x7f090027;
+        public static final int image=0x7f09002a;
         public static final int imageViewAirplane=0x7f090003;
         public static final int imageViewBattery=0x7f090006;
         public static final int imageViewBluetooth=0x7f090009;
         public static final int imageViewBrightness=0x7f090011;
         public static final int imageViewGps=0x7f090028;
-        public static final int imageViewMobile=0x7f09002e;
-        public static final int imageViewNFC=0x7f090031;
-        public static final int imageViewOpenWeatherMapIcon=0x7f09003f;
-        public static final int imageViewOrientation=0x7f090034;
-        public static final int imageViewRinger=0x7f090037;
-        public static final int imageViewSync=0x7f09003a;
+        public static final int imageViewMobile=0x7f090030;
+        public static final int imageViewNFC=0x7f090033;
+        public static final int imageViewOpenWeatherMapIcon=0x7f090041;
+        public static final int imageViewOrientation=0x7f090036;
+        public static final int imageViewRinger=0x7f090039;
+        public static final int imageViewSync=0x7f09003c;
         public static final int imageViewWeather=0x7f090026;
-        public static final int imageViewWeather1=0x7f090049;
-        public static final int imageViewWeather2=0x7f09004f;
-        public static final int imageViewWeather3=0x7f090055;
-        public static final int imageViewWeather4=0x7f09005b;
-        public static final int imageViewWeather5=0x7f090061;
-        public static final int imageViewWeatherToday=0x7f09003d;
-        public static final int imageViewWiFi=0x7f090065;
+        public static final int imageViewWeather1=0x7f09004b;
+        public static final int imageViewWeather2=0x7f090051;
+        public static final int imageViewWeather3=0x7f090057;
+        public static final int imageViewWeather4=0x7f09005d;
+        public static final int imageViewWeather5=0x7f090063;
+        public static final int imageViewWeatherToday=0x7f09003f;
+        public static final int imageViewWiFi=0x7f090067;
         public static final int info_text=0x7f090000;
         public static final int legal_text=0x7f090001;
         public static final int locationLayout=0x7f090021;
-        public static final int locationLayoutToday=0x7f090042;
-        public static final int mobileWidget=0x7f09002d;
-        public static final int nfcWidget=0x7f090030;
-        public static final int openWeatherMapIcon=0x7f09003e;
-        public static final int orientationWidget=0x7f090033;
+        public static final int locationLayoutToday=0x7f090044;
+        public static final int mobileWidget=0x7f09002f;
+        public static final int nfcWidget=0x7f090032;
+        public static final int openWeatherMapIcon=0x7f090040;
+        public static final int orientationWidget=0x7f090035;
         public static final int radioCurrent=0x7f090014;
         public static final int radioGroupLocation=0x7f090013;
         public static final int radioManual=0x7f090015;
-        public static final int refresh=0x7f090068;
-        public static final int ringerWidget=0x7f090036;
+        public static final int refresh=0x7f09006a;
+        public static final int ringerWidget=0x7f090038;
         public static final int seekBarBrightness=0x7f09000d;
-        public static final int settings=0x7f090069;
+        public static final int settings=0x7f09006b;
         public static final int spaceLayout=0x7f090024;
-        public static final int syncWidget=0x7f090039;
-        public static final int textConfigureWidgets=0x7f09002c;
-        public static final int textShowBatteryNotif=0x7f09002a;
+        public static final int syncWidget=0x7f09003b;
+        public static final int textConfigureWidgets=0x7f09002e;
+        public static final int textShowBatteryNotif=0x7f09002c;
         public static final int textViewAirplane=0x7f090004;
         public static final int textViewBatteryStatus=0x7f090007;
         public static final int textViewBluetooth=0x7f09000a;
@@ -639,50 +646,50 @@ public final class R {
         public static final int textViewClockMinute=0x7f09001f;
         public static final int textViewClockSpace=0x7f09001e;
         public static final int textViewDate=0x7f09001b;
-        public static final int textViewDate1=0x7f090047;
-        public static final int textViewDate2=0x7f09004d;
-        public static final int textViewDate3=0x7f090053;
-        public static final int textViewDate4=0x7f090059;
-        public static final int textViewDate5=0x7f09005f;
+        public static final int textViewDate1=0x7f090049;
+        public static final int textViewDate2=0x7f09004f;
+        public static final int textViewDate3=0x7f090055;
+        public static final int textViewDate4=0x7f09005b;
+        public static final int textViewDate5=0x7f090061;
         public static final int textViewDesc=0x7f090023;
-        public static final int textViewDesc1=0x7f090048;
-        public static final int textViewDesc2=0x7f09004e;
-        public static final int textViewDesc3=0x7f090054;
-        public static final int textViewDesc4=0x7f09005a;
-        public static final int textViewDesc5=0x7f090060;
-        public static final int textViewDescToday=0x7f090044;
+        public static final int textViewDesc1=0x7f09004a;
+        public static final int textViewDesc2=0x7f090050;
+        public static final int textViewDesc3=0x7f090056;
+        public static final int textViewDesc4=0x7f09005c;
+        public static final int textViewDesc5=0x7f090062;
+        public static final int textViewDescToday=0x7f090046;
         public static final int textViewGps=0x7f090029;
         public static final int textViewLoc=0x7f090022;
-        public static final int textViewLocToday=0x7f090043;
-        public static final int textViewMobile=0x7f09002f;
-        public static final int textViewNFC=0x7f090032;
-        public static final int textViewOpenWeatherMapLink=0x7f090040;
-        public static final int textViewOrientation=0x7f090035;
-        public static final int textViewRinger=0x7f090038;
-        public static final int textViewSync=0x7f09003b;
+        public static final int textViewLocToday=0x7f090045;
+        public static final int textViewMobile=0x7f090031;
+        public static final int textViewNFC=0x7f090034;
+        public static final int textViewOpenWeatherMapLink=0x7f090042;
+        public static final int textViewOrientation=0x7f090037;
+        public static final int textViewRinger=0x7f09003a;
+        public static final int textViewSync=0x7f09003d;
         public static final int textViewTemp=0x7f090025;
-        public static final int textViewTempHigh1=0x7f09004a;
-        public static final int textViewTempHigh2=0x7f090050;
-        public static final int textViewTempHigh3=0x7f090056;
-        public static final int textViewTempHigh4=0x7f09005c;
-        public static final int textViewTempHigh5=0x7f090062;
-        public static final int textViewTempLow1=0x7f09004b;
-        public static final int textViewTempLow2=0x7f090051;
-        public static final int textViewTempLow3=0x7f090057;
-        public static final int textViewTempLow4=0x7f09005d;
-        public static final int textViewTempLow5=0x7f090063;
-        public static final int textViewTempToday=0x7f090041;
-        public static final int textViewWiFi=0x7f090066;
+        public static final int textViewTempHigh1=0x7f09004c;
+        public static final int textViewTempHigh2=0x7f090052;
+        public static final int textViewTempHigh3=0x7f090058;
+        public static final int textViewTempHigh4=0x7f09005e;
+        public static final int textViewTempHigh5=0x7f090064;
+        public static final int textViewTempLow1=0x7f09004d;
+        public static final int textViewTempLow2=0x7f090053;
+        public static final int textViewTempLow3=0x7f090059;
+        public static final int textViewTempLow4=0x7f09005f;
+        public static final int textViewTempLow5=0x7f090065;
+        public static final int textViewTempToday=0x7f090043;
+        public static final int textViewWiFi=0x7f090068;
         public static final int timeLayout=0x7f09001c;
         public static final int weatherLayout=0x7f090020;
-        public static final int weatherLayout1=0x7f090046;
-        public static final int weatherLayout2=0x7f09004c;
-        public static final int weatherLayout3=0x7f090052;
-        public static final int weatherLayout4=0x7f090058;
-        public static final int weatherLayout5=0x7f09005e;
-        public static final int weatherLayoutForecast=0x7f090045;
-        public static final int weatherLayoutToday=0x7f09003c;
-        public static final int wifiWidget=0x7f090064;
+        public static final int weatherLayout1=0x7f090048;
+        public static final int weatherLayout2=0x7f09004e;
+        public static final int weatherLayout3=0x7f090054;
+        public static final int weatherLayout4=0x7f09005a;
+        public static final int weatherLayout5=0x7f090060;
+        public static final int weatherLayoutForecast=0x7f090047;
+        public static final int weatherLayoutToday=0x7f09003e;
+        public static final int wifiWidget=0x7f090066;
     }
     public static final class layout {
         public static final int about=0x7f030000;
@@ -694,14 +701,15 @@ public final class R {
         public static final int configurelocation=0x7f030006;
         public static final int digitalclockwidget=0x7f030007;
         public static final int gpswidget=0x7f030008;
-        public static final int main=0x7f030009;
-        public static final int mobilewidget=0x7f03000a;
-        public static final int nfcwidget=0x7f03000b;
-        public static final int orientationwidget=0x7f03000c;
-        public static final int ringerwidget=0x7f03000d;
-        public static final int syncwidget=0x7f03000e;
-        public static final int weatherforecast=0x7f03000f;
-        public static final int wifiwidget=0x7f030010;
+        public static final int listitem=0x7f030009;
+        public static final int main=0x7f03000a;
+        public static final int mobilewidget=0x7f03000b;
+        public static final int nfcwidget=0x7f03000c;
+        public static final int orientationwidget=0x7f03000d;
+        public static final int ringerwidget=0x7f03000e;
+        public static final int syncwidget=0x7f03000f;
+        public static final int weatherforecast=0x7f030010;
+        public static final int wifiwidget=0x7f030011;
     }
     public static final class menu {
         public static final int weatherforecastmenu=0x7f080000;
@@ -864,4 +872,29 @@ public final class R {
         public static final int wifiwidget_info=0x7f04000c;
         public static final int zoromaticwidgets_prefs=0x7f04000d;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a ImageListPreference.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #ImageListPreference_entryImages com.zoromatic.widgets:entryImages}</code></td><td></td></tr>
+           </table>
+           @see #ImageListPreference_entryImages
+         */
+        public static final int[] ImageListPreference = {
+            0x7f010000
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.zoromatic.widgets.R.attr#entryImages}
+          attribute's value can be found in the {@link #ImageListPreference} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name android:entryImages
+        */
+        public static final int ImageListPreference_entryImages = 0;
+    };
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"  
+    xmlns:widgets="http://schemas.android.com/apk/res/com.zoromatic.widgets"
 	android:key="com.zoromatic.widgets.Preferences" >
 
     <PreferenceCategory android:title="Clock Layout" >
@@ -60,13 +61,14 @@
     <PreferenceCategory android:title="@string/weathersettings" >
         <PreferenceScreen android:title="@string/weathersettings">
 		    <PreferenceCategory android:title="@string/weathersettings" >
-		        <ListPreference
+		        <com.zoromatic.widgets.ImageListPreference
 		            android:defaultValue="0"
 		            android:entries="@array/weatherIconsArray"
 		            android:entryValues="@array/weatherIconsValues"
 		            android:key="weathericons_"
 		            android:summary="@string/selectweathericons"
-		            android:title="@string/weathericons" />
+		            android:title="@string/weathericons" 
+		            widgets:entryImages="@array/weatherIconsImageValues"/>
 		        <ListPreference
 		            android:defaultValue="0"
 		            android:entries="@array/tempScaleArray"
