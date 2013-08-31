@@ -1896,24 +1896,24 @@ public class WidgetUpdateService extends Service {
 		WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 		wm.getDefaultDisplay().getMetrics(metrics);
 		
-		int originalSize = 36;
-
-		switch(metrics.densityDpi)
-		{
-			case DisplayMetrics.DENSITY_LOW:  //LDPI
-				originalSize = 36;
-				break;
-			case DisplayMetrics.DENSITY_MEDIUM: //MDPI
-				originalSize = 48;
-				break;
-			case DisplayMetrics.DENSITY_HIGH: //HDPI
-				originalSize = 72;
-				break;
-			case DisplayMetrics.DENSITY_XHIGH: //XHDPI
-				originalSize = 96;
-				break;
-		}	
-
+//		int originalSize = 36;
+//
+//		switch(metrics.densityDpi)
+//		{
+//			case DisplayMetrics.DENSITY_LOW:  //LDPI
+//				originalSize = 36;
+//				break;
+//			case DisplayMetrics.DENSITY_MEDIUM: //MDPI
+//				originalSize = 48;
+//				break;
+//			case DisplayMetrics.DENSITY_HIGH: //HDPI
+//				originalSize = 72;
+//				break;
+//			case DisplayMetrics.DENSITY_XHIGH: //XHDPI
+//				originalSize = 96;
+//				break;
+//		}	
+//
 		float fDecreaseSpan = 1.0f;
 
 		if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_PORTRAIT) {
@@ -1923,7 +1923,9 @@ public class WidgetUpdateService extends Service {
 		if (fDecreaseSpan > 1.0f)
 			fDecreaseSpan = 1.0f;
 		
-		fDecreaseSpan = (float)(originalSize / 96.0f) * fDecreaseSpan;		
+		fDecreaseSpan = fDecreaseSpan * (metrics.xdpi / metrics.densityDpi); 
+		
+//		fDecreaseSpan = (float)(originalSize / 96.0f) * fDecreaseSpan;		
 				
 		spStrHour.setSpan(new RelativeSizeSpan(fDecreaseSpan), 0, lnHour, 0);
 		spStrMinute.setSpan(new RelativeSizeSpan(fDecreaseSpan), 0, lnMinute, 0);
