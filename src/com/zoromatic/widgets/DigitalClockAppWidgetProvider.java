@@ -26,7 +26,10 @@ public class DigitalClockAppWidgetProvider extends AppWidgetProvider {
     
 		String action = intent.getAction();
 		
-		if (action.equals("mobi.intuitit.android.hpp.ACTION_READY")) {
+		if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE) || 
+				action.equals(AppWidgetManager.ACTION_APPWIDGET_ENABLED) ||
+				action.equals("com.motorola.blur.home.ACTION_SET_WIDGET_SIZE") || 
+				action.equals("mobi.intuitit.android.hpp.ACTION_READY")) {
 			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 			ComponentName thisWidget = new ComponentName(context,
         			DigitalClockAppWidgetProvider.class);
@@ -107,7 +110,7 @@ public class DigitalClockAppWidgetProvider extends AppWidgetProvider {
 			break;
 		}
 				
-		//refreshInterval = 2*60*1000; // test on 2 minutes 
+		refreshInterval = 5*60*1000; // test on 5 minutes
 		calendar.setTimeInMillis(lastRefresh);
 		//long startAlarm = calendar.getTimeInMillis() + refreshInterval; 
 		

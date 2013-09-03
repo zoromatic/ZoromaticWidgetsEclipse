@@ -27,6 +27,19 @@
         <item>9</item>
         <item>10</item>
     </string-array>
+    <array name="colorPaintValues">
+	    <item>@color/sysBlack</item>
+		<item>@color/sysDkGray</item>
+		<item>@color/sysGray</item>
+		<item>@color/sysLtGray</item>
+		<item>@color/sysWhite</item>
+		<item>@color/sysRed</item>
+		<item>@color/sysGreen</item>
+		<item>@color/sysBlue</item>
+		<item>@color/sysYellow</item>
+		<item>@color/sysCyan</item>
+		<item>@color/sysMagenta</item>
+	</array>
     <string-array name="dateFormat">
         <item>dd.MM.yyyy</item>
         <item>dd/MM/yyyy</item>        
@@ -151,11 +164,11 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
-    </string-array>
+    </string-array>    
     <array name="weatherIconsImageValues">
 		<item>@drawable/tick_weather_03d</item>
 		<item>@drawable/touch_weather_03d</item>
 		<item>@drawable/icon_set_weather_03d</item>
 		<item>@drawable/weezle_weather_03d</item>
-	</array>
+	</array>		
 </resources>

@@ -10,13 +10,14 @@
             android:summary="@string/basedon12or24"
             android:title="@string/show24hrs" />
 
-        <ListPreference
+        <com.zoromatic.widgets.ImageListPreference
             android:defaultValue="0"
             android:entries="@array/colorArray"
             android:entryValues="@array/colorValues"
             android:key="color_"
             android:summary="@string/selectclockcolor"
-            android:title="@string/clockcolor" />
+            android:title="@string/clockcolor" 
+		    widgets:entryColors="@array/colorPaintValues" />
         
         <ListPreference
             android:defaultValue="0"
@@ -33,8 +34,7 @@
 	        android:dialogMessage="@string/opacitydescription"
 	        android:defaultValue="100"
 	        android:text=" %"
-	        android:max="100"
-	        />
+	        android:max="100" />
                 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/additionalinformation" >
@@ -106,5 +106,13 @@
             android:key="openweatherlink_">
 		</PreferenceScreen>			
     </PreferenceCategory>
+    
+    <PreferenceCategory android:title="About" >
+    	<PreferenceScreen
+			android:key="zoromaticabout_" 
+			android:summary="About Zoromatic Widgets application"
+			android:title="@string/app_name">		        
+		</PreferenceScreen>
+	</PreferenceCategory>
 
 </PreferenceScreen>

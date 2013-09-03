@@ -19,7 +19,8 @@ import android.widget.ImageView;
  */
 public class ImageArrayAdapter extends ArrayAdapter<CharSequence> {
 	private int index = 0;
-	private int[] resourceIds = null;
+	private int[] imageIds = null;
+	private int[] colorIds = null;
 
 	/**
 	 * ImageArrayAdapter constructor.
@@ -30,11 +31,12 @@ public class ImageArrayAdapter extends ArrayAdapter<CharSequence> {
 	 * @param i index of the previous selected item.
 	 */
 	public ImageArrayAdapter(Context context, int textViewResourceId,
-			CharSequence[] objects, int[] ids, int i) {
+			CharSequence[] objects, int[] images, int[] colors, int i) {
 		super(context, textViewResourceId, objects);
 
 		index = i;
-		resourceIds = ids;
+		imageIds = images;
+		colorIds = colors;
 	}
 	/**
 	 * {@inheritDoc}
@@ -43,12 +45,17 @@ public class ImageArrayAdapter extends ArrayAdapter<CharSequence> {
 		LayoutInflater inflater = ((Activity)getContext()).getLayoutInflater();
 		View row = inflater.inflate(R.layout.listitem, parent, false);
 
-		ImageView imageView = (ImageView)row.findViewById(R.id.image);
-		imageView.setImageResource(resourceIds[position]);
-
-		CheckedTextView checkedTextView = (CheckedTextView)row.findViewById(
-			R.id.check);
-
+		if (imageIds != null && imageIds.length > 0) {
+			ImageView imageView = (ImageView)row.findViewById(R.id.image);
+			imageView.setImageResource(imageIds[position]);
+		}
+		
+		CheckedTextView checkedTextView = (CheckedTextView)row.findViewById(R.id.check);
+		
+		if (colorIds != null && colorIds.length > 0) {
+			checkedTextView.setTextColor(colorIds[position]);
+		}
+		
 		checkedTextView.setText(getItem(position));
 
 		if (position == index) {

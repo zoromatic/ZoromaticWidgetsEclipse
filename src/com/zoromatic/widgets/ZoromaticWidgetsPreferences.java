@@ -23,6 +23,16 @@ public class ZoromaticWidgetsPreferences extends PreferenceActivity implements O
         
         addPreferencesFromResource(R.xml.zoromaticwidgets_prefs);
         
+        boolean bShowBatteryNotif = Preferences.getShowBatteryNotif(this);
+        
+        if (bShowBatteryNotif)
+        {
+        	Intent startIntent = new Intent(this, WidgetUpdateService.class);
+            startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, Intent.ACTION_BATTERY_CHANGED);
+            
+            this.startService(startIntent);
+        }
+        
         ListPreference soundToggle = (ListPreference)findPreference(Preferences.PREF_SOUND_OPTIONS);
         
         if (soundToggle != null)

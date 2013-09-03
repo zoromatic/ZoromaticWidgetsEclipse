@@ -53,9 +53,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
-import android.content.res.Configuration;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.Typeface;
 import android.location.GpsStatus;
 import android.location.Location;
@@ -80,15 +83,12 @@ import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.telephony.TelephonyManager;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
-import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
@@ -146,7 +146,7 @@ public class WidgetUpdateService extends Service {
 		mIntentFilter.addAction(Intent.ACTION_SCREEN_ON);
 		mIntentFilter.addAction("android.nfc.action.ADAPTER_STATE_CHANGED");
 		mIntentFilter.addAction("com.android.sync.SYNC_CONN_STATUS_CHANGED");
-		mIntentFilter.addAction(AUTO_ROTATE_CHANGED);
+		mIntentFilter.addAction(AUTO_ROTATE_CHANGED);		
 
 		mIntentFilter.addAction(BLUETOOTH_WIDGET_UPDATE);
 		mIntentFilter.addAction(WIFI_WIDGET_UPDATE);
@@ -779,9 +779,9 @@ public class WidgetUpdateService extends Service {
 						this, 0, alarmClockIntent,
 						PendingIntent.FLAG_UPDATE_CURRENT);
 		    	
-				updateViews.setOnClickPendingIntent(R.id.textViewClockMinute,
+				updateViews.setOnClickPendingIntent(R.id.imageViewClockMinute,
 						pendingIntentClock);				
-				updateViews.setOnClickPendingIntent(R.id.textViewClockHour,
+				updateViews.setOnClickPendingIntent(R.id.imageViewClockHour,
 						pendingIntentClock);
 		    }
 		    
@@ -1793,6 +1793,48 @@ public class WidgetUpdateService extends Service {
 		}
 	}
 	
+	public Bitmap buildUpdate(String time) 
+	{
+	    Bitmap myBitmap = Bitmap.createBitmap(160, 84, Bitmap.Config.ARGB_4444);
+	    Canvas myCanvas = new Canvas(myBitmap);
+	    Paint paint = new Paint();
+	    Typeface clock = Typeface.createFromAsset(this.getAssets(),"fonts/Clockopia.ttf");
+	    paint.setAntiAlias(true);
+	    paint.setSubpixelText(true);
+	    paint.setTypeface(clock);
+	    paint.setStyle(Paint.Style.FILL);
+	    paint.setColor(Color.WHITE);
+	    paint.setTextSize(65);
+	    paint.setTextAlign(Align.CENTER);
+	    myCanvas.drawText(time, 80, 60, paint);
+	    return myBitmap;
+	}
+	
+	public static Bitmap getFontBitmap(Context context, String text, int color, float fontSizeSP) {
+	    int fontSizePX = convertDiptoPix(context, fontSizeSP);
+	    int pad = (fontSizePX / 9);
+	    Paint paint = new Paint();
+	    //Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
+	    Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/Clockopia.ttf");
+	    paint.setAntiAlias(true);
+	    paint.setTypeface(typeface);
+	    paint.setColor(color);
+	    paint.setTextSize(fontSizePX);
+
+	    int textWidth = (int) (paint.measureText(text) + pad * 2);
+	    int height = (int) (fontSizePX / 0.75);
+	    Bitmap bitmap = Bitmap.createBitmap(textWidth, height, Bitmap.Config.ARGB_4444);
+	    Canvas canvas = new Canvas(bitmap);
+	    float xOriginal = pad;
+	    canvas.drawText(text, xOriginal, fontSizePX, paint);
+	    return bitmap;
+	}
+
+	public static int convertDiptoPix(Context context, float dip) {
+	    int value = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, context.getResources().getDisplayMetrics());
+	    return value;
+	}
+	
 	public void updateClockStatus(RemoteViews updateViews, int appWidgetId, boolean updateWeather) {
 		Log.d(LOG_TAG, "WidgetUpdateService updateClockStatus");
 
@@ -1887,53 +1929,10 @@ public class WidgetUpdateService extends Service {
 			systemColor = Color.WHITE;
 			break;
 		}
-
-		spStrHour.setSpan(new ForegroundColorSpan(systemColor), 0, lnHour, 0);
-		spStrMinute.setSpan(new ForegroundColorSpan(systemColor), 0, lnMinute, 0);
-		spStrColon.setSpan(new ForegroundColorSpan(systemColor), 0, lnColon, 0);
 		
-		DisplayMetrics metrics = new DisplayMetrics();
-		WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-		wm.getDefaultDisplay().getMetrics(metrics);
-		
-//		int originalSize = 36;
-//
-//		switch(metrics.densityDpi)
-//		{
-//			case DisplayMetrics.DENSITY_LOW:  //LDPI
-//				originalSize = 36;
-//				break;
-//			case DisplayMetrics.DENSITY_MEDIUM: //MDPI
-//				originalSize = 48;
-//				break;
-//			case DisplayMetrics.DENSITY_HIGH: //HDPI
-//				originalSize = 72;
-//				break;
-//			case DisplayMetrics.DENSITY_XHIGH: //XHDPI
-//				originalSize = 96;
-//				break;
-//		}	
-//
-		float fDecreaseSpan = 1.0f;
-
-		if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_PORTRAIT) {
-			fDecreaseSpan = (float)metrics.heightPixels / (float)metrics.widthPixels;
-		}
-		
-		if (fDecreaseSpan > 1.0f)
-			fDecreaseSpan = 1.0f;
-		
-		fDecreaseSpan = fDecreaseSpan * (metrics.xdpi / metrics.densityDpi); 
-		
-//		fDecreaseSpan = (float)(originalSize / 96.0f) * fDecreaseSpan;		
-				
-		spStrHour.setSpan(new RelativeSizeSpan(fDecreaseSpan), 0, lnHour, 0);
-		spStrMinute.setSpan(new RelativeSizeSpan(fDecreaseSpan), 0, lnMinute, 0);
-		spStrColon.setSpan(new RelativeSizeSpan(fDecreaseSpan), 0, lnColon, 0);
-		
-		updateViews.setTextViewText(R.id.textViewClockHour, spStrHour);
-		updateViews.setTextViewText(R.id.textViewClockMinute, spStrMinute);
-		updateViews.setTextViewText(R.id.textViewClockSpace, spStrColon);	
+		updateViews.setImageViewBitmap(R.id.imageViewClockHour, getFontBitmap(this, currentHour, systemColor, 96));
+		updateViews.setImageViewBitmap(R.id.imageViewClockMinute, getFontBitmap(this, currentMinute, systemColor, 96));
+		updateViews.setImageViewBitmap(R.id.imageViewClockSpace, getFontBitmap(this, ":", systemColor, 96));
 						
 		String currentDate = "";
 		String[] mTestArray = getResources().getStringArray(R.array.dateFormat);
@@ -1979,22 +1978,25 @@ public class WidgetUpdateService extends Service {
 		
 		updateViews.setInt(R.id.backgroundImage, "setAlpha", iTransparency*255/100);		
 		
+		updateViews.setViewVisibility(R.id.imageViewClockSpace, View.INVISIBLE);
+		
 		switch (iClockSkinItem) {
 		case 0:
-			updateViews.setInt(R.id.textViewClockHour, "setBackgroundResource", R.drawable.bck_left);
-			updateViews.setInt(R.id.textViewClockMinute, "setBackgroundResource", R.drawable.bck_right);
+			updateViews.setInt(R.id.imageViewClockHour, "setBackgroundResource", R.drawable.bck_left);
+			updateViews.setInt(R.id.imageViewClockMinute, "setBackgroundResource", R.drawable.bck_right);			
 			break;
 		case 1:
-			updateViews.setInt(R.id.textViewClockHour, "setBackgroundResource", R.drawable.bck_left_light);
-			updateViews.setInt(R.id.textViewClockMinute, "setBackgroundResource", R.drawable.bck_right_light);		
+			updateViews.setInt(R.id.imageViewClockHour, "setBackgroundResource", R.drawable.bck_left_light);
+			updateViews.setInt(R.id.imageViewClockMinute, "setBackgroundResource", R.drawable.bck_right_light);		
 			break;
 		case 2:
-			updateViews.setInt(R.id.textViewClockHour, "setBackgroundResource", 0);
-			updateViews.setInt(R.id.textViewClockMinute, "setBackgroundResource", 0);
+			updateViews.setInt(R.id.imageViewClockHour, "setBackgroundResource", 0);
+			updateViews.setInt(R.id.imageViewClockMinute, "setBackgroundResource", 0);
+			updateViews.setViewVisibility(R.id.imageViewClockSpace, View.VISIBLE);
 			break;
 		default:
-			updateViews.setInt(R.id.textViewClockHour, "setBackgroundResource", R.drawable.bck_left);
-			updateViews.setInt(R.id.textViewClockMinute, "setBackgroundResource", R.drawable.bck_right);
+			updateViews.setInt(R.id.imageViewClockHour, "setBackgroundResource", R.drawable.bck_left);
+			updateViews.setInt(R.id.imageViewClockMinute, "setBackgroundResource", R.drawable.bck_right);
 			break;
 		}	
 		
@@ -2153,10 +2155,12 @@ public class WidgetUpdateService extends Service {
 
             File cacheFile = new File(parentDirectory, "weather_cache_"+appWidgetId);
             cacheFile.createNewFile();
-            
-            final BufferedWriter cacheWriter = new BufferedWriter(new FileWriter(cacheFile), result.length());
-            cacheWriter.write(result.toString());
-            cacheWriter.close();
+           
+            if (result.length() > 0) {
+	            final BufferedWriter cacheWriter = new BufferedWriter(new FileWriter(cacheFile), result.length());
+	            cacheWriter.write(result.toString());
+	            cacheWriter.close();
+            }
             
         } catch (UnknownHostException e) {
         	e.printStackTrace();
@@ -2253,9 +2257,11 @@ public class WidgetUpdateService extends Service {
             File cacheFile = new File(parentDirectory, "forecast_cache_"+appWidgetId);
             cacheFile.createNewFile();
             
-            final BufferedWriter cacheWriter = new BufferedWriter(new FileWriter(cacheFile), result.length());
-            cacheWriter.write(result.toString());
-            cacheWriter.close();
+            if (result.length() > 0) {
+	            final BufferedWriter cacheWriter = new BufferedWriter(new FileWriter(cacheFile), result.length());
+	            cacheWriter.write(result.toString());
+	            cacheWriter.close();
+            }
             
         } catch (UnknownHostException e) {
         	e.printStackTrace();    
@@ -2344,7 +2350,7 @@ public class WidgetUpdateService extends Service {
 					R.layout.digitalclockwidget);
 		}				
 		
-		if (parseString.equals(null) || parseString.equals(""))
+		if (parseString.equals(null) || parseString.equals("") || parseString.contains("<html>"))
 			return;
 		
 		JSONTokener parser = new JSONTokener(parseString);

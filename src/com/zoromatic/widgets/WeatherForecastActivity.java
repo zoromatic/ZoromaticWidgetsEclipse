@@ -92,7 +92,8 @@ public class WeatherForecastActivity extends Activity {
             
 			cacheReader.close();
             
-            parseWeatherData(appWidgetId, result.toString(), true, false);
+			if (!result.toString().contains("<html>"))
+				parseWeatherData(appWidgetId, result.toString(), true, false);
             
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -105,7 +106,7 @@ public class WeatherForecastActivity extends Activity {
 	void parseWeatherData(int appWidgetId, String parseString, boolean updateFromCache, boolean scheduledUpdate) {
 		Log.d(LOG_TAG, "WeatherForecastActivity parseWeatherData appWidgetId: " + appWidgetId + " cache: " + updateFromCache + " scheduled: " + scheduledUpdate);
 
-		if (parseString.equals(null) || parseString.equals(""))
+		if (parseString.equals(null) || parseString.equals("") || parseString.contains("<html>"))
 			return;
 		
 		JSONTokener parser = new JSONTokener(parseString);
@@ -297,8 +298,9 @@ public class WeatherForecastActivity extends Activity {
             }
             
 			cacheReader.close();
-            
-            parseForecastData(appWidgetId, result.toString(), true, false);
+			
+			if (!result.toString().contains("<html>"))
+				parseForecastData(appWidgetId, result.toString(), true, false);
             
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -311,7 +313,7 @@ public class WeatherForecastActivity extends Activity {
 	void parseForecastData(int appWidgetId, String parseString, boolean updateFromCache, boolean scheduledUpdate) {
 		Log.d(LOG_TAG, "WidgetUpdateService parseForecastData appWidgetId: " + appWidgetId + " cache: " + updateFromCache + " scheduled: " + scheduledUpdate);
 
-		if (parseString.equals(null) || parseString.equals(""))
+		if (parseString.equals(null) || parseString.equals("") || parseString.contains("<html>"))
 			return;
 		
 		JSONTokener parser = new JSONTokener(parseString);

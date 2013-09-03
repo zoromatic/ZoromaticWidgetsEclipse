@@ -2,6 +2,7 @@ package com.zoromatic.widgets;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import android.annotation.SuppressLint;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
@@ -279,7 +280,22 @@ public class DigitalClockAppWidgetPreferences extends PreferenceActivity impleme
         		connection = getResources().getString(R.string.refreshanyconnection);
         	
         	refreshWiFiOnly.setSummary(connection);
-        }              
+        }   
+        
+        Preference about = findPreference(Preferences.PREF_ABOUT_KEY);
+        
+        if (about != null) {
+        	about.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                @Override
+				public boolean onPreferenceClick(Preference p) {
+                	AboutDialog about = new AboutDialog(DigitalClockAppWidgetPreferences.this);
+                	about.setTitle("About Zoromatic Widgets");
+                	about.show();
+                    return true;
+                }
+            });        	        	
+        }
 	}
 	
 	@Override

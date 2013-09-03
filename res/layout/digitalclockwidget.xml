@@ -36,7 +36,7 @@
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:gravity="center|center_vertical"
-		        android:text="@string/datebatterytxt"
+		        android:text="@string/datebatterytxt"		       
 		        android:textSize="14sp"
 		        android:visibility="invisible" />
             
@@ -48,32 +48,35 @@
 			        android:gravity="center|center_horizontal"			        
 			        android:orientation="horizontal" >
             
-				    <TextView
-				        android:id="@+id/textViewClockHour"
+				    <ImageView
+				        android:id="@+id/imageViewClockHour"
 				        android:layout_width="0dp"
 				        android:layout_height="wrap_content"
 				        android:layout_weight=".45"
 				        android:gravity="center|fill_vertical"
 				        android:text="@string/tempempty"
+				        android:contentDescription="@string/weatherdesc"
 				        android:background="@drawable/bck_left"
 				        android:textSize="96sp" />
 				    
-				    <TextView
-				        android:id="@+id/textViewClockSpace"
+				    <ImageView
+				        android:id="@+id/imageViewClockSpace"
 				        android:layout_width="0dp"
 				        android:layout_height="wrap_content"
 				        android:layout_weight=".1"
 				        android:gravity="center|fill_vertical"
 				        android:text=""
+				        android:contentDescription="@string/weatherdesc"
 				        android:textSize="96sp" />
 				    
-				    <TextView
-				        android:id="@+id/textViewClockMinute"
+				    <ImageView
+				        android:id="@+id/imageViewClockMinute"
 				        android:layout_width="0dp"
 				        android:layout_height="wrap_content"
 				        android:layout_weight=".45"
 				        android:gravity="center|fill_vertical"
 				        android:text="@string/tempempty"
+				        android:contentDescription="@string/weatherdesc"
 				        android:background="@drawable/bck_right"
 				        android:textSize="96sp" />
 			</LinearLayout>
