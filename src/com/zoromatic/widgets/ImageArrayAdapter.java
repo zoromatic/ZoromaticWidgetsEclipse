@@ -5,6 +5,8 @@ package com.zoromatic.widgets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ public class ImageArrayAdapter extends ArrayAdapter<CharSequence> {
 	private int index = 0;
 	private int[] imageIds = null;
 	private int[] colorIds = null;
+	private String[] fontPaths = null;
 
 	/**
 	 * ImageArrayAdapter constructor.
@@ -31,12 +34,13 @@ public class ImageArrayAdapter extends ArrayAdapter<CharSequence> {
 	 * @param i index of the previous selected item.
 	 */
 	public ImageArrayAdapter(Context context, int textViewResourceId,
-			CharSequence[] objects, int[] images, int[] colors, int i) {
+			CharSequence[] objects, int[] images, int[] colors, String[] fonts, int i) {
 		super(context, textViewResourceId, objects);
 
 		index = i;
 		imageIds = images;
 		colorIds = colors;
+		fontPaths  = fonts;
 	}
 	/**
 	 * {@inheritDoc}
@@ -50,15 +54,30 @@ public class ImageArrayAdapter extends ArrayAdapter<CharSequence> {
 			imageView.setImageResource(imageIds[position]);
 		}
 		
-		CheckedTextView checkedTextView = (CheckedTextView)row.findViewById(R.id.check);
+		CheckedTextView checkedTextView = (CheckedTextView)row.findViewById(R.id.check);		
+		checkedTextView.setText(getItem(position));
+		
+		checkedTextView.setTextColor(Color.BLACK);
+		checkedTextView.setBackgroundColor(Color.WHITE);
 		
 		if (colorIds != null && colorIds.length > 0) {
-			checkedTextView.setTextColor(colorIds[position]);
+			int txtColor = ((Activity)getContext()).getResources().getColor(colorIds[position]);			
+			
+			if (txtColor == Color.WHITE)
+				checkedTextView.setTextColor(Color.LTGRAY);
+			else
+				checkedTextView.setTextColor(txtColor);	
 		}
 		
-		checkedTextView.setText(getItem(position));
-
-		if (position == index) {
+		if (fontPaths != null && fontPaths.length > 0) {			
+			
+			Typeface typeface = Typeface.createFromAsset(((Activity)getContext()).getAssets(), 
+					fontPaths[position]);
+			
+			checkedTextView.setTypeface(typeface);			
+		}
+        
+        if (position == index) {
 			checkedTextView.setChecked(true);
 		}
 

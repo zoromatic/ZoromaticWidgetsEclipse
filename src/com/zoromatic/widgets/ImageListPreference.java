@@ -18,6 +18,7 @@ import android.widget.ListAdapter;
 public class ImageListPreference extends ListPreference {
 	private int[] imageIds = null;
 	private int[] colorIds = null;
+	private String[] fontPaths = null;
 
 	/**
 	 * Constructor of the ImageListPreference. Initializes the custom images.
@@ -44,9 +45,11 @@ public class ImageListPreference extends ListPreference {
 					imageIds = new int[imageNames.length];
 			
 					for (int i=0;i<imageNames.length;i++) {
-						String imageName = imageNames[i].substring(
-							imageNames[i].indexOf('/') + 1,
-							imageNames[i].lastIndexOf('.'));
+//						String imageName = imageNames[i].substring(
+//							imageNames[i].indexOf('/') + 1,
+//							imageNames[i].lastIndexOf('.'));
+						
+						String imageName = imageNames[i];
 			
 						imageIds[i] = context.getResources().getIdentifier(imageName,
 							null, context.getPackageName());
@@ -66,9 +69,11 @@ public class ImageListPreference extends ListPreference {
 					colorIds = new int[colorNames.length];
 			
 					for (int i=0;i<colorNames.length;i++) {
-						String colorName = colorNames[i].substring(
-							colorNames[i].indexOf('/') + 1,
-							colorNames[i].lastIndexOf('.'));
+//						String colorName = colorNames[i].substring(
+//							colorNames[i].indexOf('/') + 1,
+//							colorNames[i].lastIndexOf('.'));
+						
+						String colorName = colorNames[i];
 			
 						colorIds[i] = context.getResources().getIdentifier(colorName,
 							null, context.getPackageName());
@@ -76,6 +81,19 @@ public class ImageListPreference extends ListPreference {
 				}
 			} else
 				colorIds = null;
+			
+			id = typedArray.getResourceId(R.styleable.ImageListPreference_entryFonts, -1);
+			
+			if (id >= 0) {			
+				String[] fontNames = context.getResources().getStringArray(id);
+		
+				if (fontNames[0] == null) {
+					fontPaths = null;
+				} else {
+					fontPaths = fontNames;							
+				}
+			} else
+				fontPaths = null;
 		}	
 		
 		typedArray.recycle();
@@ -88,7 +106,7 @@ public class ImageListPreference extends ListPreference {
 			getKey(), "1"));
 
 		ListAdapter listAdapter = new ImageArrayAdapter(getContext(),
-			R.layout.listitem, getEntries(), imageIds, colorIds, index);
+			R.layout.listitem, getEntries(), imageIds, colorIds, fontPaths, index);
 
 		// Order matters.
 		builder.setAdapter(listAdapter, this);

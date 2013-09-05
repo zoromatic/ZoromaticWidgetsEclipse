@@ -110,7 +110,7 @@ public class DigitalClockAppWidgetProvider extends AppWidgetProvider {
 			break;
 		}
 				
-		refreshInterval = 5*60*1000; // test on 5 minutes
+		//refreshInterval = 5*60*1000; // test on 5 minutes
 		calendar.setTimeInMillis(lastRefresh);
 		//long startAlarm = calendar.getTimeInMillis() + refreshInterval; 
 		

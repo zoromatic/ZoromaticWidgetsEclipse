@@ -40,7 +40,11 @@
 	<string name="additionalinformation">Additional Information</string>
 	<string name="showdatewidget">Show date on the widget</string>
 	<string name="showbatterywidget">Show battery status on the widget</string>
+	<string name="clocksettings">Clock Settings</string>
+	<string name="clocklayout">Clock Layout</string>
+	<string name="clocklayoutdesc">Change clock look and feel</string>
 	<string name="weathersettings">Weather Settings</string>
+	<string name="weathersettingsdesc">Set up weather information</string>
 	<string name="refreshinterval">Refresh Interval</string>
 	<string name="intervalrefreshing">Interval for refreshing weather information</string>
 	<string name="refreshnow">Refresh Now</string>
@@ -73,6 +77,8 @@
 	<string name="autobrightness">Automatic Brightness</string>
 	<string name="buttonsave">Save</string>
 	<string name="buttoncancel">Cancel</string>
+	<string name="clockfont">Clock Font</string>
+    <string name="selectclockfont">Select clock font</string>
 	
 	<string name="bluetooth">Bluetooth</string>
 	<string name="gps">GPS</string>

@@ -835,31 +835,6 @@ public class WidgetUpdateService extends Service {
 		spStrLevel.setSpan(new StyleSpan(Typeface.BOLD), 0, lnColon, 0);
 
 		updateViews.setTextViewText(R.id.textViewBatteryStatus, spStrLevel);
-
-//		if (level > 90)
-//			icon = R.drawable.battery_010;
-//		else if (level <= 90 && level > 75)
-//			icon = R.drawable.battery_009;
-//		else if (level <= 75 && level > 60)
-//			icon = R.drawable.battery_008;
-//		else if (level <= 60 && level > 50)
-//			icon = R.drawable.battery_007;
-//		else if (level <= 50 && level > 40)
-//			icon = R.drawable.battery_006;
-//		else if (level <= 40 && level > 25)
-//			icon = R.drawable.battery_005;
-//		else if (level <= 25 && level > 15)
-//			icon = R.drawable.battery_004;
-//		else if (level <= 15 && level > 5)
-//			icon = R.drawable.battery_003;
-//		else if (level <= 5)
-//			icon = R.drawable.battery_002;
-//		else
-//			icon = R.drawable.battery_001;
-//		
-//		if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-//			icon = R.drawable.battery_000;
-//		}
 		
 		switch (status) {
 		
@@ -878,7 +853,7 @@ public class WidgetUpdateService extends Service {
 			break;
 		}
 
-		updateViews.setImageViewResource(R.id.imageViewBattery, icon);
+		updateViews.setImageViewResource(R.id.imageViewBattery, icon);				
 	}
 	
 	public void updateNotificationBatteryStatus(Intent intent) {
@@ -942,9 +917,6 @@ public class WidgetUpdateService extends Service {
 		
 		notification = new Notification(icon, "Battery Status",
 				System.currentTimeMillis());
-		
-		//if (status == BatteryManager.BATTERY_STATUS_CHARGING)
-		//	notification.number = level;
 		
 		notification.flags |= Notification.FLAG_ONGOING_EVENT
 				| Notification.FLAG_NO_CLEAR;
@@ -1810,12 +1782,11 @@ public class WidgetUpdateService extends Service {
 	    return myBitmap;
 	}
 	
-	public static Bitmap getFontBitmap(Context context, String text, int color, float fontSizeSP) {
+	public static Bitmap getFontBitmap(Context context, String text, int color, String font, float fontSizeSP) {
 	    int fontSizePX = convertDiptoPix(context, fontSizeSP);
 	    int pad = (fontSizePX / 9);
 	    Paint paint = new Paint();
-	    //Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
-	    Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/Clockopia.ttf");
+	    Typeface typeface = Typeface.createFromAsset(context.getAssets(), font);
 	    paint.setAntiAlias(true);
 	    paint.setTypeface(typeface);
 	    paint.setColor(color);
@@ -1849,12 +1820,8 @@ public class WidgetUpdateService extends Service {
 		int iColorItem = Preferences.getColorItem(this, appWidgetId);
 		int iClockSkinItem = Preferences.getClockSkin(this, appWidgetId);
 		int iDateFormatItem = Preferences.getDateFormatItem(this, appWidgetId);
-		int iTransparency = Preferences.getTransparency(this, appWidgetId);
-		String colon = " ";
-		
-		if (iClockSkinItem == 2) {
-			colon = ":";
-		}
+		int iTransparency = Preferences.getTransparency(this, appWidgetId);		
+		int iFontItem = Preferences.getFontItem(this, appWidgetId);
 		
 		String currentHour, currentMinute;
 
@@ -1875,19 +1842,7 @@ public class WidgetUpdateService extends Service {
 		} else {
 			updateViews.setViewVisibility(R.id.textViewDate,
 					View.INVISIBLE);
-		}
-
-		int lnHour = currentHour.length();
-		SpannableString spStrHour = new SpannableString(currentHour);
-		spStrHour.setSpan(new StyleSpan(Typeface.BOLD), 0, lnHour, 0);
-		
-		int lnMinute = currentMinute.length();
-		SpannableString spStrMinute = new SpannableString(currentMinute);
-		spStrMinute.setSpan(new StyleSpan(Typeface.BOLD), 0, lnMinute, 0);
-		
-		int lnColon = colon.length();
-		SpannableString spStrColon = new SpannableString(colon);
-		spStrColon.setSpan(new StyleSpan(Typeface.BOLD), 0, lnColon, 0);
+		}		
 		
 		int systemColor = Color.WHITE;
 
@@ -1928,11 +1883,18 @@ public class WidgetUpdateService extends Service {
 		default:
 			systemColor = Color.WHITE;
 			break;
-		}
+		}		
 		
-		updateViews.setImageViewBitmap(R.id.imageViewClockHour, getFontBitmap(this, currentHour, systemColor, 96));
-		updateViews.setImageViewBitmap(R.id.imageViewClockMinute, getFontBitmap(this, currentMinute, systemColor, 96));
-		updateViews.setImageViewBitmap(R.id.imageViewClockSpace, getFontBitmap(this, ":", systemColor, 96));
+		String[] mFontArray = getResources().getStringArray(R.array.fontPathValues);
+		
+		String font = "fonts/Roboto.ttf";
+		
+		if (mFontArray.length > iFontItem)
+			font = mFontArray[iFontItem];
+		
+		updateViews.setImageViewBitmap(R.id.imageViewClockHour, getFontBitmap(this, currentHour, systemColor, font, 96));
+		updateViews.setImageViewBitmap(R.id.imageViewClockMinute, getFontBitmap(this, currentMinute, systemColor, font, 96));
+		updateViews.setImageViewBitmap(R.id.imageViewClockSpace, getFontBitmap(this, ":", systemColor, font, 96));
 						
 		String currentDate = "";
 		String[] mTestArray = getResources().getStringArray(R.array.dateFormat);

@@ -3,38 +3,51 @@
     xmlns:widgets="http://schemas.android.com/apk/res/com.zoromatic.widgets"
 	android:key="com.zoromatic.widgets.Preferences" >
 
-    <PreferenceCategory android:title="Clock Layout" >
+    <PreferenceCategory android:title="@string/clocksettings" >
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="show24hrs_"
             android:summary="@string/basedon12or24"
             android:title="@string/show24hrs" />
-
-        <com.zoromatic.widgets.ImageListPreference
-            android:defaultValue="0"
-            android:entries="@array/colorArray"
-            android:entryValues="@array/colorValues"
-            android:key="color_"
-            android:summary="@string/selectclockcolor"
-            android:title="@string/clockcolor" 
-		    widgets:entryColors="@array/colorPaintValues" />
-        
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/skinArray"
-            android:entryValues="@array/skinValues"
-            android:key="clockskin_"
-            android:summary="@string/selectclockskin"
-            android:title="@string/clockskin" />
-        
-        <com.zoromatic.widgets.SeekBarPreference 
-	        android:key="transparency_"
-	        android:title="@string/widgettransparency"
-	        android:summary="@string/widgetbackground"
-	        android:dialogMessage="@string/opacitydescription"
-	        android:defaultValue="100"
-	        android:text=" %"
-	        android:max="100" />
+		<PreferenceScreen android:title="@string/clocklayout" 
+		    android:summary="@string/clocklayoutdesc">		    
+		    <PreferenceCategory android:title="@string/clocklayout" >
+		        <com.zoromatic.widgets.ImageListPreference
+		            android:defaultValue="0"
+		            android:entries="@array/colorArray"
+		            android:entryValues="@array/colorValues"
+		            android:key="color_"
+		            android:summary="@string/selectclockcolor"
+		            android:title="@string/clockcolor" 
+				    widgets:entryColors="@array/colorPaintValues" />
+		        
+		        <com.zoromatic.widgets.ImageListPreference
+		            android:defaultValue="0"
+		            android:entries="@array/fontArray"
+		            android:entryValues="@array/fontValues"
+		            android:key="font_"
+		            android:summary="@string/selectclockfont"
+		            android:title="@string/clockfont"
+		            widgets:entryFonts="@array/fontPathValues" />
+		        
+		        <com.zoromatic.widgets.ImageListPreference
+		            android:defaultValue="0"
+		            android:entries="@array/skinArray"
+		            android:entryValues="@array/skinValues"
+		            android:key="clockskin_"
+		            android:summary="@string/selectclockskin"
+		            android:title="@string/clockskin"/>
+		        
+		        <com.zoromatic.widgets.SeekBarPreference 
+			        android:key="transparency_"
+			        android:title="@string/widgettransparency"
+			        android:summary="@string/widgetbackground"
+			        android:dialogMessage="@string/opacitydescription"
+			        android:defaultValue="100"
+			        android:text=" %"
+			        android:max="100" />
+			</PreferenceCategory>
+		</PreferenceScreen>
                 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/additionalinformation" >
@@ -59,7 +72,8 @@
             android:title="@string/showbattery" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/weathersettings" >
-        <PreferenceScreen android:title="@string/weathersettings">
+        <PreferenceScreen android:title="@string/weathersettings" 
+		    android:summary="@string/weathersettingsdesc">	
 		    <PreferenceCategory android:title="@string/weathersettings" >
 		        <com.zoromatic.widgets.ImageListPreference
 		            android:defaultValue="0"

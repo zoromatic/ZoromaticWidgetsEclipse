@@ -133,10 +133,11 @@ public class WidgetInfoReceiver extends BroadcastReceiver {
     			if (thisWidget != null) {
     				appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
                 	
-                	if (appWidgetIds.length <= 0)
-                		return;
+                	//if (appWidgetIds.length <= 0)
+                	//	return;
                 	
-                	startIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+                	if (appWidgetIds.length > 0)
+                		startIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
     			}
             }
             

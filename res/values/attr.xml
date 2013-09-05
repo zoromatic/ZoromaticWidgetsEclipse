@@ -3,7 +3,8 @@
 
     <declare-styleable name="ImageListPreference">
         <attr name="entryImages" format="reference" />
-        <attr name="entryColors" format="reference" />        
+        <attr name="entryColors" format="reference" />  
+        <attr name="entryFonts" format="reference" />      
     </declare-styleable>
 
 </resources>

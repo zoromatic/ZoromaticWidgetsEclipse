@@ -27,19 +27,37 @@
         <item>9</item>
         <item>10</item>
     </string-array>
-    <array name="colorPaintValues">
-	    <item>@color/sysBlack</item>
-		<item>@color/sysDkGray</item>
-		<item>@color/sysGray</item>
-		<item>@color/sysLtGray</item>
-		<item>@color/sysWhite</item>
-		<item>@color/sysRed</item>
-		<item>@color/sysGreen</item>
-		<item>@color/sysBlue</item>
-		<item>@color/sysYellow</item>
-		<item>@color/sysCyan</item>
-		<item>@color/sysMagenta</item>
+	<array name="colorPaintValues">
+	    <item>color/sysBlack</item>
+		<item>color/sysDkGray</item>
+		<item>color/sysGray</item>
+		<item>color/sysLtGray</item>
+		<item>color/sysWhite</item>
+		<item>color/sysRed</item>
+		<item>color/sysGreen</item>
+		<item>color/sysBlue</item>
+		<item>color/sysYellow</item>
+		<item>color/sysCyan</item>
+		<item>color/sysMagenta</item>
 	</array>
+	<string-array name="fontArray">
+        <item>Roboto [12:35]</item>
+        <item>Clockopia [12:35]</item>
+        <item>Helvetica [12:35]</item>
+        <item>DroidSans [12:35]</item>        
+    </string-array>
+    <string-array name="fontValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>        
+    </string-array>
+	<array name="fontPathValues">
+	    <item>fonts/Roboto.ttf</item>
+		<item>fonts/Clockopia.ttf</item>
+		<item>fonts/Helvetica.ttf</item>
+		<item>fonts/DroidSans.ttf</item>		
+	</array>    
     <string-array name="dateFormat">
         <item>dd.MM.yyyy</item>
         <item>dd/MM/yyyy</item>        
@@ -141,6 +159,11 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <array name="skinImageValues">
+		<item>drawable/bck_left</item>
+		<item>drawable/bck_left_light</item>
+		<item>drawable/none</item>				
+	</array>
     <string-array name="soundArray">
         <item>Sound/Vibration/Silent</item>
         <item>Sound/Silent/Vibration</item>
@@ -166,9 +189,9 @@
         <item>3</item>
     </string-array>    
     <array name="weatherIconsImageValues">
-		<item>@drawable/tick_weather_03d</item>
-		<item>@drawable/touch_weather_03d</item>
-		<item>@drawable/icon_set_weather_03d</item>
-		<item>@drawable/weezle_weather_03d</item>
+		<item>drawable/tick_weather_03d</item>
+		<item>drawable/touch_weather_03d</item>
+		<item>drawable/icon_set_weather_03d</item>
+		<item>drawable/weezle_weather_03d</item>			
 	</array>		
 </resources>

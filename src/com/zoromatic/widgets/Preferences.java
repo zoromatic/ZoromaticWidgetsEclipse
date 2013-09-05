@@ -35,6 +35,7 @@ public class Preferences {
 	public static final String PREF_SOUND_OPTIONS_KEY = "soundoptionskey_";
 	public static final String PREF_RESTART_SERVICE = "restartservice_";
 	public static final String PREF_WEATHER_ICONS_KEY = "weathericons_";
+	public static final String PREF_FONT_KEY = "font_";
 
 	private static SharedPreferences getPreferences(Context context) {
 		return context.getSharedPreferences(PREFS_NAME, 0);
@@ -142,6 +143,10 @@ public class Preferences {
 	public static int getWeatherIcons(Context context, int appWidgetId) {
 		return getPreferences(context).getInt(
 				PREF_WEATHER_ICONS_KEY + appWidgetId, 0);
+	}
+	
+	public static int getFontItem(Context context, int appWidgetId) {
+		return getPreferences(context).getInt(PREF_FONT_KEY + appWidgetId, 0);
 	}
 
 	public static void setShowDate(Context context, int appWidgetId,
@@ -265,5 +270,10 @@ public class Preferences {
 			int value) {
 		getPreferences(context).edit()
 				.putInt(PREF_WEATHER_ICONS_KEY + appWidgetId, value).commit();
+	}
+	
+	public static void setFontItem(Context context, int appWidgetId, int value) {
+		getPreferences(context).edit()
+				.putInt(PREF_FONT_KEY + appWidgetId, value).commit();
 	}
 }

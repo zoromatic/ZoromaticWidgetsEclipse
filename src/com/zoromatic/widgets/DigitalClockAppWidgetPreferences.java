@@ -110,6 +110,17 @@ public class DigitalClockAppWidgetPreferences extends PreferenceActivity impleme
         	color.setSummary(summary);                
         }
         
+        ListPreference clockFont = (ListPreference)findPreference(Preferences.PREF_FONT_KEY);
+        
+        if (clockFont != null)
+        {
+        	clockFont.setValueIndex(Preferences.getFontItem(this, mAppWidgetId));
+        	
+        	String summaryFull = (String)clockFont.getEntries()[Preferences.getFontItem(this, mAppWidgetId)];        	
+        	String summary = summaryFull.substring(0, summaryFull.indexOf('[')-1);        	
+        	clockFont.setSummary(summary);
+        }
+        
         ListPreference clockSkin = (ListPreference)findPreference(Preferences.PREF_CLOCK_SKIN);
         
         if (clockSkin != null)
@@ -324,6 +335,11 @@ public class DigitalClockAppWidgetPreferences extends PreferenceActivity impleme
         if (color != null)
         	Preferences.setColorItem(this, mAppWidgetId, color.findIndexOfValue(color.getValue()));  
         
+        ListPreference clockFont = (ListPreference)findPreference(Preferences.PREF_FONT_KEY);
+        
+        if (clockFont != null)
+        	Preferences.setFontItem(this, mAppWidgetId, clockFont.findIndexOfValue(clockFont.getValue()));
+        
         ListPreference clockSkin = (ListPreference)findPreference(Preferences.PREF_CLOCK_SKIN);
         
         if (clockSkin != null)
@@ -442,9 +458,21 @@ public class DigitalClockAppWidgetPreferences extends PreferenceActivity impleme
 	        	
 	        	SpannableString summary = new SpannableString ( color.getEntries()[Preferences.getColorItem(this, mAppWidgetId)] );
 	        	summary.setSpan( new ForegroundColorSpan( systemColor ), 0, summary.length(), 0 );
-	        	//summary.setSpan( new BackgroundColorSpan( systemColor ), 0, summary.length(), 0 );
 	        	
 	        	color.setSummary(summary);
+	        }
+		}
+		
+		if (key.equals(Preferences.PREF_FONT_KEY)) {
+			ListPreference clockFont = (ListPreference)findPreference(Preferences.PREF_FONT_KEY);
+	        
+	        if (clockFont != null)
+	        {
+	        	Preferences.setFontItem(this, mAppWidgetId, clockFont.findIndexOfValue(clockFont.getValue()));
+	        	
+	        	String summaryFull = (String)clockFont.getEntries()[Preferences.getFontItem(this, mAppWidgetId)];	        	
+	        	String summary = summaryFull.substring(0, summaryFull.indexOf('[')-1);	        	
+	        	clockFont.setSummary(summary);
 	        }
 		}
 		
