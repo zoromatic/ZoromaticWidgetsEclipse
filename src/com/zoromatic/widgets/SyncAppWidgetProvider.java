@@ -16,7 +16,7 @@ public class SyncAppWidgetProvider extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         
         Intent startIntent = new Intent(context, WidgetUpdateService.class);
-        startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, "com.android.sync.SYNC_CONN_STATUS_CHANGED");
+        startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, WidgetUpdateService.UPDATE_SINGLE_SYNC_WIDGET);
 
         context.startService(startIntent);
     }

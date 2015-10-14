@@ -2,7 +2,6 @@ package com.zoromatic.widgets;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -17,7 +16,7 @@ public class BluetoothAppWidgetProvider extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         
         Intent startIntent = new Intent(context, WidgetUpdateService.class);
-        startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, BluetoothAdapter.ACTION_STATE_CHANGED);
+        startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, WidgetUpdateService.UPDATE_SINGLE_BLUETOOTH_WIDGET);
 
         context.startService(startIntent);
     }

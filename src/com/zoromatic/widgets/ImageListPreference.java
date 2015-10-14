@@ -3,11 +3,20 @@
  */
 package com.zoromatic.widgets;
 
-import android.app.AlertDialog.Builder;
+import com.alertdialogpro.AlertDialogPro;
+
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.DialogInterface.OnClickListener;
 import android.content.res.TypedArray;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ListAdapter;
 
 /**
@@ -19,6 +28,14 @@ public class ImageListPreference extends ListPreference {
 	private int[] imageIds = null;
 	private int[] colorIds = null;
 	private String[] fontPaths = null;
+	private int[] batteryIds = null;
+	private int[] colorSchemeIds = null;
+	
+	private AlertDialogPro.Builder mBuilder;
+	private Dialog mDialog;
+	private int mWhichButtonClicked;
+	
+	private Context context;
 
 	/**
 	 * Constructor of the ImageListPreference. Initializes the custom images.
@@ -27,6 +44,8 @@ public class ImageListPreference extends ListPreference {
 	 */
 	public ImageListPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		
+		this.context = context;
 
 		TypedArray typedArray = context.obtainStyledAttributes(attrs,
 			R.styleable.ImageListPreference);
@@ -57,6 +76,48 @@ public class ImageListPreference extends ListPreference {
 				}
 			} else
 				imageIds = null;
+			
+			id = typedArray.getResourceId(R.styleable.ImageListPreference_entryBatteries, -1);
+			
+			if (id >= 0) {
+				String[] batteryNames = context.getResources().getStringArray(id);
+				
+				if (batteryNames[0] == null) {
+					batteryIds = null;
+				} else {
+		
+					batteryIds = new int[batteryNames.length];
+			
+					for (int i=0;i<batteryNames.length;i++) {						
+						String batteryName = batteryNames[i];
+			
+						batteryIds[i] = context.getResources().getIdentifier(batteryName,
+							null, context.getPackageName());
+					}							
+				}
+			} else
+				batteryIds = null;
+			
+			id = typedArray.getResourceId(R.styleable.ImageListPreference_entryColorSchemes, -1);
+			
+			if (id >= 0) {
+				String[] colorSchemeNames = context.getResources().getStringArray(id);
+				
+				if (colorSchemeNames[0] == null) {
+					colorSchemeIds = null;
+				} else {
+		
+					colorSchemeIds = new int[colorSchemeNames.length];
+			
+					for (int i=0;i<colorSchemeNames.length;i++) {						
+						String colorSchemeName = colorSchemeNames[i];
+			
+						colorSchemeIds[i] = context.getResources().getIdentifier(colorSchemeName,
+							null, context.getPackageName());
+					}							
+				}
+			} else
+				colorSchemeIds = null;
 			
 			id = typedArray.getResourceId(R.styleable.ImageListPreference_entryColors, -1);
 			
@@ -98,18 +159,173 @@ public class ImageListPreference extends ListPreference {
 		
 		typedArray.recycle();
 	}
+	
+	@Override
+	protected void showDialog(Bundle state) {
+		
+		int index = findIndexOfValue(getSharedPreferences().getString(
+				getKey(), "1"));
+
+		ListAdapter listAdapter = new ImageArrayAdapter(getContext(),
+			R.layout.listitem, getEntries(), imageIds, colorIds, fontPaths, batteryIds, colorSchemeIds, index);
+		
+		String theme = Preferences.getMainTheme(getContext());    
+		
+		mBuilder = new AlertDialogPro.Builder(context, 
+				theme.compareToIgnoreCase("light") == 0?R.style.Theme_AlertDialogPro_Material_Light:R.style.Theme_AlertDialogPro_Material);
+		mBuilder.setTitle(getTitle());
+		mBuilder.setIcon(getDialogIcon());
+		mBuilder.setNegativeButton(getNegativeButtonText(), this);
+		mBuilder.setAdapter(listAdapter, new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+
+		        if (which >= 0 && getEntryValues() != null) {
+		          String value = getEntryValues()[which].toString();
+		          if (callChangeListener(value))
+		            setValue(value);
+		        }				
+			}
+		});
+
+		final View contentView = onCreateDialogView();
+		
+	    if (contentView != null) {
+	      onBindDialogView(contentView);
+	      mBuilder.setView(contentView);
+	    }
+	    else
+	      mBuilder.setMessage(getDialogMessage());
+
+	    //mBuilder.show();
+	    
+	    final Dialog dialog = mDialog = mBuilder.create();
+        
+        if (state != null) {
+            dialog.onRestoreInstanceState(state);
+        }
+        
+        dialog.setOnDismissListener(this);
+        dialog.show();
+	}
+	
+	public void onClick(DialogInterface dialog, int which) {
+        mWhichButtonClicked = which;
+    }
+    
+    public void onDismiss(DialogInterface dialog) {
+        
+        mDialog = null;
+        onDialogClosed(mWhichButtonClicked == DialogInterface.BUTTON_POSITIVE);
+    }
+
+    /**
+     * Called when the dialog is dismissed and should be used to save data to
+     * the {@link SharedPreferences}.
+     * 
+     * @param positiveResult Whether the positive button was clicked (true), or
+     *            the negative button was clicked or the dialog was canceled (false).
+     */
+    protected void onDialogClosed(boolean positiveResult) {
+    }
+
+    /**
+     * Gets the dialog that is shown by this preference.
+     * 
+     * @return The dialog, or null if a dialog is not being shown.
+     */
+    public Dialog getDialog() {
+        return mDialog;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void onActivityDestroy() {
+        
+        if (mDialog == null || !mDialog.isShowing()) {
+            return;
+        }
+        
+        mDialog.dismiss();
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        final Parcelable superState = super.onSaveInstanceState();
+        if (mDialog == null || !mDialog.isShowing()) {
+            return superState;
+        }
+
+        final SavedState myState = new SavedState(superState);
+        myState.isDialogShowing = true;
+        myState.dialogBundle = mDialog.onSaveInstanceState();
+        return myState;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (state == null || !state.getClass().equals(SavedState.class)) {
+            // Didn't save state for us in onSaveInstanceState
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
+        SavedState myState = (SavedState) state;
+        super.onRestoreInstanceState(myState.getSuperState());
+        if (myState.isDialogShowing) {
+            showDialog(myState.dialogBundle);
+        }
+    }
+
+    private static class SavedState extends BaseSavedState {
+        boolean isDialogShowing;
+        Bundle dialogBundle;
+        
+        public SavedState(Parcel source) {
+            super(source);
+            isDialogShowing = source.readInt() == 1;
+            dialogBundle = source.readBundle();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            super.writeToParcel(dest, flags);
+            dest.writeInt(isDialogShowing ? 1 : 0);
+            dest.writeBundle(dialogBundle);
+        }
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        @SuppressWarnings("unused")
+		public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+    }
+	
 	/**
 	 * {@inheritDoc}
 	 */
-	protected void onPrepareDialogBuilder(Builder builder) {
+	/*protected void onPrepareDialogBuilder(Builder builder) {
 		int index = findIndexOfValue(getSharedPreferences().getString(
 			getKey(), "1"));
 
 		ListAdapter listAdapter = new ImageArrayAdapter(getContext(),
-			R.layout.listitem, getEntries(), imageIds, colorIds, fontPaths, index);
+			R.layout.listitem, getEntries(), imageIds, colorIds, fontPaths, batteryIds, index);
 
 		// Order matters.
 		builder.setAdapter(listAdapter, this);
 		super.onPrepareDialogBuilder(builder);
-	}
+	}*/
 }

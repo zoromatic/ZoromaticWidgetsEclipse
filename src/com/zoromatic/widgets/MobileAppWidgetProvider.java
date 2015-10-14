@@ -4,8 +4,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-//import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class MobileAppWidgetProvider extends AppWidgetProvider {
@@ -18,7 +16,7 @@ public class MobileAppWidgetProvider extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         
         Intent startIntent = new Intent(context, WidgetUpdateService.class);
-        startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, ConnectivityManager.CONNECTIVITY_ACTION);        
+        startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, WidgetUpdateService.UPDATE_SINGLE_MOBILE_DATA_WIDGET);        
 
         context.startService(startIntent);
     }

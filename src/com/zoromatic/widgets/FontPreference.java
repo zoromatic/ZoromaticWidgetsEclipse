@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
  
+
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
-import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
  
-public class FontPreference extends DialogPreference implements DialogInterface.OnClickListener
+public class FontPreference extends DialogPreferencePro implements DialogInterface.OnClickListener
 {
     // Keeps the font file paths and names in separate arrays
     private List< String >    m_fontPaths;
@@ -95,7 +95,7 @@ public class FontPreference extends DialogPreference implements DialogInterface.
     {
         super(context, attrs);
     }
- 
+    
     @Override
     protected void onPrepareDialogBuilder( Builder builder )
     {

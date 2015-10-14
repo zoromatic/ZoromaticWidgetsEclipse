@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:minWidth="72dp"
-    android:minHeight="72dp"
+    android:minWidth="@dimen/cell_size_1"
+    android:minHeight="@dimen/cell_size_1"
     android:initialLayout="@layout/ringerwidget">
 </appwidget-provider>

@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.util.Log;
 
 public class RingerAppWidgetProvider extends AppWidgetProvider {
@@ -17,7 +16,7 @@ public class RingerAppWidgetProvider extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         
         Intent startIntent = new Intent(context, WidgetUpdateService.class);
-        startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, AudioManager.RINGER_MODE_CHANGED_ACTION);
+        startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, WidgetUpdateService.UPDATE_SINGLE_RINGER_WIDGET);
 
         context.startService(startIntent);
     }

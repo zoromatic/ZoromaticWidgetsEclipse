@@ -16,7 +16,7 @@ public class AirplaneAppWidgetProvider extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         
         Intent startIntent = new Intent(context, WidgetUpdateService.class);
-        startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, WidgetUpdateService.UPDATE_SINGLE_AIRPLANE_WIDGET);
 
         context.startService(startIntent);
     }

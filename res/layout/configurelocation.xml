@@ -1,107 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fillViewport="true">
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
-    <LinearLayout
+    <View
+        android:id="@+id/statusBarBackground"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize" >
+    </android.support.v7.widget.Toolbar>
+    
+    <android.support.v7.internal.widget.TintCheckBox
+        android:id="@+id/checkCurrent"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:text="@string/locationcurrent" />
+    
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#808080" />
 
-        <TextView
-            android:layout_width="fill_parent" 
-            android:layout_height="wrap_content"
-            android:padding="10dip"
-            android:text="@string/locationdescription"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+    <TextView
+        android:id="@+id/textViewEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <TextView
+        android:id="@+id/textViewCustom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/custom_locations"
+        android:textStyle="bold|italic"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+	    
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#808080" />
+    
+    <ListView
+        android:id="@+id/listLocations"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:clickable="true"
+        android:divider="#808080"
+        android:dividerHeight="1px"
+        android:fastScrollEnabled="false"
+        android:smoothScrollbar="true" />    
 
-        <RadioGroup
-            android:id="@+id/radioGroupLocation" 
-            android:layout_width="fill_parent" 
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dip"
-            android:paddingRight="20dip"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/radioCurrent" 
-                android:layout_width="fill_parent" 
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/locationcurrent"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <RadioButton
-                android:id="@+id/radioManual" 
-                android:layout_width="fill_parent" 
-                android:layout_height="wrap_content"
-                android:text="@string/locationmanual"                
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </RadioGroup>
-
-        <!-- 
-        TODO: insert geolocation status message?
-         -->
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center|center_vertical"
-            android:orientation="horizontal" >
-
-            <EditText
-                android:id="@+id/editTextLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/buttonSearch"
-                android:ems="10"
-                android:inputType="textCapWords" >
-
-                <requestFocus />
-            </EditText>
-
-		    <ImageButton
-		        android:id="@+id/buttonSearch"
-		        android:layout_width="45dp"
-		        android:layout_height="45dp"
-		        android:layout_alignParentRight="true"
-		        android:layout_centerVertical="true"
-		        android:contentDescription="@string/locationsettings"
-		        android:focusable="true"
-		        android:src="@android:drawable/ic_menu_search" />
-            
-        </RelativeLayout>
-        
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1" />
-
-<!--         <LinearLayout -->
-<!--             android:layout_width="fill_parent" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:orientation="horizontal" -->
-<!--             style="@android:style/ButtonBar"> -->
-
-<!--             <Button -->
-<!--                 android:id="@+id/buttonMap" -->
-<!--                 android:layout_width="fill_parent" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:layout_weight="1" -->
-<!--                 android:text="@string/locationmap" /> -->
-
-<!--             <Button -->
-<!--                 android:id="@+id/buttonSave" -->
-<!--                 android:layout_width="fill_parent" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:layout_weight="1" -->
-<!--                 android:text="@string/locationsave" /> -->
-
-<!--         </LinearLayout> -->
-
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

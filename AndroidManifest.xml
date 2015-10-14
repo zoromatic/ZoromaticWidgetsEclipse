@@ -1,75 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zoromatic.widgets"
-    android:versionCode="7"
-    android:versionName="1.2.2" >
+    android:versionCode="20"
+    android:versionName="2.0" >
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="8" />
+        android:targetSdkVersion="22" />
 
-    <uses-permission android:name="android.permission.BLUETOOTH" >
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.NFC"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>         
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"/>
+	<uses-permission android:name="android.permission.ACCESS_SUPERUSER"/>
+    <uses-permission android:name="android.permission.BATTERY_STATS"/>
+    <uses-permission android:name="android.permission.DEVICE_POWER"/>
+    <uses-permission android:name="android.permission.SET_DEBUG_APP"/>
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>        
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>        
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>   
+    <uses-permission android:name="android.permission.FLASHLIGHT"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="normal">
     </uses-permission>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.NFC" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.BATTERY_STATS" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.DEVICE_POWER" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.SET_DEBUG_APP" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.INTERNET" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" >        
-    </uses-permission>
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" >        
-    </uses-permission>
-     
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false">
+    </uses-feature>     
+    <uses-feature android:name="android.hardware.bluetooth"
+        android:required="false">
+    </uses-feature>
+    <uses-feature android:name="android.hardware.location"
+        android:required="false">
+    </uses-feature>
+    <uses-feature android:name="android.hardware.telephony"
+        android:required="false">
+    </uses-feature>
+    <uses-feature android:name="android.hardware.wifi"
+        android:required="false">
+    </uses-feature>
+    
+    <supports-screens
+        android:anyDensity="true"
+        android:xlargeScreens="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
+	 
     <application
         android:icon="@drawable/icon"
-        android:label="@string/app_name" >
-<!--         <activity -->
-<!--             android:name=".ZoromaticWidgetsActivity" -->
-<!--             android:label="@string/app_name" > -->
-<!--             <intent-filter> -->
-<!--                 <action android:name="android.intent.action.MAIN" /> -->
-<!--                 <category android:name="android.intent.category.LAUNCHER" /> -->
-<!--             </intent-filter> -->
-<!--         </activity> -->
-
-<!--         <service -->
-<!--             android:name=".BatteryIntentService" -->
-<!--             android:enabled="true" /> -->
-
-<!--         <receiver android:name=".BatteryServiceStartup" > -->
-<!--             <intent-filter> -->
-<!--                 <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
-<!--             </intent-filter> -->
-<!--         </receiver> -->
+        android:label="@string/app_name" 
+        android:allowBackup="true" 
+        android:name=".ZoromaticWidgetsApplication"
+        android:theme="@style/Theme.AppCompat" >  
         
-        <service android:name=".WidgetUpdateService" />
+        <uses-library android:required="false" android:name="com.sec.android.app.multiwindow" />
+		<meta-data android:name="com.sec.android.support.multiwindow" android:value="true" />
+		<meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W" android:value="632.0dip" />
+		<meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H" android:value="598.0dip" />
+		<meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W" android:value="632.0dip" />
+		<meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H" android:value="598.0dip" />
+		<meta-data android:name="com.samsung.android.sdk.multiwindow.multiinstance.enable" android:value="true" />
+		<meta-data android:name="com.samsung.android.sdk.multiwindow.penwindow.enable" android:value="true" />
+        
+        <service 
+            android:name=".WidgetUpdateService" 
+            android:enabled="true"/>
         
         <receiver 
             android:name=".WidgetInfoReceiver" 
@@ -78,8 +87,8 @@
         
         <receiver
             android:name=".DigitalClockAppWidgetProvider"
-            android:icon="@drawable/icon"
-            android:label="@string/clockwidgetname4x2" >
+            android:icon="@drawable/weather_clock"
+            android:label="@string/clockweatherwidgetname4x2" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -231,42 +240,124 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/orientationwidget_info" />
         </receiver>
+        
+        <receiver 
+            android:name=".TorchAppWidgetProvider" 
+            android:icon="@drawable/flashlight" 
+            android:label="@string/torchwidgetname">
+         	<intent-filter>
+            	<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+         	</intent-filter>
+
+         	<meta-data 
+         	    android:name="android.appwidget.provider"
+            	android:resource="@xml/torchwidget_info" />
+		</receiver>
+		
+        <receiver
+            android:name=".PowerAppWidgetProvider"
+            android:icon="@drawable/power_widget"
+            android:label="@string/powerwidgetname" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/powerwidget_info" />
+        </receiver>
 
         <activity
-            android:name=".DigitalClockAppWidgetPreferences"
-            android:label="@string/clockwidgetprefs" >
+            android:name=".ZoromaticWidgetsActivity"
+            android:label="@string/app_name" 
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+	            <category android:name="android.intent.category.PENWINDOW_LAUNCHER" />
             </intent-filter>
         </activity>
         
         <activity
-            android:name=".ZoromaticWidgetsPreferences"
-            android:label="@string/app_name" >
+            android:name=".DigitalClockAppWidgetPreferenceActivity"
+            android:label="@string/clockwidgetprefs" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+	            <category android:name="android.intent.category.PENWINDOW_LAUNCHER" />
             </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".PowerAppWidgetPreferenceActivity"
+            android:label="@string/power_prefs" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+	            <category android:name="android.intent.category.PENWINDOW_LAUNCHER" />
+            </intent-filter>            
+        </activity>
+        
+        <activity
+            android:name=".ZoromaticWidgetsPreferenceActivity"
+            android:label="@string/app_prefs" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+	            <category android:name="android.intent.category.PENWINDOW_LAUNCHER" />
+            </intent-filter>            
         </activity>
         
         <activity
             android:name=".ConfigureLocationActivity"
-            android:label="@string/locationsettings" >
+            android:label="@string/locationsettings" > 
+            <intent-filter>
+	            <action android:name="android.intent.category.SEARCH" />
+	            <category android:name="android.intent.category.DEFAULT" />
+	            <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+	            <category android:name="android.intent.category.PENWINDOW_LAUNCHER" />
+	        </intent-filter>	                   
+        </activity>
+        
+        <activity
+            android:name=".WeatherForecastActivity"
+            android:label="@string/weatherforecast" >             
+            <intent-filter>
+	            <action android:name="android.intent.category.SEARCH" />
+	            <category android:name="android.intent.category.DEFAULT" />
+	            <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+	            <category android:name="android.intent.category.PENWINDOW_LAUNCHER" />
+	        </intent-filter>          	                  
+        </activity>
+        
+        <activity
+            android:name=".BatteryInfoActivity"
+            android:label="@string/batteryinfo" >            	                  
+        </activity>
+        
+        <activity
+            android:name=".BrightnessActivity"
+            android:label="@string/brightnessdesc" 
+            android:excludeFromRecents="true"
+            android:noHistory="true"	
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">       	                  
+        </activity>
+                     
+        <activity 
+            android:name=".LocationsEdit" 
+            android:label="@string/menu_update_location">            
+        </activity>
+        
+        <activity
+            android:name=".ConfigureWidgetsActivity"
+            android:label="@string/widgets_settings" > 
             <intent-filter>
 	            <action android:name="android.intent.category.SEARCH" />
 	            <category android:name="android.intent.category.DEFAULT" />
 	        </intent-filter>	                   
         </activity>
-        <activity
-            android:name=".WeatherForecastActivity"
-            android:label="@string/weatherforecast" >            	                  
-        </activity>
-        <activity
-            android:name=".ScreenBrightnessActivity"
-            android:label="@string/brightnessdesc" 
-            android:theme="@android:style/Theme.Dialog">            	                  
-        </activity>
-                     
+        
     </application>
 
 </manifest>

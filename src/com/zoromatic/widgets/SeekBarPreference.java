@@ -8,76 +8,87 @@ package com.zoromatic.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.preference.DialogPreference;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 
 @SuppressLint("UseValueOf")
-@SuppressWarnings("deprecation")
-public class SeekBarPreference extends DialogPreference implements
+public class SeekBarPreference extends DialogPreferencePro implements
 		OnSeekBarChangeListener {
 	private static final String androidns = "http://schemas.android.com/apk/res/android";
 
 	private SeekBar mSeekBar;
 	private TextView mSplashText, mValueText;
-	private Context mContext;
+	//private Context mContext;
 
 	private String mDialogMessage, mSuffix;
 	private int mDefault = 100, mMax, mValue = 100, mOriginalValue = 0;
-
+	
 	public SeekBarPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		mContext = context;
+		//mContext = context;
 
-		mDialogMessage = context.getResources().getString(R.string.opacitydescription); //attrs.getAttributeValue(androidns, "dialogMessage");
+		mDialogMessage = context.getResources().getString(R.string.opacitydescription);
 		mSuffix = attrs.getAttributeValue(androidns, "text");
 		mDefault = attrs.getAttributeIntValue(androidns, "defaultValue", 100);
-		mMax = attrs.getAttributeIntValue(androidns, "max", 100);
-
+		mMax = attrs.getAttributeIntValue(androidns, "max", 100);		
 	}
 
 	public SeekBarPreference(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
-
+	
+	@SuppressWarnings("deprecation")
 	@Override
 	protected View onCreateDialogView() {
 		LinearLayout.LayoutParams params;
-		LinearLayout layout = new LinearLayout(mContext);
+		LinearLayout layout = new LinearLayout(getContext());
 		layout.setOrientation(LinearLayout.VERTICAL);
 		layout.setPadding(6, 6, 6, 6);
 
-		mSplashText = new TextView(mContext);
+		mSplashText = new TextView(getContext());
 		if (mDialogMessage != null)
 			mSplashText.setText(mDialogMessage);
 		layout.addView(mSplashText);
 
-		mValueText = new TextView(mContext);
+		mValueText = new TextView(getContext());
 		mValueText.setGravity(Gravity.CENTER_HORIZONTAL);
 		//mValueText.setTextSize(32);
 		params = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT,
+				LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT);
 		layout.addView(mValueText, params);
 
-		mSeekBar = new SeekBar(mContext);
+		mSeekBar = new SeekBar(getContext());
 		mSeekBar.setOnSeekBarChangeListener(this);
 		layout.addView(mSeekBar, new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT,
+				LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT));
 
 		mValue = shouldPersist() ? getPersistedInt(mDefault) : mDefault;
+		
+		String t = String.valueOf(mValue);
+		mValueText.setText(mSuffix == null ? t : t.concat(mSuffix));
 
+		Drawable drawProgress = getContext().getResources().getDrawable(R.drawable.seekbar_progress);
+		mSeekBar.setProgressDrawable(drawProgress);
+		
+		Drawable drawThumb = getContext().getResources().getDrawable(R.drawable.thumb);
+		mSeekBar.setThumb(drawThumb);
+		
 		mSeekBar.setMax(mMax);
 		mSeekBar.setProgress(mValue);
 		
 		mOriginalValue = mValue;
+		
+		setPositiveButtonText(android.R.string.ok);
+		setNegativeButtonText(android.R.string.cancel);
 		
 		return layout;
 	}

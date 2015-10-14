@@ -1,541 +1,733 @@
 package com.zoromatic.widgets;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import com.zoromatic.sunrisesunset.SunriseSunsetCalculator;
-import com.zoromatic.sunrisesunset.dto.SunriseSunsetLocation;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
-@SuppressLint("SimpleDateFormat")
-public class WeatherForecastActivity extends Activity {
+@SuppressLint({ "SimpleDateFormat", "RtlHardcoded" })
+public class WeatherForecastActivity extends ThemeActionBarActivity {
 
 	private static String LOG_TAG = "WeatherForecastActivity";
 	private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-	
+	private static final int ACTIVITY_SETTINGS = 0;
+	private BroadcastReceiver mReceiver;
+	private Toolbar toolbar;
+	private DrawerLayout drawerLayout;
+	private ActionBarDrawerToggle drawerToggle;
+	private ListView leftDrawerList;
+	private List<RowItem> rowItems;
+
+	public static final String DRAWEROPEN = "draweropen";
+	private boolean mDrawerOpen = false;
+
+	private SlidingTabLayout mSlidingTabLayout;
+	private ViewPager mViewPager;
+	private ForecastFragmentPagerAdapter mFragmentPagerAdapter; 
+
+	private List<ForecastPagerItem> mTabs = new ArrayList<ForecastPagerItem>();
+	private int mCurrentItem = 0;
+	private static final String KEY_CURRENT_ITEM = "key_current_item";
+
+	private ProgressDialogFragment mProgressFragment = null;
+
+	static DataProviderTask mDataProviderTask;
+	static WeatherForecastActivity mWeatherForecastActivity; 
+	private MenuItem refreshItem = null;
+	LayoutInflater inflater = null;
+	ImageView imageView = null;
+	Animation rotation = null;
+
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	public void onCreate(Bundle savedInstanceState) {
+		// Read the appWidgetId to configure from the incoming intent
+		mAppWidgetId = getIntent().getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
 
-        // Read the appWidgetId to configure from the incoming intent
-        mAppWidgetId = getIntent().getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-        
-        if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish();
-            return;
-        }
-        
-        setContentView(R.layout.weatherforecast);          
-        readCachedData(mAppWidgetId);
-    }
-	
-	void readCachedData(int appWidgetId) {
-		readCachedWeatherData(appWidgetId);
-		readCachedForecastData(appWidgetId);
-	}
-	
-	void readCachedWeatherData(int appWidgetId) {
-		Log.d(LOG_TAG, "WeatherForecastActivity readCachedWeatherData appWidgetId: " + appWidgetId);
-
-		try {
-			File parentDirectory = new File(this.getFilesDir().getAbsolutePath());
-            
-            if (!parentDirectory.exists()) {
-                Log.e(LOG_TAG, "Cache file parent directory does not exist.");
-                
-                if(!parentDirectory.mkdirs()) {
-                	Log.e(LOG_TAG, "Cannot create cache file parent directory."); 
-                }
-            }
-
-            File cacheFile = new File(parentDirectory, "weather_cache_"+appWidgetId);
-            
-            if (!cacheFile.exists())
-            	return;
-            
-    		BufferedReader cacheReader = new BufferedReader(new FileReader(cacheFile));				
-    		char[] buf = new char[1024];
-			StringBuilder result = new StringBuilder();
-            int read = cacheReader.read(buf);
-            
-            while (read >= 0) {
-                result.append(buf, 0, read);
-                read = cacheReader.read(buf);
-            }
-            
-			cacheReader.close();
-            
-			if (!result.toString().contains("<html>"))
-				parseWeatherData(appWidgetId, result.toString(), true, false);
-            
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		}
-	}
-	
-	@SuppressWarnings("unused")
-	void parseWeatherData(int appWidgetId, String parseString, boolean updateFromCache, boolean scheduledUpdate) {
-		Log.d(LOG_TAG, "WeatherForecastActivity parseWeatherData appWidgetId: " + appWidgetId + " cache: " + updateFromCache + " scheduled: " + scheduledUpdate);
-
-		if (parseString.equals(null) || parseString.equals("") || parseString.contains("<html>"))
+		if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+			finish();
 			return;
+		}
+
+		super.onCreate(savedInstanceState);
+
+		mWeatherForecastActivity = this;
+
+		String lang = Preferences.getLanguageOptions(this);
+
+		if (lang.equals("")) {
+			String langDef = Locale.getDefault().getLanguage();
+
+			if (!langDef.equals(""))
+				lang = langDef;
+			else
+				lang = "en";
+
+			Preferences.setLanguageOptions(this, lang);                
+		}
+
+		// Change locale settings in the application
+		Resources res = getApplicationContext().getResources();
+		DisplayMetrics dm = res.getDisplayMetrics();
+		android.content.res.Configuration conf = res.getConfiguration();
+		conf.locale = new Locale(lang.toLowerCase());
+		res.updateConfiguration(conf, dm);
+
+		setContentView(R.layout.weatherforecast);
+
+		initView();
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		initDrawer();
+
+		TypedValue outValue = new TypedValue();
+		getTheme().resolveAttribute(R.attr.colorPrimary,
+				outValue,
+				true);
+		int primaryColor = outValue.resourceId;
+
+		setStatusBarColor(findViewById(R.id.statusBarBackground), 
+				getResources().getColor(primaryColor));	 
 		
-		JSONTokener parser = new JSONTokener(parseString);
-		int tempScale = Preferences.getTempScale(this, appWidgetId);
-        try {
-			JSONObject query = (JSONObject)parser.nextValue();			
-			JSONObject weatherJSON = null;
-			
-			if (query.has("list")) {
-			
-				JSONArray list = query.getJSONArray("list");
-			
-	            if (list.length() == 0) {
-	                return;
-	            }
-	            
-	            weatherJSON = list.getJSONObject(0);
-			}
-			else {
-				weatherJSON = query;
-			}
-            
-            int cityId = weatherJSON.getInt("id");
-            String location = weatherJSON.getString("name");
-            
-            int lnLoc = location.length();
-    		SpannableString spStrLoc = new SpannableString(location);
-    		spStrLoc.setSpan(new StyleSpan(Typeface.BOLD), 0, lnLoc, 0);
-            
-    		TextView text = (TextView) findViewById(R.id.textViewLocToday);
-    		text.setText(spStrLoc);
-    		
-    		long timestamp = weatherJSON.getLong("dt");
-            Date time = new Date(timestamp * 1000);
-            
-            JSONObject main = null;
-            try {
-                main = weatherJSON.getJSONObject("main");
-            } catch (JSONException e) {	                
-            }
-            try {
-                double currentTemp = main.getDouble("temp") - 273.15;
-                text = (TextView) findViewById(R.id.textViewTempToday);
-        		
-                if (tempScale == 1)
-                	text.setText(String.valueOf((int)(currentTemp*1.8+32)) + "°");
-                else
-                	text.setText(String.valueOf((int)currentTemp) + "°");
-                
-                
-            } catch (JSONException e) {	                
-            }
-            
-            JSONObject windJSON = null;
-            try {
-                windJSON = weatherJSON.getJSONObject("wind");
-            } catch (JSONException e) {	                
-            }
-            try {
-                double speed = windJSON.getDouble("speed");	                
-            } catch (JSONException e) {
-            }
-            try {
-                double deg = windJSON.getDouble("deg");	                
-            } catch (JSONException e) {
-            }
-
-            try {
-            	double humidityValue = weatherJSON.getJSONObject("main").getDouble("humidity");
-            } catch (JSONException e) {
-            }
-            
-            try {
-                JSONArray weathers = weatherJSON.getJSONArray("weather");
-                for (int i = 0; i < weathers.length(); i++) {
-                    JSONObject weather = weathers.getJSONObject(i);
-                    int weatherId = weather.getInt("id");
-                    String weatherMain = weather.getString("main");
-                    String iconName = weather.getString("icon");
-                    String iconNameAlt = iconName + "d";
-                    
-                    text = (TextView) findViewById(R.id.textViewDescToday);        		
-            		text.setText(weatherMain);
-            		
-            		ImageView image = (ImageView)findViewById(R.id.imageViewWeatherToday);
-            		
-            		WeatherConditions conditions = new WeatherConditions();
-                     
-                    int icons = Preferences.getWeatherIcons(this, appWidgetId);
-                    int resource = R.drawable.tick_weather_04d;
-                    WeatherIcon[] imageArr;
-                     
-                    switch (icons) {
- 					case 0:
- 						resource = R.drawable.tick_weather_04d;
- 						imageArr = conditions.m_ImageArrTick;
- 						break;
- 					case 1:
- 						resource = R.drawable.touch_weather_04d;
- 						imageArr = conditions.m_ImageArrTouch;
- 						break;
- 					case 2:
- 						resource = R.drawable.icon_set_weather_04d;
- 						imageArr = conditions.m_ImageArrIconSet;
- 						break;
- 					case 3:
- 						resource = R.drawable.weezle_weather_04d;
- 						imageArr = conditions.m_ImageArrWeezle;
- 						break;
- 					default:
- 						resource = R.drawable.tick_weather_04d;
- 						imageArr = conditions.m_ImageArrTick;
- 						break;
- 					}
-            		
-            		image.setImageResource(resource);
-            		
-            		float lat = Preferences.getLocationLat(this, appWidgetId);
-                    float lon = Preferences.getLocationLon(this, appWidgetId);
-                    boolean bDay = true;
-                    
-                    if (!Float.isNaN(lat) && !Float.isNaN(lon)) {
-                    	SunriseSunsetCalculator calc;
-                    	SunriseSunsetLocation loc = new SunriseSunsetLocation(String.valueOf(lat), String.valueOf(lon));
-                    	calc = new SunriseSunsetCalculator(loc, TimeZone.getDefault());
-                    	Calendar calendarForDate = Calendar.getInstance();                    	
-                    	Calendar civilSunriseCalendarForDate = calc.getCivilSunriseCalendarForDate(calendarForDate);
-                    	Calendar civilSunsetCalendarForDate = calc.getCivilSunsetCalendarForDate(calendarForDate);
-                    	
-                    	if (calendarForDate.before(civilSunriseCalendarForDate) || calendarForDate.after(civilSunsetCalendarForDate))                    
-                    		bDay = false;
-                    	else
-                    		bDay = true;                    	
-                    }
-                    
-                    for (int j=0; j<imageArr.length; j++) {
-                    	if (iconName.equals(imageArr[j].iconName) || iconNameAlt.equals(imageArr[j].iconName)) {
-                    		if (imageArr[j].bDay != bDay)
-                    			image.setImageResource(imageArr[j].altIconId);
-                    		else
-                    			image.setImageResource(imageArr[j].iconId);
-                    	}
-                    }                    
-                }
-            } catch (JSONException e) {
-                //no weather type
-            }
-            
-            if (!updateFromCache)
-            {
-            	Preferences.setLastRefresh(this, appWidgetId, System.currentTimeMillis()); 
-            	
-            	if (scheduledUpdate)
-            		Preferences.setWeatherSuccess(this, appWidgetId, true);
-            }            
-			
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	void readCachedForecastData(int appWidgetId) {
-		Log.d(LOG_TAG, "WidgetUpdateService readCachedForecastData appWidgetId: " + appWidgetId);
-
-		try {
-			File parentDirectory = new File(this.getFilesDir().getAbsolutePath());
-            
-            if (!parentDirectory.exists()) {
-                Log.e(LOG_TAG, "Cache file parent directory does not exist.");
-                
-                if(!parentDirectory.mkdirs()) {
-                	Log.e(LOG_TAG, "Cannot create cache file parent directory."); 
-                }
-            }
-
-            File cacheFile = new File(parentDirectory, "forecast_cache_"+appWidgetId);
-            
-            if (!cacheFile.exists())
-            	return;
-            
-    		BufferedReader cacheReader = new BufferedReader(new FileReader(cacheFile));				
-    		char[] buf = new char[1024];
-			StringBuilder result = new StringBuilder();
-            int read = cacheReader.read(buf);
-            
-            while (read >= 0) {
-                result.append(buf, 0, read);
-                read = cacheReader.read(buf);
-            }
-            
-			cacheReader.close();
-			
-			if (!result.toString().contains("<html>"))
-				parseForecastData(appWidgetId, result.toString(), true, false);
-            
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		}
-	}
-	
-	@SuppressWarnings("unused")
-	void parseForecastData(int appWidgetId, String parseString, boolean updateFromCache, boolean scheduledUpdate) {
-		Log.d(LOG_TAG, "WidgetUpdateService parseForecastData appWidgetId: " + appWidgetId + " cache: " + updateFromCache + " scheduled: " + scheduledUpdate);
-
-		if (parseString.equals(null) || parseString.equals("") || parseString.contains("<html>"))
-			return;
+		/*inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		JSONTokener parser = new JSONTokener(parseString);
-		int tempScale = Preferences.getTempScale(this, appWidgetId);
-        try {
-			JSONObject query = (JSONObject)parser.nextValue();
-			
-			JSONArray list = query.getJSONArray("list");
-			
-            if (list.length() == 0) {
-                return;
-            }
-            
-            for (int i=1; i<list.length(); i++) {
-            	if (i == 6)
-            		break;
-            	
-            	JSONObject weatherJSON = list.getJSONObject(i);
-            	long timestamp = weatherJSON.getLong("dt");
-            	
-            	Calendar calendar = Calendar.getInstance();
-            	calendar.setTimeInMillis(timestamp*1000);
-            	
-            	TextView textDate = null;
-            	TextView textTempHigh = null;
-            	TextView textTempLow = null;
-            	TextView textMain = null;
-        		ImageView image = null;
-        		
-        		WeatherConditions conditions = new WeatherConditions();
-                
-                int icons = Preferences.getWeatherIcons(this, appWidgetId);
-                int iconID = R.drawable.tick_weather_04d;
-                WeatherIcon[] imageArr;
-                 
-                switch (icons) {
-				case 0:
-					iconID = R.drawable.tick_weather_04d;
-					imageArr = conditions.m_ImageArrTick;
-					break;
-				case 1:
-					iconID = R.drawable.touch_weather_04d;
-					imageArr = conditions.m_ImageArrTouch;
-					break;
-				case 2:
-					iconID = R.drawable.icon_set_weather_04d;
-					imageArr = conditions.m_ImageArrIconSet;
-					break;
-				case 3:
-					iconID = R.drawable.weezle_weather_04d;
-					imageArr = conditions.m_ImageArrWeezle;
-					break;
-				default:
-					iconID = R.drawable.tick_weather_04d;
-					imageArr = conditions.m_ImageArrTick;
-					break;
-				}
-                
-        		String sTempHigh = "";
-        		String sTempLow = "";
-        		String weatherMain = "";
-            	String date = "";
-            	
-        		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
-        		date = String.format(sdf.format(calendar.getTime()));   
-        		
-        		JSONObject tempJSON = null;
-                try {
-                	tempJSON = weatherJSON.getJSONObject("temp");
-                } catch (JSONException e) {	                
-                }
-                try {
-                	double temp = tempJSON.getDouble("max") - 273.15;           	
-                	
-                	if (tempScale == 1)
-                		sTempHigh = "H: " + String.valueOf((int)(temp*1.8+32)) + "°";
-                    else
-                    	sTempHigh = "H: " + String.valueOf((int)temp) + "°";	
-                	
-                	temp = tempJSON.getDouble("min") - 273.15;           	
-                	
-                	if (tempScale == 1)
-                		sTempLow = "L: " + String.valueOf((int)(temp*1.8+32)) + "°";
-                    else
-                    	sTempLow = "L: " + String.valueOf((int)temp) + "°";
-                } catch (JSONException e) {
-                }                        	        	
-            	
-            	try {
-                    JSONArray weathers = weatherJSON.getJSONArray("weather");
-                    
-                    JSONObject weather = weathers.getJSONObject(0);
-                    int weatherId = weather.getInt("id");
-                    weatherMain = weather.getString("main");
-                    String iconName = weather.getString("icon");
-                    String iconNameAlt = iconName + "d";
-                    
-                    for (int k=0; k<imageArr.length; k++) {
-                    	if (iconName.equals(imageArr[k].iconName) || iconNameAlt.equals(imageArr[k].iconName)) {
-                    		iconID = imageArr[k].iconId;
-                    		break;
-                    	}
-                    }                    
-                } catch (JSONException e) {
-                    //no weather type
-                }
-            	
-            	switch (i) {
-				case 1:
-					textDate = (TextView) findViewById(R.id.textViewDate1);        		
-					textTempHigh = (TextView) findViewById(R.id.textViewTempHigh1);        		
-					textTempLow = (TextView) findViewById(R.id.textViewTempLow1);        		
-	        		textMain = (TextView) findViewById(R.id.textViewDesc1);        		
-            		image = (ImageView)findViewById(R.id.imageViewWeather1);            	
-            		break;
-				case 2:
-					textDate = (TextView) findViewById(R.id.textViewDate2);        		
-					textTempHigh = (TextView) findViewById(R.id.textViewTempHigh2);        		
-					textTempLow = (TextView) findViewById(R.id.textViewTempLow2);        		
-					textMain = (TextView) findViewById(R.id.textViewDesc2);        		
-            		image = (ImageView)findViewById(R.id.imageViewWeather2);
-					break;
-				case 3:
-					textDate = (TextView) findViewById(R.id.textViewDate3);        		
-					textTempHigh = (TextView) findViewById(R.id.textViewTempHigh3);        		
-					textTempLow = (TextView) findViewById(R.id.textViewTempLow3);        		
-					textMain = (TextView) findViewById(R.id.textViewDesc3);        		
-            		image = (ImageView)findViewById(R.id.imageViewWeather3);
-					break;
-				case 4:
-					textDate = (TextView) findViewById(R.id.textViewDate4);        		
-					textTempHigh = (TextView) findViewById(R.id.textViewTempHigh4);        		
-					textTempLow = (TextView) findViewById(R.id.textViewTempLow4);        		
-					textMain = (TextView) findViewById(R.id.textViewDesc4);        		
-            		image = (ImageView)findViewById(R.id.imageViewWeather4);
-					break;
-				case 5:
-					textDate = (TextView) findViewById(R.id.textViewDate5);        		
-					textTempHigh = (TextView) findViewById(R.id.textViewTempHigh5);        		
-					textTempLow = (TextView) findViewById(R.id.textViewTempLow5);        		
-					textMain = (TextView) findViewById(R.id.textViewDesc5);        		
-            		image = (ImageView)findViewById(R.id.imageViewWeather5);
-					break;
-				default:
-					break;
-				}
-            	
-            	textDate.setText(date);
-            	textTempHigh.setText(sTempHigh);
-            	textTempLow.setText(sTempLow);
-            	textMain.setText(weatherMain);
-            	image.setImageResource(iconID);
-            }
-            		            
-            if (!updateFromCache)
-            {
-            	Preferences.setLastRefresh(this, appWidgetId, System.currentTimeMillis()); 
-            	
-            	if (scheduledUpdate)
-            		Preferences.setForecastSuccess(this, appWidgetId, true);
-            }            
-			
-		} catch (JSONException e) {
-			e.printStackTrace();
+		if (inflater != null) {
+			imageView = (ImageView)inflater.inflate(R.layout.refresh_menuitem, null);
+								
+			if (imageView != null) {
+				outValue = new TypedValue();
+				getTheme().resolveAttribute(R.attr.iconRefresh,
+						outValue,
+						true);
+				int refreshIcon = outValue.resourceId;
+				imageView.setImageResource(refreshIcon);
+				
+				rotation = AnimationUtils.loadAnimation(this, R.anim.animate_menu);
+			}
+		}*/
+		
+		rotation = AnimationUtils.loadAnimation(this, R.anim.animate_menu);
+
+		// Show the ProgressDialogFragment on this thread
+		mProgressFragment = new ProgressDialogFragment();
+		Bundle args = new Bundle();
+		args.putString("title", (String) getResources().getText(R.string.working));
+		args.putString("message", (String) getResources().getText(R.string.retrieving));
+		mProgressFragment.setArguments(args);
+		mProgressFragment.show(getSupportFragmentManager(), "tagProgress");
+		
+		// Start a new thread that will download all the data
+		mDataProviderTask = new DataProviderTask();
+		mDataProviderTask.setActivity(mWeatherForecastActivity);
+		mDataProviderTask.execute();
+	}
+
+	@SuppressLint("InlinedApi")
+	public void setStatusBarColor(View statusBar,int color) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			Window w = getWindow();
+			w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+			//status bar height
+			//int actionBarHeight = getActionBarHeight();
+			int statusBarHeight = getStatusBarHeight();
+			//action bar height
+			statusBar.getLayoutParams().height = /*actionBarHeight + */statusBarHeight;
+			statusBar.setBackgroundColor(color);
+		} else {
+			statusBar.setVisibility(View.GONE);
 		}
 	}
-	
-	public static long daysBetween(final Calendar startDate, final Calendar endDate) {  
-		 int MILLIS_IN_DAY = 1000 * 60 * 60 * 24;  
-		 long endInstant = endDate.getTimeInMillis();  
-		 int presumedDays = (int) ((endInstant - startDate.getTimeInMillis()) / MILLIS_IN_DAY);  
-		 Calendar cursor = (Calendar) startDate.clone();  
-		 cursor.add(Calendar.DAY_OF_YEAR, presumedDays);  
-		 long instant = cursor.getTimeInMillis();  
-		 if (instant == endInstant)  
-		  return presumedDays;  
-		 final int step = instant < endInstant ? 1 : -1;  
-		 do {  
-		  cursor.add(Calendar.DAY_OF_MONTH, step);  
-		  presumedDays += step;  
-		 } while (cursor.getTimeInMillis() != endInstant);  
-		 return presumedDays;  
-	}  
-	
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.weatherforecastmenu, menu);
-	    return true;
+
+	@SuppressLint("NewApi")
+	public void refreshData() {
+		drawerLayout.closeDrawers();
+		mDrawerOpen = false;
+
+		float lat = Preferences.getLocationLat(getApplicationContext(), mAppWidgetId);
+		float lon = Preferences.getLocationLon(getApplicationContext(), mAppWidgetId);
+		long id = Preferences.getLocationId(getApplicationContext(), mAppWidgetId);
+
+		if ((id == -1) && (lat == -222 || lon == -222 || Float.isNaN(lat) || Float.isNaN(lon))) {
+			Toast.makeText(getApplicationContext(), getResources().getText(R.string.nolocationdefined), Toast.LENGTH_LONG).show();
+		}
+		else {
+			Intent refreshIntent = new Intent(getApplicationContext(), WidgetUpdateService.class);
+			refreshIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, WidgetUpdateService.WEATHER_UPDATE);
+			refreshIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+			getApplicationContext().startService(refreshIntent);
+			
+			if (refreshItem != null && /*imageView != null && */rotation != null) {
+				
+				if (MenuItemCompat.getActionView(refreshItem) != null) {
+					MenuItemCompat.getActionView(refreshItem).startAnimation(rotation);
+				}
+				
+				//imageView.startAnimation(rotation);				
+				//MenuItemCompat.setActionView(refreshItem, imageView);			
+			}
+			
+			//Toast.makeText(getApplicationContext(), "Updating weather.", Toast.LENGTH_LONG).show();
+		}
 	}
-	
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-	    case R.id.refresh:
-	    	float lat = Preferences.getLocationLat(getApplicationContext(), mAppWidgetId);
-        	float lon = Preferences.getLocationLon(getApplicationContext(), mAppWidgetId);
-        	long id = Preferences.getLocationId(getApplicationContext(), mAppWidgetId);
-        	
-        	if ((id == -1) && (lat == -222 || lon == -222 || Float.isNaN(lat) || Float.isNaN(lon))) {
-        		Toast.makeText(getApplicationContext(), "No location defined.", Toast.LENGTH_LONG).show();
-        	}
-        	else {
-		    	Intent refreshIntent = new Intent(getApplicationContext(), WidgetUpdateService.class);
-	            refreshIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, WidgetUpdateService.WEATHER_UPDATE);
-	            refreshIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-	            getApplicationContext().startService(refreshIntent);            
-	            Toast.makeText(getApplicationContext(), "Updating weather.", Toast.LENGTH_LONG).show();
-	            
-	            finish();
-        	}
-            
-	    	return true;
-	    case R.id.settings:
-	    	Intent settingsIntent = new Intent(this, DigitalClockAppWidgetPreferences.class);
+
+	public void openSettings() {
+		drawerLayout.closeDrawers();
+		mDrawerOpen = false;
+
+		Intent settingsIntent = new Intent(getApplicationContext(), DigitalClockAppWidgetPreferenceActivity.class);				
+
+		if (settingsIntent != null) {
 			settingsIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 			settingsIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-			startActivity(settingsIntent);
-			
-			finish();
-			
-	    	return true;
-	    default:
-	    	return super.onOptionsItemSelected(item);
+
+			startActivityForResult(settingsIntent, ACTIVITY_SETTINGS);
 		}
+	}
+
+	public int getActionBarHeight() {
+		int actionBarHeight = 0;
+		TypedValue tv = new TypedValue();
+		if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+		{
+			actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+		}
+		return actionBarHeight;
+	}
+
+	public int getStatusBarHeight() {
+		int result = 0;
+		int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+		if (resourceId > 0) {
+			result = getResources().getDimensionPixelSize(resourceId);
+		}
+		return result;
+	}
+
+	private void initView() {
+		String theme = Preferences.getMainTheme(this);
+
+		leftDrawerList = (ListView) findViewById(R.id.left_drawer);
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+
+		rowItems = new ArrayList<RowItem>();
+
+		RowItem item = new RowItem(theme.compareToIgnoreCase("light") == 0?R.drawable.ic_refresh_black_48dp:R.drawable.ic_refresh_white_48dp, 
+				(String) getResources().getText(R.string.refresh), false);
+		rowItems.add(item);
+		item = new RowItem(theme.compareToIgnoreCase("light") == 0?R.drawable.ic_settings_black_48dp:R.drawable.ic_settings_white_48dp, 
+				(String) getResources().getText(R.string.settings), false);
+		rowItems.add(item);
+
+		ItemAdapter adapter = new ItemAdapter(this, rowItems);
+		leftDrawerList.setAdapter(adapter);        
+
+		leftDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+		if (theme.compareToIgnoreCase("light") == 0)
+			leftDrawerList.setBackgroundColor(getResources().getColor(android.R.color.white));
+		else 
+			leftDrawerList.setBackgroundColor(getResources().getColor(android.R.color.black));
+	}
+
+	private void initDrawer() {
+
+		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+
+			@Override
+			public void onDrawerClosed(View drawerView) {
+				super.onDrawerClosed(drawerView);
+				mDrawerOpen = false;
+			}
+
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				mDrawerOpen = true;
+			}
+		};
+		drawerLayout.setDrawerListener(drawerToggle);
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		drawerToggle.syncState();
+	}
+
+	// The click listener for ListView in the navigation drawer 
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			selectItem(position);
+		}
+	}
+
+	private void selectItem(int position) {
+		leftDrawerList.setItemChecked(position, true);
+		drawerLayout.closeDrawers(); 
+		mDrawerOpen = false;
+
+		switch (position) {
+		case 0: // Refresh
+			refreshData();
+			break;
+		case 1: // Settings
+			openSettings();
+
+			break;
+		default:
+			break;
+		}            	
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);		
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle savedInstanceState) {
+		savedInstanceState.putBoolean(DRAWEROPEN, mDrawerOpen);
+
+		if (mViewPager != null)
+			savedInstanceState.putInt(KEY_CURRENT_ITEM, mViewPager.getCurrentItem());
+
+		super.onSaveInstanceState(savedInstanceState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// Always call the superclass so it can restore the view hierarchy
+		super.onRestoreInstanceState(savedInstanceState);
+
+		mDrawerOpen = savedInstanceState.getBoolean(DRAWEROPEN);
+		mCurrentItem = savedInstanceState.getInt(KEY_CURRENT_ITEM);
+
+		if (mDrawerOpen) {
+			if (drawerLayout != null) {
+				drawerLayout.openDrawer(Gravity.LEFT);
+				mDrawerOpen = true;
+				drawerToggle.syncState();
+			}		
+		}						
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.weatherforecastmenu, menu);
+		
+		refreshItem = menu.findItem(R.id.refresh);
+		
+		if (refreshItem != null) {
+			final Menu menuFinal = menu;
+
+			if (MenuItemCompat.getActionView(refreshItem) != null) {
+				TypedValue outValue = new TypedValue();
+				getTheme().resolveAttribute(R.attr.iconRefresh,
+						outValue,
+						true);
+				int refreshIcon = outValue.resourceId;
+				((ImageView)MenuItemCompat.getActionView(refreshItem)).setImageResource(refreshIcon);
+				
+				MenuItemCompat.getActionView(refreshItem).setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View view) {   
+						menuFinal.performIdentifierAction(refreshItem.getItemId(), 0);
+					}
+				});
+			}
+		}
+		
+		return true;				
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (drawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+		switch (item.getItemId()) {
+		case R.id.refresh:
+			refreshData();
+
+			return true;
+		case R.id.settings:	    	
+			openSettings();
+
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+
+		if (requestCode == ACTIVITY_SETTINGS) {
+			// Show the ProgressDialogFragment on this thread
+			if (mProgressFragment != null) {
+				mProgressFragment.dismiss();
+			}
+			mProgressFragment = new ProgressDialogFragment();
+			Bundle args = new Bundle();
+			args.putString("title", (String) getResources().getText(R.string.working));
+			args.putString("message", (String) getResources().getText(R.string.retrieving));
+			mProgressFragment.setArguments(args);
+			mProgressFragment.show(getSupportFragmentManager(), "tagProgress");
+
+			// Start a new thread that will download all the data
+			mDataProviderTask = new DataProviderTask();
+			mDataProviderTask.setActivity(mWeatherForecastActivity);
+			mDataProviderTask.execute();
+		}    	    	     
+	}
+
+	public boolean loadData() {
+		try {
+			if (mTabs != null) {
+				//Thread.sleep(3000);
+
+				for (ForecastPagerItem tab : mTabs) {
+					tab.setFragment(null);
+				}
+
+				mTabs.clear();			        
+
+				TypedValue outValue = new TypedValue();
+				getTheme().resolveAttribute(R.attr.tabTextColor, outValue, true);
+				int textColor = outValue.resourceId;
+				int colorIndicator = getResources().getColor(textColor);	 
+
+				int locationType = Preferences.getLocationType(getApplicationContext(), mAppWidgetId);
+
+				if (locationType == ConfigureLocationActivity.LOCATION_TYPE_CURRENT) {
+					mTabs.add(new ForecastPagerItem("Current [" + Preferences.getLocation(getApplicationContext(), mAppWidgetId) + "]", colorIndicator, mAppWidgetId, -1));
+				}
+
+				long locIdTemp = -1;
+
+				if (locationType == ConfigureLocationActivity.LOCATION_TYPE_CUSTOM) {
+					locIdTemp = Preferences.getLocationId(getApplicationContext(), mAppWidgetId);
+				}
+
+				SQLiteDbAdapter dbHelper = new SQLiteDbAdapter(getApplicationContext());
+				dbHelper.open();
+				Cursor locationsCursor = dbHelper.fetchAllLocations();
+
+				if (locationsCursor != null && locationsCursor.getCount() > 0) {
+
+					// insert default location
+					locationsCursor.moveToFirst();
+
+					do {
+						String title = locationsCursor.getString(locationsCursor.getColumnIndex(SQLiteDbAdapter.KEY_NAME));
+						long locId = locationsCursor.getLong(locationsCursor.getColumnIndex(SQLiteDbAdapter.KEY_LOCATION_ID));
+
+						if (locIdTemp >= 0 && locId == locIdTemp)
+							mTabs.add(new ForecastPagerItem(title, colorIndicator, mAppWidgetId, locId));	        		
+
+						locationsCursor.moveToNext();
+					} while (!locationsCursor.isAfterLast());	        
+
+					// insert other locations
+					locationsCursor.moveToFirst();
+
+					if (locationsCursor != null) {
+						do {
+							String title = locationsCursor.getString(locationsCursor.getColumnIndex(SQLiteDbAdapter.KEY_NAME));
+							long locId = locationsCursor.getLong(locationsCursor.getColumnIndex(SQLiteDbAdapter.KEY_LOCATION_ID));
+
+							if (locIdTemp < 0 || locId != locIdTemp)
+								mTabs.add(new ForecastPagerItem(title, colorIndicator, mAppWidgetId, locId));	        				
+
+							locationsCursor.moveToNext();
+						} while (!locationsCursor.isAfterLast());
+					}
+				}
+
+				dbHelper.close(); 
+			}
+
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+
+	}
+
+	public boolean setSliders() {
+		if (mTabs != null) {
+			TypedValue outValue = new TypedValue();
+			getTheme().resolveAttribute(R.attr.colorPrimary,
+					outValue,
+					true);
+			int primaryColor = outValue.resourceId;            
+			int colorTabs = getResources().getColor(primaryColor);
+
+			mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+			mViewPager = (ViewPager) findViewById(R.id.viewpager);
+			mFragmentPagerAdapter = new ForecastFragmentPagerAdapter(getSupportFragmentManager());
+
+			mViewPager.setAdapter(mFragmentPagerAdapter);
+
+			final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+					.getDisplayMetrics());
+			mViewPager.setPageMargin(pageMargin);
+
+			mSlidingTabLayout.setTabsColor(colorTabs);
+			mSlidingTabLayout.setViewPager(mViewPager);
+
+			mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+
+				@Override
+				public int getIndicatorColor(int position) {
+					if (mTabs.size() > position)
+						return mTabs.get(position).getIndicatorColor();
+					else {
+						TypedValue outValue = new TypedValue();
+						getTheme().resolveAttribute(R.attr.tabTextColor, outValue, true);
+						int textColor = outValue.resourceId;
+						int colorIndicator = getResources().getColor(textColor);
+
+						return colorIndicator;
+					}						
+				}
+			});
+
+			if (mViewPager != null && mViewPager.getChildCount() > 0) 
+				mViewPager.setCurrentItem(Math.min(mCurrentItem, mTabs.size()-1));
+		}
+
+		return true;
+	}
+
+	private class DataProviderTask extends AsyncTask<Void, Void, Void> {
+
+		WeatherForecastActivity weatherForecastActivity = null;
+
+		void setActivity(WeatherForecastActivity activity) {
+			weatherForecastActivity = activity;
+		}
+
+		@SuppressWarnings("unused")
+		WeatherForecastActivity getActivity() {
+			return weatherForecastActivity;
+		}
+
+		@Override
+		protected void onPreExecute() {
+
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			Log.i(LOG_TAG, "WeatherForecastActivity - Background thread starting");
+
+			weatherForecastActivity.loadData();
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+
+			weatherForecastActivity.setSliders();
+
+			if (weatherForecastActivity.mProgressFragment != null) {
+				weatherForecastActivity.mProgressFragment.dismiss(); 
+			}                                	
+		}        	
+	}
+	
+	@SuppressLint("NewApi")
+	void readCachedData (Context context) {
+		if (mAppWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+			
+			if (refreshItem != null) {
+				
+				if (MenuItemCompat.getActionView(refreshItem) != null) {
+					MenuItemCompat.getActionView(refreshItem).clearAnimation();
+					//MenuItemCompat.setActionView(refreshItem, null);
+				}
+			}
+			
+			if (mTabs != null) {
+				for (ForecastPagerItem tab : mTabs) {
+					WeatherContentFragment fragment = tab.getFragment();
+
+					if (fragment != null && fragment.getView() != null) {
+						fragment.readCachedData(context, mAppWidgetId);
+						
+						SwipeRefreshLayout swipeLayoutFragment = fragment.getSwipeLayout();
+						if (swipeLayoutFragment != null) {
+							swipeLayoutFragment.setRefreshing(false);
+						}
+					}	            				            			                	
+				}  	                		                
+			}
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		IntentFilter intentFilter = new IntentFilter(WidgetUpdateService.UPDATE_FORECAST);
+		
+		mReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {    
+				int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+						AppWidgetManager.INVALID_APPWIDGET_ID);
+				
+				if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID && appWidgetId == mAppWidgetId) {
+					readCachedData(context);
+				}
+			}			
+		};
+
+		registerReceiver(mReceiver, intentFilter);        
+		setTitle(getResources().getString(R.string.weatherforecast));              
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		unregisterReceiver(this.mReceiver);
+
+		/*if (mTabs != null) {
+
+        	for (ForecastPagerItem tab : mTabs) {
+        		tab.setFragment(null);
+        	}
+
+        	mTabs.clear();			        
+        }*/
+
+		if (mViewPager != null) { 
+			mViewPager.getAdapter().notifyDataSetChanged();    		
+			mCurrentItem = mViewPager.getCurrentItem();
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (mDataProviderTask != null)
+			mDataProviderTask.cancel(true);
+
+		if (!mDrawerOpen) {
+			super.onBackPressed();
+			finish();
+		} else {
+			if (drawerLayout != null)
+				drawerLayout.closeDrawers();
+			mDrawerOpen = false;
+		}		
+	}
+
+	static class ForecastPagerItem {
+		private CharSequence mTitle;
+		private final int mIndicatorColor;
+		private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+		private long mLocationId;
+
+		private WeatherContentFragment mFragment;
+
+		ForecastPagerItem(CharSequence title, int indicatorColor, int appWidgetId, long locId) {
+			mTitle = title;
+			mIndicatorColor = indicatorColor;
+			mAppWidgetId = appWidgetId;
+			mLocationId = locId;
+		}
+
+		Fragment createFragment() {
+			Fragment fragment = WeatherContentFragment.newInstance(mTitle, mIndicatorColor, mAppWidgetId, mLocationId);
+			((WeatherContentFragment) fragment).setTitle((String) mTitle);
+			mFragment = (WeatherContentFragment) fragment;            
+
+			return fragment;
+		}
+
+		CharSequence getTitle() {
+			return mTitle;
+		}
+
+		void setTitle (CharSequence title) {
+			mTitle = title;
+		}
+
+		int getIndicatorColor() {
+			return mIndicatorColor;
+		}
+
+		public WeatherContentFragment getFragment() {
+			return mFragment;
+		}
+
+		public void setFragment(WeatherContentFragment mFragment) {
+			this.mFragment = mFragment;
+		}        
+	}
+
+	class ForecastFragmentPagerAdapter extends FragmentStatePagerAdapter {
+
+		ForecastFragmentPagerAdapter(FragmentManager fm) {
+			super(fm);                        	       	        
+		}
+
+		@Override
+		public Fragment getItem(int i) {
+			return mTabs.get(i).createFragment();        	
+		}
+
+		@Override
+		public int getCount() {
+			return mTabs.size();        	
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {        	
+			return mTabs.get(position).getTitle();        	
+		}                             
 	}
 }

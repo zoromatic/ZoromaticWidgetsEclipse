@@ -40,14 +40,12 @@ public class DigitalClockAppWidgetProvider extends AppWidgetProvider {
             	if (appWidgetIds.length <= 0)
             		return;
             	
-            	for (int appWidgetId : appWidgetIds) {
-            		Intent startIntent = new Intent(context, WidgetUpdateService.class);
-            		startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, Intent.ACTION_TIME_CHANGED);
-                    startIntent.putExtra(WidgetInfoReceiver.UPDATE_WEATHER, true);
-                    startIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-
-                    context.startService(startIntent);
-            	}
+            	Intent startIntent = new Intent(context, WidgetUpdateService.class);
+        		startIntent.putExtra(WidgetInfoReceiver.INTENT_EXTRA, Intent.ACTION_TIME_CHANGED);
+                startIntent.putExtra(WidgetInfoReceiver.UPDATE_WEATHER, true);
+                startIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+                
+                context.startService(startIntent);            	           
 			}
 		}
 	}
